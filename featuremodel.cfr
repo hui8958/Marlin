@@ -1,0 +1,37 @@
+Marlin
+    xor Power_Supply
+        No_Switch
+        ATX
+        X_Box360
+    Board
+        EndStop
+            EndStop_Axis 3..6
+            EndStop_Type
+	            EndStopXY
+	                EndStopXY_Mechanichal
+	            xor EndStopZ
+			        EndStopZ_BLTouchSensor
+			        EndStopZ_Mechanichal
+		        	EndStopZ_InductiveSensor
+        Motor
+            Motor_Axis 3
+            xor Extruder 1..*
+                Extruder_Mixing
+                Extruder_Switching
+                Extruder_Single
+            xor Moter_Type
+                Moter_Type_Stepper
+                Moter_Type_Servo
+        Fan 1..*
+        xor HotEnd 1..*
+            HotEnd_Single
+            HotEnd_Multiple
+        Temp_Sensor 1..*
+            Temp_Sensor_Bed ?
+            xor Temp_Sensor_HotEnd 1..*
+                Temp_Sensor_HotEnd_Single
+                Temp_Sensor_HotEnd_Multiple
+        Display 0..1
+        xor Bed
+            Bed_Regular
+            Bed_Heat

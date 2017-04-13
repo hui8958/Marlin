@@ -375,6 +375,7 @@ static const char *injected_commands_P = NULL;
  * Feed rates are often configured with mm/m
  * but the planner and stepper like mm/s units.
  */
+//&begin[Extruder]
 float constexpr homing_feedrate_mm_s[] = {
   #if ENABLED(DELTA)
     MMM_TO_MMS(HOMING_FEEDRATE_Z), MMM_TO_MMS(HOMING_FEEDRATE_Z),
@@ -391,6 +392,7 @@ bool axis_relative_modes[] = AXIS_RELATIVE_MODES,
      volumetric_enabled = false;
 float filament_size[EXTRUDERS] = ARRAY_BY_EXTRUDERS1(DEFAULT_NOMINAL_FILAMENT_DIA),
       volumetric_multiplier[EXTRUDERS] = ARRAY_BY_EXTRUDERS1(1.0);
+//&end[Extruder]
 
 // The distance that XYZ has been offset by G92. Reset by G28.
 float position_shift[XYZ] = { 0 };
@@ -400,18 +402,24 @@ float position_shift[XYZ] = { 0 };
 float home_offset[XYZ] = { 0 };
 
 // Software Endstops are based on the configured limits.
+//&begin[Endstop]
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
   bool soft_endstops_enabled = true;
 #endif
 float soft_endstop_min[XYZ] = { X_MIN_POS, Y_MIN_POS, Z_MIN_POS },
       soft_endstop_max[XYZ] = { X_MAX_POS, Y_MAX_POS, Z_MAX_POS };
+//&end[Endstop]
 
+//&begin[Fan]
 #if FAN_COUNT > 0
   int fanSpeeds[FAN_COUNT] = { 0 };
 #endif
+//&begin[Fan]
 
 // The active extruder (tool). Set with T<extruder> command.
+//&begin[Extruder]
 uint8_t active_extruder = 0;
+//&end[Extruder]
 
 // Relative Mode. Enable with G91, disable with G90.
 static bool relative_mode = false;
@@ -428,8 +436,11 @@ const char errormagic[] PROGMEM = "Error:";
 const char echomagic[] PROGMEM = "echo:";
 const char axis_codes[NUM_AXIS] = {'X', 'Y', 'Z', 'E'};
 
+
 // Number of characters read in the current line of serial input
+//&begin[Board]
 static int serial_count = 0;
+//&end[Board]
 
 // Inactivity shutdown
 millis_t previous_cmd_ms = 0;
@@ -453,7 +464,9 @@ static millis_t stepper_inactive_time = (DEFAULT_STEPPER_DEACTIVE_TIME) * 1000UL
   #define BUZZ(d,f) NOOP
 #endif
 
+//&begin[Extruder]
 static uint8_t target_extruder;
+//&end[Extruder]
 
 #if HAS_BED_PROBE
   float zprobe_zoffset = Z_PROBE_OFFSET_FROM_EXTRUDER;
@@ -491,9 +504,11 @@ static uint8_t target_extruder;
 #endif
 
 // Extruder offsets
+//&begin[Hotend]
 #if HOTENDS > 1
   float hotend_offset[XYZ][HOTENDS];
 #endif
+//&end[Hotend]
 
 #if HAS_Z_SERVO_ENDSTOP
   const int z_servo_angle[2] = Z_SERVO_ANGLES;
@@ -608,15 +623,18 @@ float cartes[XYZ] = { 0 };
   FilamentChangeMenuResponse filament_change_menu_response;
 #endif
 
+//&begin[Mixing_Extruder]
 #if ENABLED(MIXING_EXTRUDER)
   float mixing_factor[MIXING_STEPPERS]; // Reciprocal of mix proportion. 0.0 = off, otherwise >= 1.0.
   #if MIXING_VIRTUAL_TOOLS > 1
     float mixing_virtual_tool_mix[MIXING_VIRTUAL_TOOLS][MIXING_STEPPERS];
   #endif
 #endif
+//&end[Mixing_Extruder]
 
 static bool send_ok[BUFSIZE];
 
+//&begin[Servo]
 #if HAS_SERVOS
   Servo servo[NUM_SERVOS];
   #define MOVE_SERVO(I, P) servo[I].move(P)
@@ -625,6 +643,7 @@ static bool send_ok[BUFSIZE];
     #define STOW_Z_SERVO() MOVE_SERVO(Z_ENDSTOP_SERVO_NR, z_servo_angle[1])
   #endif
 #endif
+//&end[Servo]
 
 #ifdef CHDK
   millis_t chdkHigh = 0;
@@ -900,6 +919,7 @@ void suicide() {
   #endif
 }
 
+//&begin[Servo]
 void servo_init() {
   #if NUM_SERVOS >= 1 && HAS_SERVO_0
     servo[0].attach(SERVO0_PIN);
@@ -931,6 +951,7 @@ void servo_init() {
     STOW_Z_SERVO();
   #endif
 }
+//&end[Servo]
 
 /**
  * Stepper Reset (RigidBoard, et.al.)
@@ -1287,6 +1308,7 @@ bool code_seen(char code) {
  *
  * Returns TRUE if the target is invalid
  */
+ //&begin[Extruder]
 bool get_target_extruder_from_command(int code) {
   if (code_seen('T')) {
     if (code_value_byte() >= EXTRUDERS) {
@@ -1303,6 +1325,7 @@ bool get_target_extruder_from_command(int code) {
 
   return false;
 }
+//&end[Extruder]
 
 #if ENABLED(DUAL_X_CARRIAGE) || ENABLED(DUAL_NOZZLE_DUPLICATION_MODE)
   bool extruder_duplication_enabled = false; // Used in Dual X mode 2
@@ -1345,9 +1368,11 @@ bool get_target_extruder_from_command(int code) {
  * the software endstop positions must be refreshed to remain
  * at the same positions relative to the machine.
  */
+ //&line[Endstop]
 void update_software_endstops(AxisEnum axis) {
+//&line[Endstop]
   float offs = LOGICAL_POSITION(0, axis);
-
+ 
   #if ENABLED(DUAL_X_CARRIAGE)
     bool did_update = false;
     if (axis == X_AXIS) {
@@ -1373,7 +1398,9 @@ void update_software_endstops(AxisEnum axis) {
       }
     }
   #else
+  //&line[Endstop]
     soft_endstop_min[axis] = base_min_pos(axis) + offs;
+  //&line[Endstop]  
     soft_endstop_max[axis] = base_max_pos(axis) + offs;
   #endif
 
@@ -1705,13 +1732,15 @@ void do_blocking_move_to_xy(const float &x, const float &y, const float &fr_mm_s
 
 //
 // Prepare to do endstop or probe moves
-// with custom feedrates.
+// with custom feedrates. (wanzi- this could be the feature where we changes the endstops to adjust homing position, then the new inputs need to be set)
 //
 //  - Save current feedrates
 //  - Reset the rate multiplier
 //  - Reset the command timeout
 //  - Enable the endstops (for endstop moves)
 //
+
+//&begin[Endstop]
 static void setup_for_endstop_or_probe_move() {
   #if ENABLED(DEBUG_LEVELING_FEATURE)
     if (DEBUGGING(LEVELING)) DEBUG_POS("setup_for_endstop_or_probe_move", current_position);
@@ -1730,6 +1759,7 @@ static void clean_up_after_endstop_or_probe_move() {
   feedrate_percentage = saved_feedrate_percentage;
   refresh_cmd_timeout();
 }
+//&end[Endstop]
 
 #if HAS_BED_PROBE
   /**
@@ -1984,6 +2014,7 @@ static void clean_up_after_endstop_or_probe_move() {
   #define DEPLOY_PROBE() set_probe_deployed(true)
   #define STOW_PROBE() set_probe_deployed(false)
 
+//&begin[BLTOUCH]
   #if ENABLED(BLTOUCH)
     FORCE_INLINE void set_bltouch_deployed(const bool &deploy) {
       servo[Z_ENDSTOP_SERVO_NR].move(deploy ? BLTOUCH_DEPLOY : BLTOUCH_STOW);
@@ -1996,8 +2027,10 @@ static void clean_up_after_endstop_or_probe_move() {
       #endif
     }
   #endif
+//&end[BLTOUCH]
 
   // returns false for ok and true for failure
+  //&line[BLTOUCH]
   static bool set_probe_deployed(bool deploy) {
 
     #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -2013,7 +2046,9 @@ static void clean_up_after_endstop_or_probe_move() {
     do_probe_raise(_Z_CLEARANCE_DEPLOY_PROBE);
 
     // When deploying make sure BLTOUCH is not already triggered
+    //&line[BLTOUCH]
     #if ENABLED(BLTOUCH)
+    //&line[BLTOUCH]
       if (deploy && TEST_BLTOUCH()) { stop(); return true; }
     #elif ENABLED(Z_PROBE_SLED)
       if (axis_unhomed_error(true, false, false)) { stop(); return true; }
@@ -2072,24 +2107,29 @@ static void clean_up_after_endstop_or_probe_move() {
     return false;
   }
 
+ //&line[BLTOUCH]
   static void do_probe_move(float z, float fr_mm_m) {
     #if ENABLED(DEBUG_LEVELING_FEATURE)
       if (DEBUGGING(LEVELING)) DEBUG_POS(">>> do_probe_move", current_position);
     #endif
 
     // Deploy BLTouch at the start of any probe
+     //&begin[BLTOUCH]
     #if ENABLED(BLTOUCH)
       set_bltouch_deployed(true);
     #endif
-
+    //&end[BLTOUCH]
+    
     // Move down until probe triggered
     do_blocking_move_to_z(LOGICAL_Z_POSITION(z), MMM_TO_MMS(fr_mm_m));
 
     // Retract BLTouch immediately after a probe
+     //&begin[BLTOUCH]
     #if ENABLED(BLTOUCH)
       set_bltouch_deployed(false);
     #endif
-
+    //&end[BLTOUCH]
+    
     // Clear endstop flags
     endstops.hit_on_purpose();
 

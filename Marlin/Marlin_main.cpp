@@ -535,6 +535,7 @@ static uint8_t target_extruder;
 
 #endif // FWRETRACT
 
+  //&begin[Display]
 #if ENABLED(ULTIPANEL) && HAS_POWER_SWITCH
   bool powersupply =
     #if ENABLED(PS_DEFAULT_OFF)
@@ -554,6 +555,7 @@ static uint8_t target_extruder;
     #endif
   ;
 #endif
+ //&end[Display]
 
 #if ENABLED(DELTA)
 
@@ -900,6 +902,7 @@ void setup_homepin(void) {
   #endif
 }
 
+//&begin[Power_Supply]
 void setup_powerhold() {
   #if HAS_SUICIDE
     OUT_WRITE(SUICIDE_PIN, HIGH);
@@ -918,6 +921,7 @@ void suicide() {
     OUT_WRITE(SUICIDE_PIN, LOW);
   #endif
 }
+//&end[Power_Supply]
 
 //&begin[Servo]
 void servo_init() {
@@ -1760,6 +1764,7 @@ static void clean_up_after_endstop_or_probe_move() {
   refresh_cmd_timeout();
 }
 //&end[Endstop]
+
 
 #if HAS_BED_PROBE
   /**
@@ -10237,7 +10242,9 @@ void setup() {
 
   setup_killpin();
 
+//&begin[Power_Supply]
   setup_powerhold();
+//&end[Power_Supply]
 
   #if HAS_STEPPER_RESET
     disableStepperDrivers();

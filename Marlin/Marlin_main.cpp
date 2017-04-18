@@ -10292,14 +10292,18 @@ void setup() {
   #if ENABLED(FILAMENT_RUNOUT_SENSOR)
     setup_filrunoutpin();
   #endif
-
+    
+//&line[Board]
   setup_killpin();
-
+    
+//&line[Power_Supply]
   setup_powerhold();
 
+//&begin[Stepper]
   #if HAS_STEPPER_RESET
     disableStepperDrivers();
   #endif
+//&end[Stepper]
 
   MYSERIAL.begin(BAUDRATE);
   SERIAL_PROTOCOLLNPGM("start");

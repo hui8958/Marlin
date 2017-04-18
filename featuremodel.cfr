@@ -32,6 +32,18 @@ Marlin
                 Temp_Sensor_HotEnd_Single
                 Temp_Sensor_HotEnd_Multiple
         Display 0..1
+            Buzzer
+            SDcard_Reader
         xor Bed
             Bed_Regular
             Bed_Heat
+    Homing
+        Bed_Leveing
+            Manual_Bed_Leveling
+            Auto_Bed_Leveling
+    WatchDog
+    Command_Input_Process
+    Move_To_Destination
+    Movement_Planner
+    Print
+    Debugger

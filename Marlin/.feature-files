@@ -1,4 +1,5 @@
 Board:board.h,
+fastio.h,
 dac_mcp4728.cpp,
 dac_mcp4728.h,
 digipot_mcp4451.cpp,

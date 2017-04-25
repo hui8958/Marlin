@@ -28,7 +28,7 @@
 #ifndef CONDITIONALS_POST_H
 #define CONDITIONALS_POST_H
 
-  //&begin[]
+
   /**
    * Axis lengths and center
    */

@@ -330,6 +330,7 @@
 
 // @section homing
 
+//&begin[Endstop]
 //homing hits the endstop, then retracts by this distance, before it tries to slowly bump again:
 #define X_HOME_BUMP_MM 5
 #define Y_HOME_BUMP_MM 5
@@ -339,6 +340,7 @@
 
 // When G28 is called, this option will make Y home before X
 //#define HOME_Y_BEFORE_X
+//&end[Endstop]
 
 // @section machine
 
@@ -353,6 +355,7 @@
 #define INVERT_Z_STEP_PIN false
 #define INVERT_E_STEP_PIN false
 
+//&begin[Stepper]
 // Default stepper release if idle. Set to 0 to deactivate.
 // Steppers will shut down DEFAULT_STEPPER_DEACTIVE_TIME seconds after the last move when DISABLE_INACTIVE_? is true.
 // Time can be set by M18 and M84.
@@ -361,9 +364,12 @@
 #define DISABLE_INACTIVE_Y true
 #define DISABLE_INACTIVE_Z true  // set to false if the nozzle will fall down on your printed part when print has finished.
 #define DISABLE_INACTIVE_E true
+//&end[Stepper]
 
+//&begin[Extruder]
 #define DEFAULT_MINIMUMFEEDRATE       0.0     // minimum feedrate
 #define DEFAULT_MINTRAVELFEEDRATE     0.0
+//&end[Extruder]
 
 // @section lcd
 
@@ -587,6 +593,7 @@
 
 // @section extras
 
+//&begin[Arc_Movement]
 // Arc interpretation settings:
 #define ARC_SUPPORT  // Disabling this saves ~2738 bytes
 #define MM_PER_ARC_SEGMENT 1
@@ -594,6 +601,7 @@
 
 // Support for G5 with XYZE destination and IJPQ offsets. Requires ~2666 bytes.
 //#define BEZIER_CURVE_SUPPORT
+//&end[Arc_Movement]
 
 // G38.2 and G38.3 Probe Target
 //#define G38_PROBE_TARGET
@@ -629,6 +637,7 @@
 
 // @section serial
 
+//&begin[IO_Handling]
 // The ASCII buffer for serial input
 #define MAX_CMD_SIZE 96
 #define BUFSIZE 4
@@ -641,6 +650,7 @@
 // Other output doesn't need to be that speedy.
 // :[0, 2, 4, 8, 16, 32, 64, 128, 256]
 #define TX_BUFFER_SIZE 0
+//&end[IO_Handling]
 
 // Enable an emergency-command parser to intercept certain commands as they
 // enter the serial receive buffer, so they cannot be blocked.

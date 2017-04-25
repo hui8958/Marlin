@@ -28,6 +28,7 @@
 #ifndef CONDITIONALS_POST_H
 #define CONDITIONALS_POST_H
 
+  //&begin[]
   /**
    * Axis lengths and center
    */
@@ -169,15 +170,18 @@
   #if ENABLED(CONFIG_STEPPERS_TOSHIBA)
     #define MAX_STEP_FREQUENCY 10000 // Max step frequency for Toshiba Stepper Controllers
   #else
+  //&line[Stepper]
     #define MAX_STEP_FREQUENCY 40000 // Max step frequency for Ultimaker (5000 pps / half step)
   #endif
 
+  //&begin[Stepper]
   // MS1 MS2 Stepper Driver Microstepping mode table
   #define MICROSTEP1 LOW,LOW
   #define MICROSTEP2 HIGH,LOW
   #define MICROSTEP4 LOW,HIGH
   #define MICROSTEP8 HIGH,HIGH
   #define MICROSTEP16 HIGH,HIGH
+  //&end[Stepper]
 
   /**
    * Advance calculated values
@@ -207,6 +211,7 @@
     #define DISABLE_INACTIVE_E DISABLE_E
   #endif
 
+//&begin[Power]
   // Power Signal Control Definitions
   // By default use ATX definition
   #ifndef POWER_SUPPLY
@@ -220,7 +225,9 @@
     #define PS_ON_ASLEEP LOW
   #endif
   #define HAS_POWER_SWITCH (POWER_SUPPLY > 0 && PIN_EXISTS(PS_ON))
+//&end[Power]
 
+//&begin[Temperature]
   /**
    * Temp Sensor defines
    */
@@ -290,6 +297,7 @@
     #define THERMISTORBED TEMP_SENSOR_BED
     #define BED_USES_THERMISTOR
   #endif
+//&end[Temperature]
 
   /**
    * Flags for PID handling
@@ -297,6 +305,7 @@
   #define HAS_PID_HEATING (ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED))
   #define HAS_PID_FOR_BOTH (ENABLED(PIDTEMP) && ENABLED(PIDTEMPBED))
 
+//&begin[Hotend]
   /**
    * Default hotend offsets, if not defined
    */
@@ -311,18 +320,23 @@
       #define HOTEND_OFFSET_Z { 0 }
     #endif
   #endif
+//&end[Hotend]
 
+//&begin[Extruder]
   /**
    * ARRAY_BY_EXTRUDERS based on EXTRUDERS
    */
   #define ARRAY_BY_EXTRUDERS(...) ARRAY_N(EXTRUDERS, __VA_ARGS__)
   #define ARRAY_BY_EXTRUDERS1(v1) ARRAY_BY_EXTRUDERS(v1, v1, v1, v1, v1, v1)
+//&end[Extruder]
 
+//&begin[Hotend]
   /**
    * ARRAY_BY_HOTENDS based on HOTENDS
    */
   #define ARRAY_BY_HOTENDS(...) ARRAY_N(HOTENDS, __VA_ARGS__)
   #define ARRAY_BY_HOTENDS1(v1) ARRAY_BY_HOTENDS(v1, v1, v1, v1, v1, v1)
+//&end[Hotend]
 
   /**
    * Z_DUAL_ENDSTOPS endstop reassignment
@@ -396,6 +410,7 @@
 
   #define IS_Z2_OR_PROBE(P) (P == Z2_MIN_PIN || P == Z2_MAX_PIN || P == Z_MIN_PROBE_PIN)
 
+//&begin[Endstop]
   /**
    * Set ENDSTOPPULLUPS for active endstop switches
    */
@@ -419,7 +434,9 @@
       #define ENDSTOPPULLUP_ZMIN
     #endif
   #endif
+//&end[Endstop]
 
+//&begin[Board]
   /**
    * Shorthand for pin tests, used wherever needed
    */
@@ -521,7 +538,9 @@
   #define HAS_TEMP_HOTEND (HAS_TEMP_0 || ENABLED(HEATER_0_USES_MAX6675))
 
   #define HAS_THERMALLY_PROTECTED_BED (HAS_TEMP_BED && HAS_HEATER_BED && ENABLED(THERMAL_PROTECTION_BED))
+//&end[Board]
 
+//&begin[Extruder]
   /**
    * This setting is also used by M109 when trying to calculate
    * a ballpark safe margin to prevent wait-forever situation.
@@ -529,7 +548,9 @@
   #ifndef EXTRUDE_MINTEMP
     #define EXTRUDE_MINTEMP 170
   #endif
+//&end[Extruder]
 
+//&begin[Temperature]
   /**
    * Helper Macros for heaters and extruder fan
    */
@@ -551,7 +572,9 @@
   #if HAS_HEATER_BED
     #define WRITE_HEATER_BED(v) WRITE(HEATER_BED_PIN, v)
   #endif
+//&end[Temperature]
 
+//&begin[Fan]
   /**
    * Up to 3 PWM fans
    */
@@ -576,6 +599,7 @@
     #define WRITE_FAN2(v) WRITE(FAN2_PIN, v)
   #endif
   #define WRITE_FAN_N(n, v) WRITE_FAN##n(v)
+//&end[Fan]
 
   /**
    * Servos and probes
@@ -716,6 +740,7 @@
   #endif
 
   // Stepper pulse duration, in cycles
+  //&line[Stepper]
   #define STEP_PULSE_CYCLES ((MINIMUM_STEPPER_PULSE) * CYCLES_PER_MICROSECOND)
 
   #ifndef DELTA_ENDSTOP_ADJ

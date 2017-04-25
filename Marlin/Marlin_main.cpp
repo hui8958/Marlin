@@ -450,10 +450,10 @@ const char errormagic[] PROGMEM = "Error:";
 const char echomagic[] PROGMEM = "echo:";
 const char axis_codes[NUM_AXIS] = {'X', 'Y', 'Z', 'E'};
 
-//&begin[IO_Handling]
+//&begin[Input_Handling]
 // Number of characters read in the current line of serial input
 static int serial_count = 0;
-//&end[IO_Handling]
+//&end[Input_Handling]
 
 // Inactivity shutdown
 millis_t previous_cmd_ms = 0;
@@ -654,7 +654,7 @@ float cartes[XYZ] = { 0 };
 #endif
 //&end[Mixing_Extruder]
 
-//&line[IO_handling]
+//&line[input_handling]
 static bool send_ok[BUFSIZE];
 
 //&begin[Servo]
@@ -687,14 +687,14 @@ static bool send_ok[BUFSIZE];
   #define KEEPALIVE_STATE(n) ;
 #endif // HOST_KEEPALIVE_FEATURE
 
-//&begin[IO_Handling]
+//&begin[Input_Handling]
 #define DEFINE_PGM_READ_ANY(type, reader)       \
   static inline type pgm_read_any(const type *p)  \
   { return pgm_read_##reader##_near(p); }
 
 DEFINE_PGM_READ_ANY(float,       float)
 DEFINE_PGM_READ_ANY(signed char, byte)
-//&end[IO_Handling]
+//&end[Input_Handling]
 
 //&begin[Move_To_Destination]
 //&begin[Homing]
@@ -745,7 +745,7 @@ void set_current_from_steppers_for_axis(const AxisEnum axis);
 #endif
 //&end[Arc_Movement]
 
-//&begin[IO_Handling]
+//&begin[Input_Handling]
 void serial_echopair_P(const char* s_P, const char *v)   { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, char v)          { serialprintPGM(s_P); SERIAL_CHAR(v); }
 void serial_echopair_P(const char* s_P, int v)           { serialprintPGM(s_P); SERIAL_ECHO(v); }
@@ -753,7 +753,7 @@ void serial_echopair_P(const char* s_P, long v)          { serialprintPGM(s_P); 
 void serial_echopair_P(const char* s_P, float v)         { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, double v)        { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, unsigned long v) { serialprintPGM(s_P); SERIAL_ECHO(v); }
-//&end[IO_Handling]
+//&end[Input_Handling]
 
 //&begin[Switching_Extruder]
 void tool_change(const uint8_t tmp_extruder, const float fr_mm_s=0.0, bool no_move=false);
@@ -10428,14 +10428,17 @@ void setup() {
     setup_filrunoutpin();
   #endif
 
+//&line[Board]
   setup_killpin();
 
+//&line[Power]
   setup_powerhold();
 
   #if HAS_STEPPER_RESET
     disableStepperDrivers();
   #endif
 
+//&begin[IO_Handling]
   MYSERIAL.begin(BAUDRATE);
   SERIAL_PROTOCOLLNPGM("start");
   SERIAL_ECHO_START;
@@ -10453,6 +10456,7 @@ void setup() {
   SERIAL_CHAR(' ');
   SERIAL_ECHOLNPGM(SHORT_BUILD_VERSION);
   SERIAL_EOL;
+//&end[IO_Handling]
 
   #if defined(STRING_DISTRIBUTION_DATE) && defined(STRING_CONFIG_H_AUTHOR)
     SERIAL_ECHO_START;
@@ -10462,9 +10466,11 @@ void setup() {
     SERIAL_ECHOLNPGM("Compiled: " __DATE__);
   #endif
 
+//&begin[IO_Handling]
   SERIAL_ECHO_START;
   SERIAL_ECHOPAIR(MSG_FREE_MEMORY, freeMemory());
   SERIAL_ECHOLNPAIR(MSG_PLANNER_BUFFER_BYTES, (int)sizeof(block_t)*BLOCK_BUFFER_SIZE);
+//&end[IO_Handling]
 
   // Send "ok" after commands by default
 //&line[Command_Handling]
@@ -10474,12 +10480,15 @@ void setup() {
   // This also updates variables in the planner, elsewhere
   Config_RetrieveSettings();
 
+//&line[Move_To_Destination]
   // Initialize current position based on home_offset
   memcpy(current_position, home_offset, sizeof(home_offset));
 
+//&line[Stepper]
   // Vital to init stepper/planner equivalent for current_position
   SYNC_PLAN_POSITION_KINEMATIC();
 
+//&line[Temperature]
   thermalManager.init();    // Initialize temperature loop
 
   #if ENABLED(USE_WATCHDOG)
@@ -10523,6 +10532,7 @@ void setup() {
     OUT_WRITE(SLED_PIN, LOW); // turn it off
   #endif // Z_PROBE_SLED
 
+//&line[Board]
   setup_homepin();
 
   #if PIN_EXISTS(STAT_LED_RED)

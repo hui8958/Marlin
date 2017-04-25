@@ -450,10 +450,10 @@ const char errormagic[] PROGMEM = "Error:";
 const char echomagic[] PROGMEM = "echo:";
 const char axis_codes[NUM_AXIS] = {'X', 'Y', 'Z', 'E'};
 
-//&begin[Input_Handling]
+//&begin[IO_Handling]
 // Number of characters read in the current line of serial input
 static int serial_count = 0;
-//&end[Input_Handling]
+//&end[IO_Handling]
 
 // Inactivity shutdown
 millis_t previous_cmd_ms = 0;
@@ -654,7 +654,7 @@ float cartes[XYZ] = { 0 };
 #endif
 //&end[Mixing_Extruder]
 
-//&line[input_handling]
+//&line[IO_handling]
 static bool send_ok[BUFSIZE];
 
 //&begin[Servo]
@@ -687,14 +687,14 @@ static bool send_ok[BUFSIZE];
   #define KEEPALIVE_STATE(n) ;
 #endif // HOST_KEEPALIVE_FEATURE
 
-//&begin[Input_Handling]
+//&begin[IO_Handling]
 #define DEFINE_PGM_READ_ANY(type, reader)       \
   static inline type pgm_read_any(const type *p)  \
   { return pgm_read_##reader##_near(p); }
 
 DEFINE_PGM_READ_ANY(float,       float)
 DEFINE_PGM_READ_ANY(signed char, byte)
-//&end[Input_Handling]
+//&end[IO_Handling]
 
 //&begin[Move_To_Destination]
 //&begin[Homing]
@@ -745,7 +745,7 @@ void set_current_from_steppers_for_axis(const AxisEnum axis);
 #endif
 //&end[Arc_Movement]
 
-//&begin[Input_Handling]
+//&begin[IO_Handling]
 void serial_echopair_P(const char* s_P, const char *v)   { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, char v)          { serialprintPGM(s_P); SERIAL_CHAR(v); }
 void serial_echopair_P(const char* s_P, int v)           { serialprintPGM(s_P); SERIAL_ECHO(v); }
@@ -753,7 +753,7 @@ void serial_echopair_P(const char* s_P, long v)          { serialprintPGM(s_P); 
 void serial_echopair_P(const char* s_P, float v)         { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, double v)        { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, unsigned long v) { serialprintPGM(s_P); SERIAL_ECHO(v); }
-//&end[Input_Handling]
+//&end[IO_Handling]
 
 //&begin[Switching_Extruder]
 void tool_change(const uint8_t tmp_extruder, const float fr_mm_s=0.0, bool no_move=false);

@@ -42,7 +42,8 @@ Marlin
             Manual_Bed_Leveling
             Auto_Bed_Leveling
     WatchDog
-	Temperature
+    Temperature
+    PRINTCOUNTER
     Command_Input_Process
     Move_To_Destination
     Movement_Planner

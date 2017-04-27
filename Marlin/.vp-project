@@ -36,7 +36,7 @@ Marlin
             SDcard_Reader
         xor Bed
             Bed_Regular
-            Bed_Heat
+            Bed_Heated
     Homing
         Bed_Leveing
             Manual_Bed_Leveling
@@ -45,5 +45,10 @@ Marlin
     Command_Input_Process
     Move_To_Destination
     Movement_Planner
-    PrintCounter
+    Print_Job_Timer
     Debugger
+    Inch_Mode_Support
+    Temperature_Units_Support
+    IO_Handling
+    Arc_Movement
+    Auto_Bed_Leveling_Bilinear

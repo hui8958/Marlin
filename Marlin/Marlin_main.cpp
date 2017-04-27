@@ -331,7 +331,7 @@ static float destination[XYZE] = { 0.0 };
 bool axis_homed[XYZ] = { false }, axis_known_position[XYZ] = { false };
 //&end[Homing]
 
-//&begin[Command_Handling]
+//&begin[Command_Input_Process]
 /**
  * GCode line number handling. Hosts may opt to include line numbers when
  * sending commands to Marlin, and lines will be checked for sequentiality.
@@ -367,7 +367,7 @@ static char *current_command,      // The command currently being executed
  * are enqueued ahead of any pending serial or sd card commands.
  */
 static const char *injected_commands_P = NULL;
-//&end[Command_Handling]
+//&end[Command_Input_Process]
 
 //&begin[Inch_Mode_Support]
 #if ENABLED(INCH_MODE_SUPPORT)
@@ -450,24 +450,24 @@ const char errormagic[] PROGMEM = "Error:";
 const char echomagic[] PROGMEM = "echo:";
 const char axis_codes[NUM_AXIS] = {'X', 'Y', 'Z', 'E'};
 
-//&begin[Input_Handling]
+//&begin[IO_Handling]
 // Number of characters read in the current line of serial input
 static int serial_count = 0;
-//&end[Input_Handling]
+//&end[IO_Handling]
 
 // Inactivity shutdown
 millis_t previous_cmd_ms = 0;
 static millis_t max_inactive_time = 0;
 static millis_t stepper_inactive_time = (DEFAULT_STEPPER_DEACTIVE_TIME) * 1000UL;
 
-//&begin[Print_Job_Timer]
+//&begin[PRINTCOUNTER]
 // Print Job Timer
 #if ENABLED(PRINTCOUNTER)
   PrintCounter print_job_timer = PrintCounter();
 #else
   Stopwatch print_job_timer = Stopwatch();
 #endif
-//&end[Print_Job_Timer]
+//&end[PRINTCOUNTER]
 
 //&begin[Buzzer]
 // Buzzer - I2C on the LCD or a BEEPER_PIN
@@ -554,7 +554,7 @@ static uint8_t target_extruder;
 
 #endif // FWRETRACT
 
-//&begin[Power]
+//&begin[Power_Supply]
 #if ENABLED(ULTIPANEL) && HAS_POWER_SWITCH
   bool powersupply =
     #if ENABLED(PS_DEFAULT_OFF)
@@ -564,7 +564,7 @@ static uint8_t target_extruder;
     #endif
   ;
 #endif
-//&end[Power]
+//&end[Power_Supply]
 
 #if ENABLED(ULTIPANEL) && HAS_CASE_LIGHT
   bool case_light_on =
@@ -645,19 +645,19 @@ float cartes[XYZ] = { 0 };
   FilamentChangeMenuResponse filament_change_menu_response;
 #endif
 
-//&begin[Mixing_Extruder]
+//&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
   float mixing_factor[MIXING_STEPPERS]; // Reciprocal of mix proportion. 0.0 = off, otherwise >= 1.0.
   #if MIXING_VIRTUAL_TOOLS > 1
     float mixing_virtual_tool_mix[MIXING_VIRTUAL_TOOLS][MIXING_STEPPERS];
   #endif
 #endif
-//&end[Mixing_Extruder]
+//&end[Extruder_Mixing]
 
-//&line[input_handling]
+//&line[IO_handling]
 static bool send_ok[BUFSIZE];
 
-//&begin[Servo]
+//&begin[Moter_Type_Servo]
 #if HAS_SERVOS
   Servo servo[NUM_SERVOS];
   #define MOVE_SERVO(I, P) servo[I].move(P)
@@ -666,7 +666,7 @@ static bool send_ok[BUFSIZE];
     #define STOW_Z_SERVO() MOVE_SERVO(Z_ENDSTOP_SERVO_NR, z_servo_angle[1])
   #endif
 #endif
-//&end[Servo]
+//&end[Moter_Type_Servo]
 
 #ifdef CHDK
   millis_t chdkHigh = 0;
@@ -687,17 +687,16 @@ static bool send_ok[BUFSIZE];
   #define KEEPALIVE_STATE(n) ;
 #endif // HOST_KEEPALIVE_FEATURE
 
-//&begin[Input_Handling]
+//&begin[IO_Handling]
 #define DEFINE_PGM_READ_ANY(type, reader)       \
   static inline type pgm_read_any(const type *p)  \
   { return pgm_read_##reader##_near(p); }
 
 DEFINE_PGM_READ_ANY(float,       float)
 DEFINE_PGM_READ_ANY(signed char, byte)
-//&end[Input_Handling]
+//&end[IO_Handling]
 
-//&begin[Move_To_Destination]
-//&begin[Homing]
+//&begin[Move_To_Destination,Homing]
 #define XYZ_CONSTS_FROM_CONFIG(type, array, CONFIG) \
   static const PROGMEM type array##_P[XYZ] =        \
       { X_##CONFIG, Y_##CONFIG, Z_##CONFIG };     \
@@ -710,8 +709,7 @@ XYZ_CONSTS_FROM_CONFIG(float, base_home_pos,  HOME_POS)
 XYZ_CONSTS_FROM_CONFIG(float, max_length,     MAX_LENGTH)
 XYZ_CONSTS_FROM_CONFIG(float, home_bump_mm,   HOME_BUMP_MM)
 XYZ_CONSTS_FROM_CONFIG(signed char, home_dir, HOME_DIR)
-//&end[Move_To_Destination]
-//&end[Homing]
+//&end[Move_To_Destination,Homing]
 
 /**
  * ***************************************************************************
@@ -730,10 +728,10 @@ void process_next_command();
 void prepare_move_to_destination();
 //&end[Move_To_Destination]
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 void get_cartesian_from_steppers();
 void set_current_from_steppers_for_axis(const AxisEnum axis);
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 //&begin[Arc_Movement]
 #if ENABLED(ARC_SUPPORT)
@@ -745,7 +743,7 @@ void set_current_from_steppers_for_axis(const AxisEnum axis);
 #endif
 //&end[Arc_Movement]
 
-//&begin[Input_Handling]
+//&begin[IO_Handling]
 void serial_echopair_P(const char* s_P, const char *v)   { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, char v)          { serialprintPGM(s_P); SERIAL_CHAR(v); }
 void serial_echopair_P(const char* s_P, int v)           { serialprintPGM(s_P); SERIAL_ECHO(v); }
@@ -753,11 +751,11 @@ void serial_echopair_P(const char* s_P, long v)          { serialprintPGM(s_P); 
 void serial_echopair_P(const char* s_P, float v)         { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, double v)        { serialprintPGM(s_P); SERIAL_ECHO(v); }
 void serial_echopair_P(const char* s_P, unsigned long v) { serialprintPGM(s_P); SERIAL_ECHO(v); }
-//&end[Input_Handling]
+//&end[IO_Handling]
 
-//&begin[Switching_Extruder]
+//&begin[Extruder_Switching]
 void tool_change(const uint8_t tmp_extruder, const float fr_mm_s=0.0, bool no_move=false);
-//&end[Switching_Extruder]
+//&end[Extruder_Switching]
 
 static void report_current_position();
 
@@ -955,7 +953,7 @@ void setup_homepin(void) {
 }
 //&end[Board]
 
-//&begin[Power]
+//&begin[Power_Supply]
 void setup_powerhold() {
   #if HAS_SUICIDE
     OUT_WRITE(SUICIDE_PIN, HIGH);
@@ -968,7 +966,7 @@ void setup_powerhold() {
     #endif
   #endif
 }
-//&end[Power]
+//&end[Power_Supply]
 
 //&begin[Board]
 void suicide() {
@@ -978,7 +976,7 @@ void suicide() {
 }
 //&end[Board]
 
-//&begin[Servo]
+//&begin[Moter_Type_Servo]
 void servo_init() {
   #if NUM_SERVOS >= 1 && HAS_SERVO_0
     servo[0].attach(SERVO0_PIN);
@@ -1010,9 +1008,9 @@ void servo_init() {
     STOW_Z_SERVO();
   #endif
 }
-//&end[Servo]
+//&end[Moter_Type_Servo]
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 /**
  * Stepper Reset (RigidBoard, et.al.)
  */
@@ -1022,7 +1020,7 @@ void servo_init() {
   }
   void enableStepperDrivers() { SET_INPUT(STEPPER_RESET_PIN); }  // set to input, which allows it to be pulled high by pullups
 #endif
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 #if ENABLED(EXPERIMENTAL_I2CBUS) && I2C_SLAVE_ADDRESS > 0
 
@@ -2093,7 +2091,7 @@ static void clean_up_after_endstop_or_probe_move() {
   #define DEPLOY_PROBE() set_probe_deployed(true)
   #define STOW_PROBE() set_probe_deployed(false)
 
-//&begin[BLTOUCH]
+//&begin[EndStopZ_BLTouchSensor]
   #if ENABLED(BLTOUCH)
     FORCE_INLINE void set_bltouch_deployed(const bool &deploy) {
       servo[Z_ENDSTOP_SERVO_NR].move(deploy ? BLTOUCH_DEPLOY : BLTOUCH_STOW);
@@ -2106,10 +2104,10 @@ static void clean_up_after_endstop_or_probe_move() {
       #endif
     }
   #endif
-//&end[BLTOUCH]
+//&end[EndStopZ_BLTouchSensor]
 
   // returns false for ok and true for failure
-  //&line[BLTOUCH]
+  //&line[EndStopZ_BLTouchSensor]
   static bool set_probe_deployed(bool deploy) {
 
     #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -2125,9 +2123,9 @@ static void clean_up_after_endstop_or_probe_move() {
     do_probe_raise(_Z_CLEARANCE_DEPLOY_PROBE);
 
     // When deploying make sure BLTOUCH is not already triggered
-    //&line[BLTOUCH]
+    //&line[EndStopZ_BLTouchSensor]
     #if ENABLED(BLTOUCH)
-    //&line[BLTOUCH]
+    //&line[EndStopZ_BLTouchSensor]
       if (deploy && TEST_BLTOUCH()) { stop(); return true; }
     #elif ENABLED(Z_PROBE_SLED)
       if (axis_unhomed_error(true, false, false)) { stop(); return true; }
@@ -2186,28 +2184,28 @@ static void clean_up_after_endstop_or_probe_move() {
     return false;
   }
 
- //&line[BLTOUCH]
+ //&line[EndStopZ_BLTouchSensor]
   static void do_probe_move(float z, float fr_mm_m) {
     #if ENABLED(DEBUG_LEVELING_FEATURE)
       if (DEBUGGING(LEVELING)) DEBUG_POS(">>> do_probe_move", current_position);
     #endif
 
     // Deploy BLTouch at the start of any probe
-     //&begin[BLTOUCH]
+     //&begin[EndStopZ_BLTouchSensor]
     #if ENABLED(BLTOUCH)
       set_bltouch_deployed(true);
     #endif
-    //&end[BLTOUCH]
+    //&end[EndStopZ_BLTouchSensor]
     
     // Move down until probe triggered
     do_blocking_move_to_z(LOGICAL_Z_POSITION(z), MMM_TO_MMS(fr_mm_m));
 
     // Retract BLTouch immediately after a probe
-     //&begin[BLTOUCH]
+     //&begin[EndStopZ_BLTouchSensor]
     #if ENABLED(BLTOUCH)
       set_bltouch_deployed(false);
     #endif
-    //&end[BLTOUCH]
+    //&end[EndStopZ_BLTouchSensor]
     
     // Clear endstop flags
     endstops.hit_on_purpose();
@@ -2899,7 +2897,7 @@ static void homeaxis(AxisEnum axis) {
 
 #endif // FWRETRACT
 
-//&begin[Mixing_Extruder]
+//&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
 
   void normalize_mix() {
@@ -2938,7 +2936,7 @@ static void homeaxis(AxisEnum axis) {
   #endif
 
 #endif
-//&end[Mixing_Extruder]
+//&end[Extruder_Mixing]
 
 /**
  * ***************************************************************************
@@ -2964,12 +2962,12 @@ void gcode_get_destination() {
 
   if (code_seen('F') && code_value_linear_units() > 0.0)
     feedrate_mm_s = MMM_TO_MMS(code_value_linear_units());
-
+//&begin[PRINTCOUNTER, Print_Job_Timer]
   #if ENABLED(PRINTCOUNTER)
     if (!DEBUGGING(DRYRUN))
       print_job_timer.incFilamentUsed(destination[E_AXIS] - current_position[E_AXIS]);
   #endif
-
+//&end[PRINTCOUNTER, Print_Job_Timer]
   // Get ABCDHI mixing factors
   #if ENABLED(MIXING_EXTRUDER) && ENABLED(DIRECT_MIXING_IN_G1)
     gcode_get_mix();
@@ -4024,6 +4022,7 @@ inline void gcode_G28() {
    *     Usage: "G29 E" or "G29 e"
    *
    */
+   
   inline void gcode_G29() {
 
     #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -4460,8 +4459,8 @@ inline void gcode_G28() {
         #if ENABLED(DEBUG_LEVELING_FEATURE)
           if (DEBUGGING(LEVELING)) DEBUG_POS("G29 uncorrected XYZ", current_position);
         #endif
-
-        matrix_3x3 inverse = matrix_3x3::transpose(planner.bed_level_matrix);
+        
+		matrix_3x3 inverse = matrix_3x3::transpose(planner.bed_level_matrix);
 
         // 2. Apply the inverse matrix to the distance
         //    from the reference point to X, Y, and zero.
@@ -4788,7 +4787,7 @@ inline void gcode_G92() {
 
 #endif // EMERGENCY_PARSER || ULTIPANEL
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 /**
  * M17: Enable power on all stepper motors
  */
@@ -4796,7 +4795,7 @@ inline void gcode_M17() {
   LCD_MESSAGEPGM(MSG_NO_MOVE);
   enable_all_steppers();
 }
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 #if ENABLED(SDSUPPORT)
 
@@ -5401,7 +5400,7 @@ inline void gcode_M104() {
   #endif
 }
 
-//&begin[Heated_Bed]
+//&begin[Bed_Heated]
 #if HAS_TEMP_HOTEND || HAS_TEMP_BED
 
   void print_heaterstates() {
@@ -5471,7 +5470,7 @@ inline void gcode_M105() {
   SERIAL_EOL;
 }
 //&end[Hotend]
-//&end[Heated_Bed]
+//&end[Bed_Heated]
 
 #if ENABLED(AUTO_REPORT_TEMPERATURES) && (HAS_TEMP_HOTEND || HAS_TEMP_BED)
 
@@ -5687,7 +5686,7 @@ inline void gcode_M109() {
 }
 //&end[Hotend]
 
-//&begin[Heated_Bed]
+//&begin[Bed_Heated]
 #if HAS_TEMP_BED
 
   #ifndef MIN_COOLING_SLOPE_DEG_BED
@@ -5807,7 +5806,7 @@ inline void gcode_M109() {
   }
 
 #endif // HAS_TEMP_BED
-//&end[Heated_Bed]
+//&end[Bed_Heated]
 
 //&begin[Command_Handling]
 /**
@@ -5903,7 +5902,7 @@ inline void gcode_M111() {
 
 #endif //BARICUDA
 
-//&begin[Heated_Bed]
+//&begin[Bed_Heated]
 /**
  * M140: Set bed temperature
  */
@@ -5911,7 +5910,7 @@ inline void gcode_M140() {
   if (DEBUGGING(DRYRUN)) return;
   if (code_seen('S')) thermalManager.setTargetBed(code_value_temp_abs());
 }
-//&end[Heated_Bed]
+//&end[Bed_Heated]
 
 #if ENABLED(ULTIPANEL)
 
@@ -5962,7 +5961,7 @@ inline void gcode_M140() {
 #endif
 //&end[Temperature_Units_Support]
 
-//&begin[Power]
+//&begin[Power_Supply]
 #if HAS_POWER_SWITCH
 
   /**
@@ -6019,7 +6018,7 @@ inline void gcode_M81() {
     lcd_update();
   #endif
 }
-//&end[Power]
+//&end[Power_Supply]
 
 //&begin[Extruder]
 /**
@@ -6034,7 +6033,7 @@ inline void gcode_M83() { axis_relative_modes[E_AXIS] = true; }
 //&end[Extruder]
 
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 /**
  * M18, M84: Disable all stepper motors
  */
@@ -6063,7 +6062,7 @@ inline void gcode_M18_M84() {
     }
   }
 }
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 /**
  * M85: Set inactivity shutdown timer with parameter S<seconds>. To disable set zero (default)
@@ -6072,7 +6071,7 @@ inline void gcode_M85() {
   if (code_seen('S')) max_inactive_time = code_value_millis_from_seconds();
 }
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 /**
  * Multi-stepper support for M92, M201, M203
  */
@@ -6140,7 +6139,7 @@ static void report_current_position() {
  * M114: Output current position to serial port
  */
 inline void gcode_M114() { report_current_position(); }
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 /**
  * M115: Capabilities string
@@ -6358,7 +6357,7 @@ inline void gcode_M200() {
 }
 //&end[Extruder]
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 /**
  * M201: Set max acceleration in units/s^2 for print moves (M201 X1000 Y1000)
  *
@@ -6385,7 +6384,7 @@ inline void gcode_M201() {
     }
   }
 #endif
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 //begin[Extruder]
 /**
@@ -6414,7 +6413,7 @@ inline void gcode_M203() {
  *
  *  Also sets minimum segment time in ms (B20000) to prevent buffer under-runs and M20 minimum feedrate
  */
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 inline void gcode_M204() {
   if (code_seen('S')) {  // Kept for legacy compatibility. Should NOT BE USED for new developments.
     planner.travel_acceleration = planner.acceleration = code_value_linear_units();
@@ -6454,7 +6453,7 @@ inline void gcode_M205() {
   if (code_seen('Z')) planner.max_jerk[Z_AXIS] = code_value_axis_units(Z_AXIS);
   if (code_seen('E')) planner.max_jerk[E_AXIS] = code_value_axis_units(E_AXIS);
 }
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 //&begin[Homing]
 /**
@@ -6756,7 +6755,7 @@ inline void gcode_M226() {
 
 #endif // EXPERIMENTAL_I2CBUS
 
-//&begin[Servo]
+//&begin[Moter_Type_Servo]
 #if HAS_SERVOS
 
   /**
@@ -6782,7 +6781,7 @@ inline void gcode_M226() {
   }
 
 #endif // HAS_SERVOS
-//&end[Servo]
+//&end[Moter_Type_Servo]
 
 //&begin[Buzzer]
 #if HAS_BUZZER
@@ -6857,7 +6856,7 @@ inline void gcode_M226() {
 #endif // PIDTEMP
 //&end[Hotend]
 
-//&begin[Heated Bed]
+//&begin[Bed_Heated]
 #if ENABLED(PIDTEMPBED)
 
   inline void gcode_M304() {
@@ -6874,7 +6873,7 @@ inline void gcode_M226() {
   }
 
 #endif // PIDTEMPBED
-//&end[Heated Bed]
+//&end[Bed_Heated]
 
 #if defined(CHDK) || HAS_PHOTOGRAPH
 
@@ -7099,12 +7098,12 @@ inline void gcode_M303() {
 
 #endif // EXT_SOLENOID
 
-//&begin[Move to Destination]
+//&begin[Move_To_Destination]
 /**
  * M400: Finish all moves
  */
 inline void gcode_M400() { stepper.synchronize(); }
-//&end[Move to Destination]
+//&end[Move_To_Destination]
 
 #if HAS_BED_PROBE
 
@@ -7176,14 +7175,14 @@ inline void gcode_M400() { stepper.synchronize(); }
 
 #endif // FILAMENT_WIDTH_SENSOR
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 void quickstop_stepper() {
   stepper.quick_stop();
   stepper.synchronize();
   set_current_from_steppers_for_axis(ALL_AXES);
   SYNC_PLAN_POSITION_KINEMATIC();
 }
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 #if PLANNER_LEVELING
   /**
@@ -7712,7 +7711,7 @@ inline void gcode_M907() {
 
 #endif // HAS_CASE_LIGHT
 
-//&begin[Mixing_Extruder]
+//&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
 
   /**
@@ -7769,7 +7768,7 @@ inline void gcode_M907() {
   #endif
 
 #endif // MIXING_EXTRUDER
-//&end[Mixing Extruder]
+//&end[Extruder_Mixing]
 
 /**
  * M999: Restart after being stopped
@@ -7791,14 +7790,14 @@ inline void gcode_M999() {
   FlushSerialRequestResend();
 }
 
-//&begin[Switching_Extruder]
+//&begin[Extruder_Switching]
 #if ENABLED(SWITCHING_EXTRUDER)
   inline void move_extruder_servo(uint8_t e) {
     const int angles[2] = SWITCHING_EXTRUDER_SERVO_ANGLES;
     MOVE_SERVO(SWITCHING_EXTRUDER_SERVO_NR, angles[e]);
   }
 #endif
-//&end[Switching_Extruder]
+//&end[Extruder_Switching]
 
 //&begin[Extruder]
 inline void invalid_extruder_error(const uint8_t &e) {
@@ -7809,8 +7808,8 @@ inline void invalid_extruder_error(const uint8_t &e) {
 }
 //&end[Extruder]
 
-//&begin[Mixing_Extruder]
-//&begin[Switching_Extruder]
+//&begin[Extruder_Mixing]
+//&begin[Extruder_Switching]
 /**
  * Perform a tool-change, which may result in moving the
  * previous tool out of the way and the new tool into place.
@@ -8108,10 +8107,10 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
   #endif //!MIXING_EXTRUDER || MIXING_VIRTUAL_TOOLS <= 1
 }
-//&end[Mixing_Extruder]
-//&end[Switching_Extruder]
+//&end[Extruder_Mixing]
+//&end[Extruder_Switching]
 
-//&begin[Switching_Extruder]
+//&begin[Extruder_Switching]
 /**
  * T0-T3: Switch tool, usually switching extruders
  *
@@ -8150,9 +8149,9 @@ inline void gcode_T(uint8_t tmp_extruder) {
     }
   #endif
 }
-//&end[Switching_Extruder]
+//&end[Extruder_Switching]
 
-//&begin[Command_Handling]
+//&begin[Command_Input_Process]
 /**
  * Process a single command and dispatch it to its handler
  * This is called from the main loop()
@@ -8933,7 +8932,7 @@ void ok_to_send() {
   #endif
   SERIAL_EOL;
 }
-//&end[Command_Handling]
+//&end[Command_Input_Process]
 
 //&begin[Endstop]
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
@@ -9233,7 +9232,7 @@ void ok_to_send() {
 
 #endif // DELTA
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 /**
  * Get the stepper positions in the cartes[] array.
  * Forward kinematics are applied for DELTA and SCARA.
@@ -9283,7 +9282,7 @@ void set_current_from_steppers_for_axis(const AxisEnum axis) {
   else
     current_position[axis] = cartes[axis];
 }
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 #if ENABLED(MESH_BED_LEVELING)
 
@@ -10109,7 +10108,7 @@ void calculate_volumetric_multipliers() {
 }
 //&end[Extruder]
 
-//&begin[Stepper]
+//&begin[Moter_Type_Stepper]
 void enable_all_steppers() {
   enable_x();
   enable_y();
@@ -10129,7 +10128,7 @@ void disable_all_steppers() {
   disable_e2();
   disable_e3();
 }
-//&end[Stepper]
+//&end[Moter_Type_Stepper]
 
 /**
  * Manage several activities:
@@ -10405,16 +10404,16 @@ void stop() {
  *  - Print startup messages and diagnostics
  *  - Get EEPROM or default settings
  *  - Initialize managers for:
- *    â€?temperature
- *    â€?planner
- *    â€?watchdog
- *    â€?stepper
- *    â€?photo pin
- *    â€?servos
- *    â€?LCD controller
- *    â€?Digipot I2C
- *    â€?Z probe sled
- *    â€?status LEDs
+ *    ?temperature
+ *    ?planner
+ *    ?watchdog
+ *    ?stepper
+ *    ?photo pin
+ *    ?servos
+ *    ?LCD controller
+ *    ?Digipot I2C
+ *    ?Z probe sled
+ *    ?status LEDs
  */
 void setup() {
 
@@ -10428,11 +10427,11 @@ void setup() {
     setup_filrunoutpin();
   #endif
 
-//&line[Board]
-  setup_killpin();
 
-//&line[Power]
-  setup_powerhold();
+  setup_killpin(); //&line[Board]
+
+
+  setup_powerhold();//&line[Power_Supply]
 
   #if HAS_STEPPER_RESET
     disableStepperDrivers();
@@ -10480,25 +10479,25 @@ void setup() {
   // This also updates variables in the planner, elsewhere
   Config_RetrieveSettings();
 
-//&line[Move_To_Destination]
+
   // Initialize current position based on home_offset
-  memcpy(current_position, home_offset, sizeof(home_offset));
+  memcpy(current_position, home_offset, sizeof(home_offset)); //&line[Move_To_Destination]
 
-//&line[Stepper]
+
   // Vital to init stepper/planner equivalent for current_position
-  SYNC_PLAN_POSITION_KINEMATIC();
+  SYNC_PLAN_POSITION_KINEMATIC(); //&line[Moter_Type_Stepper]
 
-//&line[Temperature]
-  thermalManager.init();    // Initialize temperature loop
+
+  thermalManager.init();  //&line[Temperature]   // Initialize temperature loop
 
   #if ENABLED(USE_WATCHDOG)
     watchdog_init();
   #endif
 
-//&line[Stepper]
-  stepper.init();    // Initialize stepper, this enables interrupts!
-//&line[Servo]
-  servo_init();
+
+  stepper.init();  //&line[Moter_Type_Stepper]  // Initialize stepper, this enables interrupts!
+
+  servo_init(); //&line[Moter_Type_Servo]
 
   #if HAS_PHOTOGRAPH
     OUT_WRITE(PHOTOGRAPH_PIN, LOW);
@@ -10532,8 +10531,8 @@ void setup() {
     OUT_WRITE(SLED_PIN, LOW); // turn it off
   #endif // Z_PROBE_SLED
 
-//&line[Board]
-  setup_homepin();
+
+  setup_homepin(); //&line[Board]
 
   #if PIN_EXISTS(STAT_LED_RED)
     OUT_WRITE(STAT_LED_RED_PIN, LOW); // turn it off
@@ -10561,7 +10560,7 @@ void setup() {
     #endif
   #endif
 
-//&begin[Mixing_Extruder]
+//&begin[Extruder_Mixing]
   #if ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1
     // Initialize mixing to 100% color 1
     for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
@@ -10570,7 +10569,7 @@ void setup() {
       for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
         mixing_virtual_tool_mix[t][i] = mixing_factor[i];
   #endif
-//&end[Mixing_Extruder]
+//&end[Extruder_Mixing]
 
   #if ENABLED(EXPERIMENTAL_I2CBUS) && I2C_SLAVE_ADDRESS > 0
     i2c.onReceive(i2c_on_receive);
@@ -10638,7 +10637,6 @@ if (commands_in_queue < BUFSIZE) get_available_commands();
   }
 //&end[Command_Handling]
 
-//&line[Endstop]
-  endstops.report_state();
+  endstops.report_state(); //&line[Endstop]
   idle();
 }

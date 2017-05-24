@@ -104,6 +104,7 @@ class Stepper {
     static long counter_X, counter_Y, counter_Z, counter_E;
     static volatile uint32_t step_events_completed; // The number of step events executed in the current block
 
+//&begin[LIN_ADVANCE]
     #if ENABLED(ADVANCE) || ENABLED(LIN_ADVANCE)
       static uint8_t old_OCR0A;
       static volatile uint8_t eISR_Rate;
@@ -120,7 +121,7 @@ class Stepper {
         static long old_advance;
       #endif
     #endif // ADVANCE or LIN_ADVANCE
-
+//&end[LIN_ADVANCE]
     static long acceleration_time, deceleration_time;
     //unsigned long accelerate_until, decelerate_after, acceleration_rate, initial_rate, final_rate, nominal_rate;
     static unsigned short acc_step_rate; // needed for deceleration start point
@@ -358,14 +359,14 @@ class Stepper {
       acc_step_rate = current_block->initial_rate;
       acceleration_time = calc_timer(acc_step_rate);
       OCR1A = acceleration_time;
-      
+ //&begin[LIN_ADVANCE]     
       #if ENABLED(LIN_ADVANCE)
         if (current_block->use_advance_lead) {
           current_estep_rate[current_block->active_extruder] = ((unsigned long)acc_step_rate * current_block->abs_adv_steps_multiplier8) >> 17;
           final_estep_rate = (current_block->nominal_rate * current_block->abs_adv_steps_multiplier8) >> 17;
         }
       #endif
-
+//&end[LIN_ADVANCE]
       // SERIAL_ECHO_START;
       // SERIAL_ECHOPGM("advance :");
       // SERIAL_ECHO(current_block->advance/256.0);

@@ -988,12 +988,14 @@
 //    P2: The nozzle height will be raised by Z-park amount but never going over
 //        the machine's limit of Z_MAX_POS.
 //
-//#define NOZZLE_PARK_FEATURE
 
+//&begin[Park_Nozzle]
+//#define NOZZLE_PARK_FEATURE
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z }
   #define NOZZLE_PARK_POINT { (X_MIN_POS + 10), (Y_MAX_POS - 10), 20 }
 #endif
+//&end[Park_Nozzle]
 
 //
 // Clean Nozzle Feature -- EXPERIMENTAL
@@ -1031,6 +1033,7 @@
 //
 //#define NOZZLE_CLEAN_FEATURE
 
+//&begin[Clean_Nozzle]
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
   // Number of pattern repetitions
   #define NOZZLE_CLEAN_STROKES  12
@@ -1042,6 +1045,7 @@
   // Moves the nozzle to the initial position
   #define NOZZLE_CLEAN_GOBACK
 #endif
+//&end[Clean_Nozzle]
 
 //
 // Print job timer

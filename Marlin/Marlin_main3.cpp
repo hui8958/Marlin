@@ -100,11 +100,11 @@ inline void gcode_M42() {
         // else
           pin_state[pin - first_pin] = digitalRead(pin);
       }
-
+//&begin[Emergency_Command_Parser]
       #if ENABLED(EMERGENCY_PARSER) || ENABLED(ULTIPANEL)
         wait_for_user = true;
       #endif
-
+//&end[Emergency_Command_Parser]
       for(;;) {
         for (int8_t pin = first_pin; pin <= last_pin; pin++) {
           if (pin_is_protected(pin)) continue;
@@ -571,7 +571,7 @@ inline void gcode_M105() {
 
 #endif // FAN_COUNT > 0
 //&end[Fan]
-
+//&begin[Emergency_Command_Parser]
 #if DISABLED(EMERGENCY_PARSER)
 
   /**
@@ -595,7 +595,7 @@ inline void gcode_M105() {
   inline void gcode_M410() { quickstop_stepper(); }
 
 #endif
-
+//&end[Emergency_Command_Parser]
 //&begin[Hotend]
   #ifndef MIN_COOLING_SLOPE_DEG
     #define MIN_COOLING_SLOPE_DEG 1.50
@@ -1233,14 +1233,14 @@ inline void gcode_M115() {
     #else
       SERIAL_PROTOCOLLNPGM("Cap:SOFTWARE_POWER:0");
     #endif
-
+//&begin[CASE_LIGHT]
     // TOGGLE_LIGHTS (M355)
     #if HAS_CASE_LIGHT
       SERIAL_PROTOCOLLNPGM("Cap:TOGGLE_LIGHTS:1");
     #else
       SERIAL_PROTOCOLLNPGM("Cap:TOGGLE_LIGHTS:0");
     #endif
-
+//&end[CASE_LIGHT]
     // EMERGENCY_PARSER (M108, M112, M410)
     #if ENABLED(EMERGENCY_PARSER)
       SERIAL_PROTOCOLLNPGM("Cap:EMERGENCY_PARSER:1");

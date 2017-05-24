@@ -328,6 +328,7 @@
     #define E_AXIS_N E_AXIS
   #endif
 
+  //&begin[EndStopZ_BLTouchSensor]
   /**
    * The BLTouch Probe emulates a servo probe
    * and uses "special" angles for its state.
@@ -359,7 +360,7 @@
       #define TEST_BLTOUCH() _TEST_BLTOUCH(Z_MIN_PROBE)
     #endif
   #endif
-
+//&end[EndStopZ_BLTouchSensor]
   /**
    * Set a flag for a servo probe
    */

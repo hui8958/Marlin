@@ -107,10 +107,12 @@ FORCE_INLINE void serialprintPGM(const char* str) {
 }
 
 void idle(
+//&begin[FILAMENT_CHANGE_FEATURE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     bool no_stepper_sleep = false  // pass true to keep steppers from disabling on timeout
   #endif
-);
+//&end[FILAMENT_CHANGE_FEATURE]
+  );
 
 void manage_inactivity(bool ignore_stepper_queue = false);
 
@@ -269,11 +271,11 @@ extern float volumetric_multiplier[EXTRUDERS]; // reciprocal of cross-sectional 
 extern bool axis_known_position[XYZ]; // axis[n].is_known
 extern bool axis_homed[XYZ]; // axis[n].is_homed
 extern volatile bool wait_for_heatup;
-
+//&begin[Emergency_Command_Parser]
 #if ENABLED(EMERGENCY_PARSER) || ENABLED(ULTIPANEL)
   extern volatile bool wait_for_user;
 #endif
-
+//&end[Emergency_Command_Parser]
 extern float current_position[NUM_AXIS];
 extern float position_shift[XYZ];
 extern float home_offset[XYZ];
@@ -362,11 +364,11 @@ float code_value_temp_diff();
   extern int filwidth_delay_index[2];  // Ring buffer indexes. Used by planner, temperature, and main code
   extern int meas_delay_cm;            // Delay distance
 #endif
-
+//&begin[FILAMENT_CHANGE_FEATURE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
   extern FilamentChangeMenuResponse filament_change_menu_response;
 #endif
-
+//&end[FILAMENT_CHANGE_FEATURE]
 #if ENABLED(PID_EXTRUSION_SCALING)
   extern int lpq_len;
 #endif

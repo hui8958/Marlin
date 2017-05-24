@@ -93,12 +93,13 @@ volatile uint32_t Stepper::step_events_completed = 0; // The number of step even
 
   uint8_t Stepper::old_OCR0A = 0;
   volatile uint8_t Stepper::eISR_Rate = 200; // Keep the ISR at a low rate until needed
-
+//&begin[LIN_ADVANCE]
   #if ENABLED(LIN_ADVANCE)
     volatile int Stepper::e_steps[E_STEPPERS];
     int Stepper::final_estep_rate,
         Stepper::current_estep_rate[E_STEPPERS],
         Stepper::current_adv_steps[E_STEPPERS];
+//&end[LIN_ADVANCE]
   #else
     long Stepper::e_steps[E_STEPPERS],
          Stepper::final_advance = 0,
@@ -426,6 +427,7 @@ void Stepper::isr() {
   // Take multiple steps per interrupt (For high speed moves)
   bool all_steps_done = false;
   for (int8_t i = 0; i < step_loops; i++) {
+//&begin[LIN_ADVANCE]
     #if ENABLED(LIN_ADVANCE)
 
       counter_E += current_block->steps[E_AXIS];
@@ -477,7 +479,7 @@ void Stepper::isr() {
       #endif // MIXING_EXTRUDER
 
     #endif // ADVANCE or LIN_ADVANCE
-
+//&end[LIN_ADVANCE]
     #define _COUNTER(AXIS) counter_## AXIS
     #define _APPLY_STEP(AXIS) AXIS ##_APPLY_STEP
     #define _INVERT_STEP_PIN(AXIS) INVERT_## AXIS ##_STEP_PIN
@@ -568,7 +570,8 @@ void Stepper::isr() {
       break;
     }
   }
-
+  
+//&begin[LIN_ADVANCE]
   #if ENABLED(LIN_ADVANCE)
     if (current_block->use_advance_lead) {
       int delta_adv_steps = current_estep_rate[TOOL_E_INDEX] - current_adv_steps[TOOL_E_INDEX];
@@ -583,7 +586,8 @@ void Stepper::isr() {
       #endif
    }
   #endif
-  
+//&end[LIN_ADVANCE]
+
   #if ENABLED(ADVANCE) || ENABLED(LIN_ADVANCE)
     // If we have esteps to execute, fire the next advance_isr "now"
     if (e_steps[TOOL_E_INDEX]) OCR0A = TCNT0 + 2;
@@ -602,7 +606,8 @@ void Stepper::isr() {
     uint16_t timer = calc_timer(acc_step_rate);
     OCR1A = timer;
     acceleration_time += timer;
-
+	
+//&begin[LIN_ADVANCE]
     #if ENABLED(LIN_ADVANCE)
 
       if (current_block->use_advance_lead) {
@@ -636,9 +641,11 @@ void Stepper::isr() {
 
     #endif // ADVANCE or LIN_ADVANCE
 
+
     #if ENABLED(ADVANCE) || ENABLED(LIN_ADVANCE)
       eISR_Rate = (timer >> 3) * step_loops / abs(e_steps[TOOL_E_INDEX]); //>> 3 is divide by 8. Reason: Timer 1 runs at 16/8=2MHz, Timer 0 at 16/64=0.25MHz. ==> 2/0.25=8.
     #endif
+//&end[LIN_ADVANCE]
   }
   else if (step_events_completed > (uint32_t)current_block->decelerate_after) {
     uint16_t step_rate;
@@ -655,7 +662,7 @@ void Stepper::isr() {
     uint16_t timer = calc_timer(step_rate);
     OCR1A = timer;
     deceleration_time += timer;
-
+//&begin[LIN_ADVANCE]
     #if ENABLED(LIN_ADVANCE)
 
       if (current_block->use_advance_lead) {
@@ -690,6 +697,7 @@ void Stepper::isr() {
     #if ENABLED(ADVANCE) || ENABLED(LIN_ADVANCE)
       eISR_Rate = (timer >> 3) * step_loops / abs(e_steps[TOOL_E_INDEX]);
     #endif
+//&end[LIN_ADVANCE]
   }
   else {
 
@@ -971,7 +979,7 @@ void Stepper::init() {
   OCR1A = 0x4000;
   TCNT1 = 0;
   ENABLE_STEPPER_DRIVER_INTERRUPT();
-
+//&begin[LIN_ADVANCE]
   #if ENABLED(ADVANCE) || ENABLED(LIN_ADVANCE)
 
     for (int i = 0; i < E_STEPPERS; i++) {
@@ -988,7 +996,7 @@ void Stepper::init() {
     SBI(TIMSK0, OCIE0A);
 
   #endif // ADVANCE or LIN_ADVANCE
-
+//&end[LIN_ADVANCE]
   endstops.enable(true); // Start with endstops active. After homing they can be disabled
   sei();
 

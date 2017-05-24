@@ -54,3 +54,10 @@ Marlin
     IO_Handling
     Arc_Movement
     Auto_Bed_Leveling_Bilinear
+    Park_Nozzle
+    LIN_ADVANCE
+    FILAMENT_CHANGE_FEATURE
+    CASE_LIGHT
+    Emergency_Command_Parser
+    G2_G3_R_Parameter
+    Clean_Nozzle

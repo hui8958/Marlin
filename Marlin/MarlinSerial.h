@@ -117,12 +117,12 @@ struct ring_buffer_r {
     extern ring_buffer_t tx_buffer;
   #endif
 #endif
-
+//&begin[Emergency_Command_Parser]
 #if ENABLED(EMERGENCY_PARSER)
   #include "language.h"
   void emergency_parser(unsigned char c);
 #endif
-
+//&end[Emergency_Command_Parser]
 class MarlinSerial { //: public Stream
 
   public:

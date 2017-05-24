@@ -140,10 +140,12 @@ float Planner::previous_speed[NUM_AXIS],
   long Planner::axis_segment_time[2][3] = { {MAX_FREQ_TIME + 1, 0, 0}, {MAX_FREQ_TIME + 1, 0, 0} };
 #endif
 
+//&begin[LIN_ADVANCE]
 #if ENABLED(LIN_ADVANCE)
   float Planner::extruder_advance_k = LIN_ADVANCE_K;
   float Planner::position_float[NUM_AXIS] = { 0 };
 #endif
+//&end[LIN_ADVANCE]
 
 #if ENABLED(ENSURE_SMOOTH_MOVES)
   uint32_t Planner::block_buffer_runtime_us = 0;
@@ -668,7 +670,8 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
       last_extruder = extruder;
     }
   #endif
-
+  
+//&begin[LIN_ADVANCE]
   #if ENABLED(LIN_ADVANCE)
     float target_float[XYZE] = {a, b, c, e};
     float de_float = target_float[E_AXIS] - position_float[E_AXIS];
@@ -676,7 +679,7 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
     
     memcpy(position_float, target_float, sizeof(position_float));
   #endif
-
+//&end[LIN_ADVANCE]
   long da = target[X_AXIS] - position[X_AXIS],
        db = target[Y_AXIS] - position[Y_AXIS],
        dc = target[Z_AXIS] - position[Z_AXIS];
@@ -1303,6 +1306,7 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
   previous_nominal_speed = block->nominal_speed;
   previous_safe_speed = safe_speed;
 
+  //&begin[LIN_ADVANCE]
   #if ENABLED(LIN_ADVANCE)
 
     // Don't use LIN_ADVANCE for blocks if:
@@ -1344,7 +1348,7 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
      */
 
   #endif // ADVANCE or LIN_ADVANCE
-
+//&end[LIN_ADVANCE]
   calculate_trapezoid_for_block(block, block->entry_speed / block->nominal_speed, safe_speed / block->nominal_speed);
 
   // Move buffer head
@@ -1451,7 +1455,7 @@ void Planner::refresh_positioning() {
   }
 
 #endif
-
+//&begin[LIN_ADVANCE]
 #if ENABLED(LIN_ADVANCE)
 
   void Planner::advance_M905(const float &k) {
@@ -1462,3 +1466,4 @@ void Planner::refresh_positioning() {
   }
 
 #endif
+//&end[LIN_ADVANCE]

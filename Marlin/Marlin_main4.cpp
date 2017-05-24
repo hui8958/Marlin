@@ -65,7 +65,7 @@ inline void gcode_M503() {
   }
 
 #endif // HAS_BED_PROBE
-
+//&begin[FILAMENT_CHANGE_FEATURE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
 
   /**
@@ -240,7 +240,7 @@ inline void gcode_M503() {
   }
 
 #endif // FILAMENT_CHANGE_FEATURE
-
+//&end[FILAMENT_CHANGE_FEATURE]
 #if ENABLED(DUAL_X_CARRIAGE)
 
   /**
@@ -295,7 +295,7 @@ inline void gcode_M503() {
   }
 
 #endif // M605
-
+//&begin[LIN_ADVANCE]
 #if ENABLED(LIN_ADVANCE)
   /**
    * M905: Set advance factor
@@ -305,7 +305,7 @@ inline void gcode_M503() {
     planner.advance_M905(code_seen('K') ? code_value_float() : -1.0);
   }
 #endif
-
+//&end[LIN_ADVANCE]
 /**
  * M907: Set digital trimpot motor current using axis codes X, Y, Z, E, B, S
  */
@@ -401,6 +401,7 @@ inline void gcode_M907() {
 
 #endif // HAS_MICROSTEPS
 
+//&begin[CASE_LIGHT]
 #if HAS_CASE_LIGHT
 
   uint8_t case_light_brightness = 255;
@@ -426,6 +427,7 @@ inline void gcode_M907() {
   }
 
 #endif // HAS_CASE_LIGHT
+//&end[CASE_LIGHT]
 
 //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
@@ -975,13 +977,13 @@ void process_next_command() {
           gcode_G10_G11(codenum == 10);
           break;
       #endif // FWRETRACT
-
+//&begin[Clean_Nozzle]
       #if ENABLED(NOZZLE_CLEAN_FEATURE)
         case 12:
           gcode_G12(); // G12: Nozzle Clean
           break;
       #endif // NOZZLE_CLEAN_FEATURE
-
+//&end[Clean_Nozzle]
       #if ENABLED(INCH_MODE_SUPPORT)
         case 20: //G20: Inch Mode
           gcode_G20();
@@ -991,13 +993,15 @@ void process_next_command() {
           gcode_G21();
           break;
       #endif // INCH_MODE_SUPPORT
-
+	  
+	//&begin[Park_Nozzle]
       #if ENABLED(NOZZLE_PARK_FEATURE)
         case 27: // G27: Nozzle Park
           gcode_G27();
           break;
       #endif // NOZZLE_PARK_FEATURE
-
+	//&end[Park_Nozzle]
+	  
       case 28: // G28: Home all axes, one at a time
         gcode_G28();
         break;
@@ -1048,13 +1052,14 @@ void process_next_command() {
     break;
 
     case 'M': switch (codenum) {
+		//&begin[Emergency_Command_Parser]
       #if ENABLED(ULTIPANEL) || ENABLED(EMERGENCY_PARSER)
         case 0: // M0: Unconditional stop - Wait for user button press on LCD
         case 1: // M1: Conditional stop - Wait for user button press on LCD
           gcode_M0_M1();
           break;
       #endif // ULTIPANEL
-
+//&end[Emergency_Command_Parser]
       case 17: // M17: Enable all stepper motors
         gcode_M17();
         break;
@@ -1140,7 +1145,7 @@ void process_next_command() {
       case 111: // M111: Set debug level
         gcode_M111();
         break;
-
+//&begin[Emergency_Command_Parser]
       #if DISABLED(EMERGENCY_PARSER)
 
         case 108: // M108: Cancel Waiting
@@ -1156,7 +1161,7 @@ void process_next_command() {
           break;
 
       #endif
-
+//&end[Emergency_Command_Parser]
       #if ENABLED(HOST_KEEPALIVE_FEATURE)
         case 113: // M113: Set Host Keepalive interval
           gcode_M113();
@@ -1524,25 +1529,25 @@ void process_next_command() {
           gcode_M851();
           break;
       #endif // HAS_BED_PROBE
-
+//&begin[FILAMENT_CHANGE_FEATURE]
       #if ENABLED(FILAMENT_CHANGE_FEATURE)
         case 600: // M600: Pause for filament change
           gcode_M600();
           break;
       #endif // FILAMENT_CHANGE_FEATURE
-
+//&end[FILAMENT_CHANGE_FEATURE]
       #if ENABLED(DUAL_X_CARRIAGE)
         case 605: // M605: Set Dual X Carriage movement mode
           gcode_M605();
           break;
       #endif // DUAL_X_CARRIAGE
-
+//&begin[LIN_ADVANCE]
       #if ENABLED(LIN_ADVANCE)
         case 905: // M905: Set advance K factor.
           gcode_M905();
           break;
       #endif
-
+//&end[LIN_ADVANCE]
       case 907: // M907: Set digital trimpot motor current using axis codes.
         gcode_M907();
         break;
@@ -1578,7 +1583,7 @@ void process_next_command() {
           break;
 
       #endif // HAS_MICROSTEPS
-
+//&begin[CASE_LIGHT]
       #if HAS_CASE_LIGHT
 
         case 355: // M355 Turn case lights on/off
@@ -1586,7 +1591,7 @@ void process_next_command() {
           break;
 
       #endif // HAS_CASE_LIGHT
-
+//&end[CASE_LIGHT]
       case 999: // M999: Restart after being Stopped
         gcode_M999();
         break;
@@ -3037,10 +3042,12 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
  * Standard idle routine keeps the machine alive
  */
 void idle(
+//&begin[FILAMENT_CHANGE_FEATURE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     bool no_stepper_sleep/*=false*/
   #endif
-) {
+//&end[FILAMENT_CHANGE_FEATURE]
+  ) {
   lcd_update();
 
   host_keepalive();
@@ -3050,9 +3057,11 @@ void idle(
   #endif
 
   manage_inactivity(
+  //&begin[FILAMENT_CHANGE_FEATURE]
     #if ENABLED(FILAMENT_CHANGE_FEATURE)
       no_stepper_sleep
     #endif
+	//&end[FILAMENT_CHANGE_FEATURE]
   );
 
   thermalManager.manage_heater();
@@ -3218,11 +3227,11 @@ void setup() {
   #if HAS_PHOTOGRAPH
     OUT_WRITE(PHOTOGRAPH_PIN, LOW);
   #endif
-
+//&begin[CASE_LIGHT]
   #if HAS_CASE_LIGHT
     update_case_light();
   #endif
-
+//&end[CASE_LIGHT]
   #if HAS_BED_PROBE
     endstops.enable_z_probe(false);
   #endif

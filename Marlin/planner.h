@@ -92,10 +92,12 @@ typedef struct {
 
   uint8_t direction_bits;                   // The direction bit set for this block (refers to *_DIRECTION_BIT in config.h)
 
+  //&begin[LIN_ADVANCE]
   // Advance extrusion
   #if ENABLED(LIN_ADVANCE)
     bool use_advance_lead;
     uint32_t abs_adv_steps_multiplier8; // Factorised by 2^8 to avoid float
+	//&end[LIN_ADVANCE]
   #elif ENABLED(ADVANCE)
     int32_t advance_rate;
     volatile int32_t initial_advance;
@@ -208,12 +210,12 @@ class Planner {
       // Segment times (in µs). Used for speed calculations
       static long axis_segment_time[2][3];
     #endif
-    
+    //&begin[LIN_ADVANCE]
     #if ENABLED(LIN_ADVANCE)
       static float position_float[NUM_AXIS];
       static float extruder_advance_k;
     #endif
-
+//&end[LIN_ADVANCE]
     #if ENABLED(ENSURE_SMOOTH_MOVES)
       static uint32_t block_buffer_runtime_us; //Theoretical block buffer runtime in µs
     #endif
@@ -266,11 +268,11 @@ class Planner {
       #define ARG_Z const float &lz
 
     #endif
-    
+    //&begin[LIN_ADVANCE]
     #if ENABLED(LIN_ADVANCE)
       void advance_M905(const float &k);
     #endif
-
+//&end[LIN_ADVANCE]
     /**
      * Planner::_buffer_line
      *

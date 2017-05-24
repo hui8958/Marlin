@@ -249,10 +249,11 @@
 /**
  * Filament Change with Extruder Runout Prevention
  */
+ //&begin[FILAMENT_CHANGE_FEATURE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE) && ENABLED(EXTRUDER_RUNOUT_PREVENT)
   #error "EXTRUDER_RUNOUT_PREVENT is incompatible with FILAMENT_CHANGE_FEATURE."
 #endif
-
+//&end[FILAMENT_CHANGE_FEATURE]
 /**
  * Individual axis homing is useless for DELTAS
  */
@@ -855,14 +856,14 @@
     #error "Enable USE_ZMAX_PLUG when homing Z to MAX."
   #endif
 #endif
-
+//&begin[Emergency_Command_Parser]
 /**
  * emergency-command parser
  */
 #if ENABLED(EMERGENCY_PARSER) && defined(USBCON)
   #error "EMERGENCY_PARSER does not work on boards with AT90USB processors (USBCON)."
 #endif
-
+//&end[Emergency_Command_Parser]
 /**
  * I2C bus
  */

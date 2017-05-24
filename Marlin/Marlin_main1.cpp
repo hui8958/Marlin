@@ -440,12 +440,12 @@ static bool relative_mode = false;
 
 // For M109 and M190, this flag may be cleared (by M108) to exit the wait loop
 volatile bool wait_for_heatup = true;
-
+//&begin[Emergency_Command_Parser]
 // For M0/M1, this flag may be cleared (by M108) to exit the wait-for-user loop
 #if ENABLED(EMERGENCY_PARSER) || ENABLED(ULTIPANEL)
   volatile bool wait_for_user = false;
 #endif
-
+//&end[Emergency_Command_Parser]
 const char errormagic[] PROGMEM = "Error:";
 const char echomagic[] PROGMEM = "echo:";
 const char axis_codes[NUM_AXIS] = {'X', 'Y', 'Z', 'E'};
@@ -565,7 +565,7 @@ static uint8_t target_extruder;
   ;
 #endif
 //&end[Power_Supply]
-
+//&begin[CASE_LIGHT]
 #if ENABLED(ULTIPANEL) && HAS_CASE_LIGHT
   bool case_light_on =
     #if ENABLED(CASE_LIGHT_DEFAULT_ON)
@@ -575,7 +575,7 @@ static uint8_t target_extruder;
     #endif
   ;
 #endif
-
+//&end[CASE_LIGHT]
 #if ENABLED(DELTA)
 
   #define SIN_60 0.8660254037844386
@@ -641,9 +641,11 @@ float cartes[XYZ] = { 0 };
   static bool filament_ran_out = false;
 #endif
 
+//&begin[FILAMENT_CHANGE_FEATURE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
   FilamentChangeMenuResponse filament_change_menu_response;
 #endif
+//&end[FILAMENT_CHANGE_FEATURE]
 
 //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
@@ -3129,7 +3131,7 @@ inline void gcode_G0_G1(
       #if ENABLED(SF_ARC_FIX)
         relative_mode = relative_mode_backup;
       #endif
-
+//&begin[G2_G3_R_Parameter]
       float arc_offset[2] = { 0.0, 0.0 };
       if (code_seen('R')) {
         const float r = code_value_axis_units(X_AXIS),
@@ -3162,6 +3164,7 @@ inline void gcode_G0_G1(
         SERIAL_ERROR_START;
         SERIAL_ERRORLNPGM(MSG_ERR_ARC_ARGS);
       }
+//&end[G2_G3_R_Parameter]
     }
   }
 #endif

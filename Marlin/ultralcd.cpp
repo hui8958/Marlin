@@ -141,7 +141,7 @@ uint8_t lcdDrawUpdate = LCDVIEW_CLEAR_CALL_REDRAW; // Set when the LCD needs to 
     void lcd_info_board_menu();
     void lcd_info_menu();
   #endif // LCD_INFO_MENU
-
+//&begin[FILAMENT_CHANGE_FEATURE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     void lcd_filament_change_option_menu();
     void lcd_filament_change_init_message();
@@ -151,7 +151,7 @@ uint8_t lcdDrawUpdate = LCDVIEW_CLEAR_CALL_REDRAW; // Set when the LCD needs to 
     void lcd_filament_change_extrude_message();
     void lcd_filament_change_resume_message();
   #endif
-
+//&end[FILAMENT_CHANGE_FEATURE]
   #if HAS_LCD_CONTRAST
     void lcd_set_contrast();
   #endif
@@ -753,14 +753,14 @@ void kill_screen(const char* lcd_msg) {
       void watch_temp_callback_bed() {}
     #endif
   #endif
-
+//&begin[FILAMENT_CHANGE_FEATURE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     void lcd_enqueue_filament_change() {
       lcd_filament_change_show_message(FILAMENT_CHANGE_MESSAGE_INIT);
       enqueue_and_echo_commands_P(PSTR("M600"));
     }
   #endif
-
+//&end[FILAMENT_CHANGE_FEATURE]
   /**
    *
    * "Tune" submenu
@@ -871,14 +871,14 @@ void kill_screen(const char* lcd_msg) {
       #endif //BABYSTEP_XY
       MENU_ITEM(submenu, MSG_BABYSTEP_Z, lcd_babystep_z);
     #endif
-
+//&begin[FILAMENT_CHANGE_FEATURE]
     //
     // Change filament
     //
     #if ENABLED(FILAMENT_CHANGE_FEATURE)
        MENU_ITEM(function, MSG_FILAMENTCHANGE, lcd_enqueue_filament_change);
     #endif
-
+//&end[FILAMENT_CHANGE_FEATURE]
     END_MENU();
   }
 
@@ -2272,7 +2272,7 @@ void kill_screen(const char* lcd_msg) {
       END_MENU();
     }
   #endif // LCD_INFO_MENU
-
+//&begin[FILAMENT_CHANGE_FEATURE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
 
     void lcd_filament_change_resume_print() {
@@ -2404,7 +2404,7 @@ void kill_screen(const char* lcd_msg) {
     }
 
   #endif // FILAMENT_CHANGE_FEATURE
-
+//&end[FILAMENT_CHANGE_FEATURE]
   /**
    *
    * Functions for editing single values

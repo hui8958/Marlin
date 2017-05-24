@@ -573,12 +573,13 @@
  * Stiff filament (PLA)        | K=47*L/10 | K=139*L/10 |
  * Softer filament (ABS, nGen) | K=88*L/10 | K=260*L/10 |
  */
+//&begin[LIN_ADVANCE]
 //#define LIN_ADVANCE
 
 #if ENABLED(LIN_ADVANCE)
   #define LIN_ADVANCE_K 75
 #endif
-
+//&end[LIN_ADVANCE]
 // @section leveling
 
 // Default mesh area is an area with an inset margin on the print area.
@@ -689,6 +690,7 @@
 
 // Add support for experimental filament exchange support M600; requires display
 #if ENABLED(ULTIPANEL)
+//&begin[FILAMENT_CHANGE_FEATURE]
   // #define FILAMENT_CHANGE_FEATURE             // Enable filament exchange menu and M600 g-code (used for runout sensor too)
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     #define FILAMENT_CHANGE_X_POS 3             // X position of hotend
@@ -714,7 +716,8 @@
                                                 // or until outcoming filament color is not clear for filament color change
     #define FILAMENT_CHANGE_EXTRUDE_FEEDRATE 3  // Extrude filament feedrate in mm/s - must be slower than load feedrate
   #endif
-#endif
+//&end[FILAMENT_CHANGE_FEATURE]
+  #endif
 
 /******************************************************************************\
  * enable this section if you have TMC26X motor drivers.

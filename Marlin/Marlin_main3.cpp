@@ -1327,7 +1327,7 @@ inline void gcode_M121() { endstops.enable_globally(false); }
     #endif
   }
 #endif // HAVE_TMC2130DRIVER
-
+//&begin[RGB_LED]
 #if ENABLED(BLINKM) || ENABLED(RGB_LED)
 
   void set_led_color(const uint8_t r, const uint8_t g, const uint8_t b) {
@@ -1373,7 +1373,7 @@ inline void gcode_M121() { endstops.enable_globally(false); }
   }
 
 #endif // BLINKM || RGB_LED
-
+//&end[RGB_LED]
 //&begin[Extruder]
 /**
  * M200: Set filament diameter and set E axis units to cubic units

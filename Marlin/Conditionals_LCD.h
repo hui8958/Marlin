@@ -278,6 +278,7 @@
     #define BOOTSCREEN_TIMEOUT 2500
   #endif
 
+  //&begin[SINGLENOZZLE]
   /**
    * Extruders have some combination of stepper motors and hotends
    * so we separate these concepts into the defines:
@@ -315,7 +316,7 @@
     #define E_MANUAL     EXTRUDERS
     #define TOOL_E_INDEX current_block->active_extruder
   #endif
-
+  //&end[SINGLENOZZLE]
   /**
    * Distinct E Factors – Disable by commenting out DISTINCT_E_FACTORS
    */

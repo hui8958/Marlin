@@ -414,11 +414,11 @@ inline void gcode_M77() { print_job_timer.stop(); }
 inline void gcode_M104() {
   if (get_target_extruder_from_command(104)) return;
   if (DEBUGGING(DRYRUN)) return;
-
+  //&begin[SINGLENOZZLE]
   #if ENABLED(SINGLENOZZLE)
     if (target_extruder != active_extruder) return;
   #endif
-
+  //&end[SINGLENOZZLE]
   if (code_seen('S')) {
     thermalManager.setTargetHotend(code_value_temp_abs(), target_extruder);
     #if ENABLED(DUAL_X_CARRIAGE)
@@ -613,11 +613,11 @@ inline void gcode_M109() {
 
   if (get_target_extruder_from_command(109)) return;
   if (DEBUGGING(DRYRUN)) return;
-
+  //&begin[SINGLENOZZLE]
   #if ENABLED(SINGLENOZZLE)
     if (target_extruder != active_extruder) return;
   #endif
-
+  //&end[SINGLENOZZLE]
   bool no_wait_for_cooling = code_seen('S');
   if (no_wait_for_cooling || code_seen('R')) {
     thermalManager.setTargetHotend(code_value_temp_abs(), target_extruder);

@@ -277,11 +277,12 @@
   #if ENABLED(HEATERS_PARALLEL)
     #error "EXTRUDERS must be 1 with HEATERS_PARALLEL."
   #endif
-
+  //&begin[SINGLENOZZLE]
 #elif ENABLED(SINGLENOZZLE)
   #error "SINGLENOZZLE requires 2 or more EXTRUDERS."
+    //&end[SINGLENOZZLE]
 #endif
-
+  //&begin[SINGLENOZZLE]
 /**
  * Only one type of extruder allowed
  */
@@ -289,7 +290,7 @@
   || (ENABLED(SINGLENOZZLE) && ENABLED(MIXING_EXTRUDER))
     #error "Please define only one type of extruder: SINGLENOZZLE, SWITCHING_EXTRUDER, or MIXING_EXTRUDER."
 #endif
-
+  //&end[SINGLENOZZLE]
 /**
  * Single Stepper Dual Extruder with switching servo
  */
@@ -800,8 +801,10 @@
     #error "DUAL_NOZZLE_DUPLICATION_MODE requires exactly 2 hotends."
   #elif ENABLED(DUAL_X_CARRIAGE)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with DUAL_X_CARRIAGE."
+	  //&begin[SINGLENOZZLE]
   #elif ENABLED(SINGLENOZZLE)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with SINGLENOZZLE."
+	  //&end[SINGLENOZZLE]
   #elif ENABLED(MIXING_EXTRUDER)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with MIXING_EXTRUDER."
   #elif ENABLED(SWITCHING_EXTRUDER)

@@ -67,3 +67,4 @@ Marlin
     Control_Software_EndStop
     MINIMUM_STEPPER_PULSE
     RGB_LED
+    SINGLENOZZLE

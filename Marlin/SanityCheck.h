@@ -864,6 +864,7 @@
   #error "EMERGENCY_PARSER does not work on boards with AT90USB processors (USBCON)."
 #endif
 //&end[Emergency_Command_Parser]
+//&begin[Extended_Capabilities_Report]
 /**
  * I2C bus
  */
@@ -874,7 +875,7 @@
     #error "I2C_SLAVE_ADDRESS can't be over 127. (Only 7 bits allowed.)"
   #endif
 #endif
-
+//&end[Extended_Capabilities_Report]
 /**
  * G38 Probe Target
  */

@@ -21,7 +21,7 @@
  */
 
 #include "Marlin.h"
-
+//&begin[Extended_Capabilities_Report]
 #if ENABLED(EXPERIMENTAL_I2CBUS)
 
 #include "twibus.h"
@@ -202,3 +202,4 @@ void TWIBus::flush() {
 #endif
 
 #endif //EXPERIMENTAL_I2CBUS
+//&end[Extended_Capabilities_Report]

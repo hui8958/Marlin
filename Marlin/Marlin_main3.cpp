@@ -519,7 +519,7 @@ inline void gcode_M105() {
 }
 //&end[Hotend]
 //&end[Bed_Heated]
-
+//&begin[AUTO_REPORT_TEMPERATURES]
 #if ENABLED(AUTO_REPORT_TEMPERATURES) && (HAS_TEMP_HOTEND || HAS_TEMP_BED)
 
   static uint8_t auto_report_temp_interval;
@@ -545,7 +545,7 @@ inline void gcode_M105() {
   }
 
 #endif // AUTO_REPORT_TEMPERATURES
-
+//&end[AUTO_REPORT_TEMPERATURES]
 //&begin[Fan]
 #if FAN_COUNT > 0
 
@@ -1188,7 +1188,7 @@ static void report_current_position() {
  */
 inline void gcode_M114() { report_current_position(); }
 //&end[Moter_Type_Stepper]
-
+//&begin[Extended_Capabilities_Report]
 /**
  * M115: Capabilities string
  */
@@ -1203,14 +1203,14 @@ inline void gcode_M115() {
     #else
       SERIAL_PROTOCOLLNPGM("Cap:EEPROM:0");
     #endif
-
+//&begin[AUTO_REPORT_TEMPERATURES]
     // AUTOREPORT_TEMP (M155)
     #if ENABLED(AUTO_REPORT_TEMPERATURES)
       SERIAL_PROTOCOLLNPGM("Cap:AUTOREPORT_TEMP:1");
     #else
       SERIAL_PROTOCOLLNPGM("Cap:AUTOREPORT_TEMP:0");
     #endif
-
+//&end[AUTO_REPORT_TEMPERATURES]
     // PROGRESS (M530 S L, M531 <file>, M532 X L)
     SERIAL_PROTOCOLLNPGM("Cap:PROGRESS:0");
 
@@ -1251,7 +1251,7 @@ inline void gcode_M115() {
 
   #endif // EXTENDED_CAPABILITIES_REPORT
 }
-
+//&end[Extended_Capabilities_Report]
 /**
  * M117: Set LCD Status Message
  */
@@ -1752,6 +1752,7 @@ inline void gcode_M226() {
 }
 //&end[Board]
 
+//&begin[Extended_Capabilities_Report]
 #if ENABLED(EXPERIMENTAL_I2CBUS)
 
   /**
@@ -1804,7 +1805,7 @@ inline void gcode_M226() {
   }
 
 #endif // EXPERIMENTAL_I2CBUS
-
+//&end[Extended_Capabilities_Report]
 //&begin[Moter_Type_Servo]
 #if HAS_SERVOS
 

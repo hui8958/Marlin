@@ -1177,13 +1177,13 @@ void process_next_command() {
         gcode_M105();
         KEEPALIVE_STATE(NOT_BUSY);
         return; // "ok" already printed
-
+//&begin[AUTO_REPORT_TEMPERATURES]
       #if ENABLED(AUTO_REPORT_TEMPERATURES) && (HAS_TEMP_HOTEND || HAS_TEMP_BED)
         case 155: // M155: Set temperature auto-report interval
           gcode_M155();
           break;
       #endif
-
+//&end[AUTO_REPORT_TEMPERATURES]
       case 109: // M109: Wait for hotend temperature to reach target
         gcode_M109();
         break;
@@ -1256,9 +1256,11 @@ void process_next_command() {
       case 114: // M114: Report current position
         gcode_M114();
         break;
+		//&begin[Extended_Capabilities_Report]
       case 115: // M115: Report capabilities
         gcode_M115();
         break;
+		//&end[Extended_Capabilities_Report]
       case 117: // M117: Set LCD message text, if possible
         gcode_M117();
         break;
@@ -1421,7 +1423,7 @@ void process_next_command() {
           gcode_M250();
           break;
       #endif // HAS_LCD_CONTRAST
-
+//&begin[Extended_Capabilities_Report]
       #if ENABLED(EXPERIMENTAL_I2CBUS)
 
         case 260: // M260: Send data to an i2c slave
@@ -1433,7 +1435,7 @@ void process_next_command() {
           break;
 
       #endif // EXPERIMENTAL_I2CBUS
-
+//&end[Extended_Capabilities_Report]
       #if ENABLED(PREVENT_COLD_EXTRUSION)
         case 302: // M302: Allow cold extrudes (set the minimum extrude temperature)
           gcode_M302();
@@ -3052,11 +3054,11 @@ void idle(
   lcd_update();
 
   host_keepalive();
-
+//&begin[AUTO_REPORT_TEMPERATURES]
   #if ENABLED(AUTO_REPORT_TEMPERATURES) && (HAS_TEMP_HOTEND || HAS_TEMP_BED)
     auto_report_temperatures();
   #endif
-
+//&end[AUTO_REPORT_TEMPERATURES]
   manage_inactivity(
   //&begin[FILAMENT_CHANGE_FEATURE]
     #if ENABLED(FILAMENT_CHANGE_FEATURE)
@@ -3296,12 +3298,12 @@ void setup() {
         mixing_virtual_tool_mix[t][i] = mixing_factor[i];
   #endif
 //&end[Extruder_Mixing]
-
+//&begin[Extended_Capabilities_Report]
   #if ENABLED(EXPERIMENTAL_I2CBUS) && I2C_SLAVE_ADDRESS > 0
     i2c.onReceive(i2c_on_receive);
     i2c.onRequest(i2c_on_request);
   #endif
-
+//&end[Extended_Capabilities_Report]
   #if ENABLED(ENDSTOP_INTERRUPTS_FEATURE)
     setup_endstop_interrupts();
   #endif

@@ -61,3 +61,4 @@ Marlin
     Emergency_Command_Parser
     G2_G3_R_Parameter
     Clean_Nozzle
+	PINS_DEBUGGING

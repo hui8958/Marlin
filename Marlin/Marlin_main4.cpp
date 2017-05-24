@@ -1105,12 +1105,12 @@ void process_next_command() {
 
       case 42: // M42: Change pin state
         gcode_M42(); break;
-
+//&begin[PINS_DEBUGGING]
       #if ENABLED(PINS_DEBUGGING)
         case 43: // M43: Read pin state
           gcode_M43(); break;
       #endif
-
+//&end[PINS_DEBUGGING]
       #if ENABLED(Z_MIN_PROBE_REPEATABILITY_TEST)
         case 48: // M48: Z probe repeatability test
           gcode_M48();

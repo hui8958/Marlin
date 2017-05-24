@@ -1,4 +1,5 @@
 //&begin[Board]
+//&begin[PINS_DEBUGGING]
 /**
  * Sensitive pin test for M42, M226
  */
@@ -8,7 +9,7 @@ static bool pin_is_protected(uint8_t pin) {
     if (sensitive_pins[i] == pin) return true;
   return false;
 }
-
+//&end[PINS_DEBUGGING]
 /**
  * M42: Change pin status via GCode
  *
@@ -23,13 +24,13 @@ inline void gcode_M42() {
 
   int pin_number = code_seen('P') ? code_value_int() : LED_PIN;
   if (pin_number < 0) return;
-
+//&begin[PINS_DEBUGGING]
   if (pin_is_protected(pin_number)) {
     SERIAL_ERROR_START;
     SERIAL_ERRORLNPGM(MSG_ERR_PROTECTED_PIN);
     return;
   }
-
+//&end[PINS_DEBUGGING]
   pinMode(pin_number, OUTPUT);
   digitalWrite(pin_number, pin_status);
   analogWrite(pin_number, pin_status);
@@ -49,7 +50,7 @@ inline void gcode_M42() {
   #endif
 }
 //&end[Board]
-
+//&begin[PINS_DEBUGGING]
 #if ENABLED(PINS_DEBUGGING)
 
   #include "pinsDebug.h"
@@ -134,7 +135,7 @@ inline void gcode_M42() {
   }
 
 #endif // PINS_DEBUGGING
-
+//&end[PINS_DEBUGGING]
 #if ENABLED(Z_MIN_PROBE_REPEATABILITY_TEST)
 
   /**
@@ -1720,6 +1721,7 @@ inline void gcode_M221() {
  */
 inline void gcode_M226() {
   if (code_seen('P')) {
+	  //&begin[PINS_DEBUGGING]
     int pin_number = code_value_int(),
         pin_state = code_seen('S') ? code_value_int() : -1; // required pin state - default is inverted
 
@@ -1745,6 +1747,7 @@ inline void gcode_M226() {
       while (digitalRead(pin_number) != target) idle();
 
     } // pin_state -1 0 1 && pin_number > -1
+	//&end[PINS_DEBUGGING]
   } // code_seen('P')
 }
 //&end[Board]

@@ -164,3 +164,5 @@ thermistortables.h
 Temperature
 nozzle.h
 Clean_Nozzle
+pinsDebug.h
+PINS_DEBUGGING

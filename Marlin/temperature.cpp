@@ -1392,7 +1392,7 @@ void Temperature::set_current_temp_raw() {
   current_temperature_bed_raw = raw_temp_bed_value;
   temp_meas_ready = true;
 }
-
+//&begin[PINS_DEBUGGING]
 #if ENABLED(PINS_DEBUGGING)
   /**
    * monitors endstops & Z probe for changes
@@ -1473,7 +1473,7 @@ void Temperature::set_current_temp_raw() {
     }
   }
 #endif // PINS_DEBUGGING
-
+//&end[PINS_DEBUGGING]
 /**
  * Timer 0 is shared with millies so don't change the prescaler.
  *
@@ -1932,7 +1932,7 @@ void Temperature::isr() {
       }
     }
   #endif //BABYSTEPPING
-
+//&begin[PINS_DEBUGGING]
   #if ENABLED(PINS_DEBUGGING)
     extern bool endstop_monitor_flag;
     // run the endstop monitor at 15Hz
@@ -1943,6 +1943,6 @@ void Temperature::isr() {
       if (!endstop_monitor_count) endstop_monitor();  // report changes in endstop status
     }
   #endif
-  
+  //&end[PINS_DEBUGGING]
   SBI(TIMSK0, OCIE0B); //re-enable Temperature ISR
 }

@@ -70,3 +70,4 @@ Marlin
     SINGLENOZZLE_MIXING_EXTRUDER
     PWM_Fans
     THERMAL_PROTECTION_BED
+    Silent_StepStick

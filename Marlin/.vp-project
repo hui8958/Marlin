@@ -65,3 +65,5 @@ Marlin
     AUTO_REPORT_TEMPERATURES
     Extended_Capabilities_Report
     Control_Software_EndStop
+    MINIMUM_STEPPER_PULSE
+    RGB_LED

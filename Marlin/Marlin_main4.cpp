@@ -1293,7 +1293,7 @@ void process_next_command() {
           gcode_M149();
           break;
       #endif
-
+//&begin[RGB_LED]
       #if ENABLED(BLINKM) || ENABLED(RGB_LED)
 
         case 150: // M150: Set Status LED Color
@@ -1301,7 +1301,7 @@ void process_next_command() {
           break;
 
       #endif // BLINKM
-
+//&end[RGB_LED]
       #if ENABLED(MIXING_EXTRUDER)
         case 163: // M163: Set a component weight for mixing extruder
           gcode_M163();
@@ -3271,13 +3271,13 @@ void setup() {
   #if PIN_EXISTS(STAT_LED_BLUE)
     OUT_WRITE(STAT_LED_BLUE_PIN, LOW); // turn it off
   #endif
-
+//&begin[RGB_LED]
   #if ENABLED(RGB_LED)
     pinMode(RGB_LED_R_PIN, OUTPUT);
     pinMode(RGB_LED_G_PIN, OUTPUT);
     pinMode(RGB_LED_B_PIN, OUTPUT);
   #endif
-
+//&end[RGB_LED]
   lcd_init();
   #if ENABLED(SHOW_BOOTSCREEN)
     #if ENABLED(DOGLCD)

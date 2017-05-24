@@ -490,13 +490,14 @@ void Stepper::isr() {
       if (_COUNTER(AXIS) > 0) { _APPLY_STEP(AXIS)(!_INVERT_STEP_PIN(AXIS),0); }
 
     // Stop an active pulse, reset the Bresenham counter, update the position
+	//&begin[MINIMUM_STEPPER_PULSE]
     #define PULSE_STOP(AXIS) \
       if (_COUNTER(AXIS) > 0) { \
         _COUNTER(AXIS) -= current_block->step_event_count; \
         count_position[_AXIS(AXIS)] += count_direction[_AXIS(AXIS)]; \
         _APPLY_STEP(AXIS)(_INVERT_STEP_PIN(AXIS),0); \
       }
-
+	//&end[MINIMUM_STEPPER_PULSE]
     #define CYCLES_EATEN_BY_CODE 240
 
     // If a minimum pulse time was specified get the CPU clock

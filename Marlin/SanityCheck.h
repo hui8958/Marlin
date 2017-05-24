@@ -886,7 +886,7 @@
     #error "G38_PROBE_TARGET requires a Cartesian machine."
   #endif
 #endif
-
+//&begin[RGB_LED]
 /**
  * RGB_LED Requirements
  */
@@ -897,7 +897,7 @@
     #error "RGB_LED and BLINKM are currently incompatible (both use M150)."
   #endif
 #endif
-
+//&end[RGB_LED]
 /**
  * Auto Fan check for PWM pins
  */

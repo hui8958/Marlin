@@ -404,11 +404,11 @@ void Planner::recalculate() {
 void Planner::check_axes_activity() {
   unsigned char axis_active[NUM_AXIS] = { 0 },
                 tail_fan_speed[FAN_COUNT];
-
+//&begin[PWM_Fans]
   #if FAN_COUNT > 0
     for (uint8_t i = 0; i < FAN_COUNT; i++) tail_fan_speed[i] = fanSpeeds[i];
   #endif
-
+//&end[PWM_Fans]
   #if ENABLED(BARICUDA)
     #if HAS_HEATER_1
       unsigned char tail_valve_pressure = baricuda_valve_pressure;
@@ -419,11 +419,11 @@ void Planner::check_axes_activity() {
   #endif
 
   if (blocks_queued()) {
-
+//&begin[PWM_Fans]
     #if FAN_COUNT > 0
       for (uint8_t i = 0; i < FAN_COUNT; i++) tail_fan_speed[i] = block_buffer[block_buffer_tail].fan_speed[i];
     #endif
-
+//&end[PWM_Fans]
     block_t* block;
 
     #if ENABLED(BARICUDA)
@@ -458,7 +458,7 @@ void Planner::check_axes_activity() {
       disable_e3();
     }
   #endif
-
+//&begin[PWM_Fans]
   #if FAN_COUNT > 0
 
     #if defined(FAN_MIN_PWM)
@@ -497,7 +497,7 @@ void Planner::check_axes_activity() {
       #endif
 
     #endif //FAN_KICKSTART_TIME
-
+//&begin[PWM_Fans]
     #if ENABLED(FAN_SOFT_PWM)
       #if HAS_FAN0
         thermalManager.fanSpeedSoftPwm[0] = CALC_FAN_SPEED(0);
@@ -519,9 +519,9 @@ void Planner::check_axes_activity() {
         analogWrite(FAN2_PIN, CALC_FAN_SPEED(2));
       #endif
     #endif
-
+//&end[PWM_Fans]
   #endif // FAN_COUNT > 0
-
+//&end[PWM_Fans]
   #if ENABLED(AUTOTEMP)
     getHighESpeed();
   #endif
@@ -809,11 +809,11 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
     for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
       block->mix_event_count[i] = mixing_factor[i] * block->step_event_count;
   #endif
-
+//&begin[PWM_Fans]
   #if FAN_COUNT > 0
     for (uint8_t i = 0; i < FAN_COUNT; i++) block->fan_speed[i] = fanSpeeds[i];
   #endif
-
+//&end[PWM_Fans]
   #if ENABLED(BARICUDA)
     block->valve_pressure = baricuda_valve_pressure;
     block->e_to_p_pressure = baricuda_e_to_p_pressure;

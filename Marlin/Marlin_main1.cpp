@@ -427,9 +427,11 @@ float soft_endstop_min[XYZ] = { X_MIN_POS, Y_MIN_POS, Z_MIN_POS },
 //&end[Endstop]
 
 //&begin[Fan]
+//&begin[PWM_Fans]
 #if FAN_COUNT > 0
   int fanSpeeds[FAN_COUNT] = { 0 };
 #endif
+//&end[PWM_Fans]
 //&begin[Fan]
 
 //&begin[Extruder]

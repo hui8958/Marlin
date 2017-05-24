@@ -821,6 +821,7 @@ void kill_screen(const char* lcd_msg) {
     //
     // Fan Speed:
     //
+	//&begin[PWM_Fans]
     #if FAN_COUNT > 0
       #if HAS_FAN0
         #if FAN_COUNT > 1
@@ -837,7 +838,7 @@ void kill_screen(const char* lcd_msg) {
         MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_FAN_SPEED " 3", &fanSpeeds[2], 0, 255);
       #endif
     #endif // FAN_COUNT > 0
-
+//&end[PWM_Fans]
     //
     // Flow:
     // Flow 1:
@@ -921,6 +922,7 @@ void kill_screen(const char* lcd_msg) {
     #else
       UNUSED(tempb);
     #endif
+	//&begin[PWM_Fans]
     #if FAN_COUNT > 0
       #if FAN_COUNT > 1
         fanSpeeds[active_extruder < FAN_COUNT ? active_extruder : 0] = fan;
@@ -930,7 +932,8 @@ void kill_screen(const char* lcd_msg) {
     #else
       UNUSED(fan);
     #endif
-    lcd_return_to_status();
+    //&end[PWM_Fans]
+	lcd_return_to_status();
   }
 
   #if TEMP_SENSOR_0 != 0
@@ -1031,9 +1034,11 @@ void kill_screen(const char* lcd_msg) {
   #endif // TEMP_SENSOR_0 && (TEMP_SENSOR_1 || TEMP_SENSOR_2 || TEMP_SENSOR_3 || TEMP_SENSOR_BED)
 
   void lcd_cooldown() {
+	  //&begin[PWM_Fans]
     #if FAN_COUNT > 0
       for (uint8_t i = 0; i < FAN_COUNT; i++) fanSpeeds[i] = 0;
     #endif
+	//&end[PWM_Fans]
     thermalManager.disable_all_heaters();
     lcd_return_to_status();
   }
@@ -1723,7 +1728,7 @@ void kill_screen(const char* lcd_msg) {
     #if TEMP_SENSOR_BED != 0
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_BED, &thermalManager.target_temperature_bed, 0, BED_MAXTEMP - 15, watch_temp_callback_bed);
     #endif
-
+//&begin[PWM_Fans]
     //
     // Fan Speed:
     //
@@ -1743,7 +1748,7 @@ void kill_screen(const char* lcd_msg) {
         MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_FAN_SPEED " 3", &fanSpeeds[2], 0, 255);
       #endif
     #endif // FAN_COUNT > 0
-
+//&end[PWM_Fans]
     //
     // Autotemp, Min, Max, Fact
     //

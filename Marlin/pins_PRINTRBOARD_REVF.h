@@ -92,12 +92,13 @@
 
 // If soft or fast PWM is off then use Teensyduino pin numbering, Marlin
 // fastio pin numbering otherwise
+//&begin[PWM_Fans]
 #if ENABLED(FAN_SOFT_PWM) || ENABLED(FAST_PWM_FAN)
   #define FAN_PIN          22
 #else
   #define FAN_PIN          16
 #endif
-
+//&end[PWM_Fans]
 //
 // Misc. Functions
 //

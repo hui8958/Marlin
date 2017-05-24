@@ -65,11 +65,11 @@ int   Temperature::current_temperature_raw[HOTENDS] = { 0 },
 #endif
 
 uint8_t Temperature::soft_pwm_bed;
-
+//&begin[PWM_Fans]
 #if ENABLED(FAN_SOFT_PWM)
   uint8_t Temperature::fanSpeedSoftPwm[FAN_COUNT];
 #endif
-
+//&end[PWM_Fans]
 #if ENABLED(PIDTEMP)
   #if ENABLED(PID_PARAMS_PER_HOTEND) && HOTENDS > 1
     float Temperature::Kp[HOTENDS] = ARRAY_BY_HOTENDS1(DEFAULT_Kp),
@@ -185,11 +185,11 @@ int Temperature::minttemp_raw[HOTENDS] = ARRAY_BY_HOTENDS(HEATER_0_RAW_LO_TEMP ,
 #endif
 
 uint8_t Temperature::soft_pwm[HOTENDS];
-
+//&begin[PWM_Fans]
 #if ENABLED(FAN_SOFT_PWM)
   uint8_t Temperature::soft_pwm_fan[FAN_COUNT];
 #endif
-
+//&end[PWM_Fans]
 #if ENABLED(FILAMENT_WIDTH_SENSOR)
   int Temperature::current_raw_filwidth = 0;  //Holds measured filament diameter - one extruder only
 #endif
@@ -968,7 +968,7 @@ void Temperature::init() {
   #if HAS_HEATER_BED
     SET_OUTPUT(HEATER_BED_PIN);
   #endif
-
+//&begin[PWM_Fans]
   #if HAS_FAN0
     SET_OUTPUT(FAN_PIN);
     #if ENABLED(FAST_PWM_FAN)
@@ -998,7 +998,7 @@ void Temperature::init() {
       soft_pwm_fan[2] = fanSpeedSoftPwm[2] >> 1;
     #endif
   #endif
-
+//&end[PWM_Fans]
   #if ENABLED(HEATER_0_USES_MAX6675)
 
     OUT_WRITE(SCK_PIN, LOW);
@@ -1551,7 +1551,7 @@ void Temperature::isr() {
         soft_pwm_BED = soft_pwm_bed;
         WRITE_HEATER_BED(soft_pwm_BED > 0 ? 1 : 0);
       #endif
-
+//&begin[PWM_Fans]
       #if ENABLED(FAN_SOFT_PWM)
         #if HAS_FAN0
           soft_pwm_fan[0] = fanSpeedSoftPwm[0] >> 1;
@@ -1566,7 +1566,8 @@ void Temperature::isr() {
           WRITE_FAN2(soft_pwm_fan[2] > 0 ? 1 : 0);
         #endif
       #endif
-    }
+//&end[PWM_Fans]  
+  }
 
     if (soft_pwm_0 < pwm_count) WRITE_HEATER_0(0);
     #if HOTENDS > 1
@@ -1676,7 +1677,7 @@ void Temperature::isr() {
     #if HAS_HEATER_BED
       PWM_OFF_ROUTINE(BED); // BED
     #endif
-
+//&begin[PWM_Fans]
     #if ENABLED(FAN_SOFT_PWM)
       if (pwm_count == 0) {
         #if HAS_FAN0
@@ -1702,7 +1703,7 @@ void Temperature::isr() {
         if (soft_pwm_fan[2] < pwm_count) WRITE_FAN2(0);
       #endif
     #endif //FAN_SOFT_PWM
-
+//&end[PWM_Fans]
     // SOFT_PWM_SCALE to frequency:
     //
     // 0: 16000000/64/256/128 =   7.6294 Hz

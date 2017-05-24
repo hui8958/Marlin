@@ -348,11 +348,11 @@ float code_value_temp_diff();
 #if ENABLED(HOST_KEEPALIVE_FEATURE)
   extern uint8_t host_keepalive_interval;
 #endif
-
+//&begin[PWM_Fans]
 #if FAN_COUNT > 0
   extern int fanSpeeds[FAN_COUNT];
 #endif
-
+//&end[PWM_Fans]
 #if ENABLED(BARICUDA)
   extern int baricuda_valve_pressure;
   extern int baricuda_e_to_p_pressure;

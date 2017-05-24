@@ -1193,7 +1193,7 @@ void process_next_command() {
           gcode_M190();
           break;
       #endif // HAS_TEMP_BED
-
+//&begin[PWM_Fans]
       #if FAN_COUNT > 0
         case 106: // M106: Fan On
           gcode_M106();
@@ -1202,7 +1202,7 @@ void process_next_command() {
           gcode_M107();
           break;
       #endif // FAN_COUNT > 0
-
+//&end[PWM_Fans]
       #if ENABLED(BARICUDA)
         // PWM for HEATER_1_PIN
         #if HAS_HEATER_1

@@ -691,7 +691,7 @@
     #error "DUAL_X_CARRIAGE requires X_HOME_DIR -1 and X2_HOME_DIR 1."
   #endif
 #endif // DUAL_X_CARRIAGE
-
+//&begin[PWM_Fans]
 /**
  * Make sure auto fan pins don't conflict with the fan pin
  */
@@ -724,7 +724,7 @@
     #error "You cannot set E3_AUTO_FAN_PIN equal to CONTROLLERFAN_PIN."
   #endif
 #endif
-
+//&end[PWM_Fans]
 /**
  * Test Heater, Temp Sensor, and Extruder Pins; Sensor Type must also be set.
  */

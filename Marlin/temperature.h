@@ -66,11 +66,11 @@ class Temperature {
     #endif
 
     static uint8_t soft_pwm_bed;
-
+//&begin[PWM_Fans]
     #if ENABLED(FAN_SOFT_PWM)
       static uint8_t fanSpeedSoftPwm[FAN_COUNT];
     #endif
-
+//&end[PWM_Fans]
     #if ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED)
       #define PID_dT ((OVERSAMPLENR * 12.0)/(F_CPU / 64.0 / 256.0))
     #endif
@@ -206,11 +206,11 @@ class Temperature {
     #endif
 
     static uint8_t soft_pwm[HOTENDS];
-
+//&begin[PWM_Fans]
     #if ENABLED(FAN_SOFT_PWM)
       static uint8_t soft_pwm_fan[FAN_COUNT];
     #endif
-
+//&end[PWM_Fans]
     #if ENABLED(FILAMENT_WIDTH_SENSOR)
       static int current_raw_filwidth;  //Holds measured filament diameter - one extruder only
     #endif

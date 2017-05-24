@@ -461,9 +461,11 @@
   #define AUTO_3_IS_0 (E3_AUTO_FAN_PIN == E0_AUTO_FAN_PIN)
   #define AUTO_3_IS_1 (E3_AUTO_FAN_PIN == E1_AUTO_FAN_PIN)
   #define AUTO_3_IS_2 (E3_AUTO_FAN_PIN == E2_AUTO_FAN_PIN)
+  //&begin[PWM_Fans]
   #define HAS_FAN0 (PIN_EXISTS(FAN))
   #define HAS_FAN1 (PIN_EXISTS(FAN1) && CONTROLLERFAN_PIN != FAN1_PIN && E0_AUTO_FAN_PIN != FAN1_PIN && E1_AUTO_FAN_PIN != FAN1_PIN && E2_AUTO_FAN_PIN != FAN1_PIN && E3_AUTO_FAN_PIN != FAN1_PIN)
   #define HAS_FAN2 (PIN_EXISTS(FAN2) && CONTROLLERFAN_PIN != FAN2_PIN && E0_AUTO_FAN_PIN != FAN2_PIN && E1_AUTO_FAN_PIN != FAN2_PIN && E2_AUTO_FAN_PIN != FAN2_PIN && E3_AUTO_FAN_PIN != FAN2_PIN)
+  //&end[PWM_Fans]
   #define HAS_CONTROLLERFAN (PIN_EXISTS(CONTROLLERFAN))
   #define HAS_SERVOS (defined(NUM_SERVOS) && NUM_SERVOS > 0)
   #define HAS_SERVO_0 (PIN_EXISTS(SERVO0))
@@ -576,6 +578,7 @@
 //&end[Temperature]
 
 //&begin[Fan]
+//&begin[PWM_Fans]
   /**
    * Up to 3 PWM fans
    */
@@ -600,6 +603,7 @@
     #define WRITE_FAN2(v) WRITE(FAN2_PIN, v)
   #endif
   #define WRITE_FAN_N(n, v) WRITE_FAN##n(v)
+  //&end[PWM_Fans]
 //&end[Fan]
 
   /**

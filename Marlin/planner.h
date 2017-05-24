@@ -117,11 +117,11 @@ typedef struct {
            initial_rate,                    // The jerk-adjusted step rate at start of block
            final_rate,                      // The minimal rate at exit
            acceleration_steps_per_s2;       // acceleration steps/sec^2
-
+//&begin[PWM_Fans]
   #if FAN_COUNT > 0
     uint16_t fan_speed[FAN_COUNT];
   #endif
-
+//&end[PWM_Fans]
   #if ENABLED(BARICUDA)
     uint32_t valve_pressure, e_to_p_pressure;
   #endif

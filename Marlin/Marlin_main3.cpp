@@ -18,7 +18,7 @@ static bool pin_is_protected(uint8_t pin) {
  */
 inline void gcode_M42() {
   if (!code_seen('S')) return;
-
+//&begin[PWM_Fans]
   int pin_status = code_value_int();
   if (pin_status < 0 || pin_status > 255) return;
 
@@ -48,6 +48,7 @@ inline void gcode_M42() {
       #endif
     }
   #endif
+  //&end[PWM_Fans]
 }
 //&end[Board]
 //&begin[PINS_DEBUGGING]
@@ -548,7 +549,7 @@ inline void gcode_M105() {
 //&end[AUTO_REPORT_TEMPERATURES]
 //&begin[Fan]
 #if FAN_COUNT > 0
-
+//&begin[PWM_Fans]
   /**
    * M106: Set Fan Speed
    *
@@ -561,7 +562,8 @@ inline void gcode_M105() {
     NOMORE(s, 255);
     if (p < FAN_COUNT) fanSpeeds[p] = s;
   }
-
+//&end[PWM_Fans]
+//&begin[PWM_Fans]
   /**
    * M107: Fan Off
    */
@@ -569,7 +571,7 @@ inline void gcode_M105() {
     uint16_t p = code_seen('P') ? code_value_ushort() : 0;
     if (p < FAN_COUNT) fanSpeeds[p] = 0;
   }
-
+//&end[PWM_Fans]
 #endif // FAN_COUNT > 0
 //&end[Fan]
 //&begin[Emergency_Command_Parser]
@@ -1044,6 +1046,7 @@ inline void gcode_M140() {
 inline void gcode_M81() {
   thermalManager.disable_all_heaters();
   stepper.finish_and_disable();
+  //&begin[PWM_Fans]
   #if FAN_COUNT > 0
     #if FAN_COUNT > 1
       for (uint8_t i = 0; i < FAN_COUNT; i++) fanSpeeds[i] = 0;
@@ -1051,6 +1054,7 @@ inline void gcode_M81() {
       fanSpeeds[0] = 0;
     #endif
   #endif
+  //&end[PWM_Fans]
   delay(1000); // Wait 1 second before switching off
   #if HAS_SUICIDE
     stepper.synchronize();

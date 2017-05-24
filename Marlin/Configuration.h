@@ -734,9 +734,10 @@
 #define X_HOME_DIR -1
 #define Y_HOME_DIR -1
 #define Z_HOME_DIR -1
-
+//&begin[Control_Software_EndStop]
 #define min_software_endstops true // If true, axis won't move to coordinates less than HOME_POS.
 #define max_software_endstops true  // If true, axis won't move to coordinates greater than the defined lengths below.
+//&end[Control_Software_EndStop]
 //&end[Endstop]
 
 // @section machine

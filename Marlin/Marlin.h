@@ -286,6 +286,7 @@ extern float home_offset[XYZ];
 
 // Software Endstops
 void update_software_endstops(AxisEnum axis);
+//&begin[Control_Software_EndStop]
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
   extern bool soft_endstops_enabled;
   void clamp_to_software_endstops(float target[XYZ]);
@@ -293,6 +294,7 @@ void update_software_endstops(AxisEnum axis);
   #define soft_endstops_enabled false
   #define clamp_to_software_endstops(x) NOOP
 #endif
+//&end[Control_Software_EndStop]
 extern float soft_endstop_min[XYZ];
 extern float soft_endstop_max[XYZ];
 

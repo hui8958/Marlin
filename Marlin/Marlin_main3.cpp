@@ -1630,6 +1630,7 @@ inline void gcode_M206() {
 #endif // FWRETRACT
 
 //&begin[Endstop]
+//&begin[Control_Software_EndStop]
 /**
  * M211: Enable, Disable, and/or Report software endstops
  *
@@ -1656,6 +1657,7 @@ inline void gcode_M211() {
   SERIAL_ECHOPAIR(" " MSG_Y, soft_endstop_max[Y_AXIS]);
   SERIAL_ECHOLNPAIR(" " MSG_Z, soft_endstop_max[Z_AXIS]);
 }
+//&end[Control_Software_EndStop]
 //&end[Endstop]
 
 //&begin[Hotend]

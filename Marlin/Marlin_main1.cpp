@@ -416,12 +416,14 @@ float home_offset[XYZ] = { 0 };
 //&end[Homing]
 
 //&begin[Endstop]
+//&begin[Control_Software_EndStop]
 // Software Endstops are based on the configured limits.
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
   bool soft_endstops_enabled = true;
 #endif
 float soft_endstop_min[XYZ] = { X_MIN_POS, Y_MIN_POS, Z_MIN_POS },
       soft_endstop_max[XYZ] = { X_MAX_POS, Y_MAX_POS, Z_MAX_POS };
+//&end[Control_Software_EndStop]
 //&end[Endstop]
 
 //&begin[Fan]

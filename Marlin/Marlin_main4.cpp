@@ -1659,6 +1659,7 @@ void ok_to_send() {
 //&end[Command_Input_Process]
 
 //&begin[Endstop]
+//&begin[Control_Software_EndStop]
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
 
   /**
@@ -1678,6 +1679,7 @@ void ok_to_send() {
   }
 
 #endif
+//&end[Control_Software_EndStop]
 //&end[Endstop]
 
 #if ENABLED(AUTO_BED_LEVELING_BILINEAR)

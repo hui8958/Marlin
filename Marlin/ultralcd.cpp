@@ -1409,7 +1409,7 @@ void kill_screen(const char* lcd_msg) {
     ENCODER_DIRECTION_NORMAL();
     if (encoderPosition) {
       refresh_cmd_timeout();
-
+		//&begin[Control_Software_EndStop]
       // Limit to software endstops, if enabled
       float min = (soft_endstops_enabled && min_software_endstops) ? soft_endstop_min[axis] : current_position[axis] - 1000,
             max = (soft_endstops_enabled && max_software_endstops) ? soft_endstop_max[axis] : current_position[axis] + 1000;
@@ -1440,6 +1440,7 @@ void kill_screen(const char* lcd_msg) {
   void lcd_move_x() { _lcd_move_xyz(PSTR(MSG_MOVE_X), X_AXIS); }
   void lcd_move_y() { _lcd_move_xyz(PSTR(MSG_MOVE_Y), Y_AXIS); }
   void lcd_move_z() { _lcd_move_xyz(PSTR(MSG_MOVE_Z), Z_AXIS); }
+  //&end[Control_Software_EndStop]
   void _lcd_move_e(
     #if E_MANUAL > 1
       int8_t eindex=-1

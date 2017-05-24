@@ -64,3 +64,4 @@ Marlin
     PINS_DEBUGGING
     AUTO_REPORT_TEMPERATURES
     Extended_Capabilities_Report
+    Control_Software_EndStop

@@ -984,6 +984,7 @@ void process_next_command() {
           break;
       #endif // NOZZLE_CLEAN_FEATURE
 //&end[Clean_Nozzle]
+//&begin[Inch_Mode_Support]
       #if ENABLED(INCH_MODE_SUPPORT)
         case 20: //G20: Inch Mode
           gcode_G20();
@@ -993,7 +994,7 @@ void process_next_command() {
           gcode_G21();
           break;
       #endif // INCH_MODE_SUPPORT
-	  
+//&end[Inch_Mode_Support]
 	//&begin[Park_Nozzle]
       #if ENABLED(NOZZLE_PARK_FEATURE)
         case 27: // G27: Nozzle Park

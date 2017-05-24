@@ -115,12 +115,12 @@ class Temperature {
       static int watch_target_temp[HOTENDS];
       static millis_t watch_heater_next_ms[HOTENDS];
     #endif
-
+//&begin[THERMAL_PROTECTION_BED]
     #if ENABLED(THERMAL_PROTECTION_BED) && WATCH_BED_TEMP_PERIOD > 0
       static int watch_target_bed_temp;
       static millis_t watch_bed_next_ms;
     #endif
-
+//&end[THERMAL_PROTECTION_BED]
     #if ENABLED(PREVENT_COLD_EXTRUSION)
       static bool allow_cold_extrude;
       static float extrude_min_temp;
@@ -302,11 +302,11 @@ class Temperature {
       return target_temperature[HOTEND_INDEX];
     }
     static float degTargetBed() { return target_temperature_bed; }
-
+//&begin[THERMAL_PROTECTION_BED]
     #if ENABLED(THERMAL_PROTECTION_HOTENDS) && WATCH_TEMP_PERIOD > 0
       static void start_watching_heater(uint8_t e = 0);
     #endif
-
+//&end[THERMAL_PROTECTION_BED]
     #if ENABLED(THERMAL_PROTECTION_BED) && WATCH_BED_TEMP_PERIOD > 0
       static void start_watching_bed();
     #endif
@@ -329,9 +329,11 @@ class Temperature {
 
     static void setTargetBed(const float& celsius) {
       target_temperature_bed = celsius;
+	  //&begin[THERMAL_PROTECTION_BED]
       #if ENABLED(THERMAL_PROTECTION_BED) && WATCH_BED_TEMP_PERIOD > 0
         start_watching_bed();
       #endif
+	  //&end[THERMAL_PROTECTION_BED]
     }
 
     static bool isHeatingHotend(uint8_t e) {

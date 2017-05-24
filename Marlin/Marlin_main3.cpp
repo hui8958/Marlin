@@ -1279,7 +1279,7 @@ inline void gcode_M120() { endstops.enable_globally(true); }
  */
 inline void gcode_M121() { endstops.enable_globally(false); }
 //&end[Endstop]
-
+//&begin[Silent_StepStick]
 #if ENABLED(HAVE_TMC2130DRIVER)
 
   /**
@@ -1331,6 +1331,7 @@ inline void gcode_M121() { endstops.enable_globally(false); }
     #endif
   }
 #endif // HAVE_TMC2130DRIVER
+//&end[Silent_StepStick]
 //&begin[RGB_LED]
 #if ENABLED(BLINKM) || ENABLED(RGB_LED)
 

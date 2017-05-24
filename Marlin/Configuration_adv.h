@@ -89,7 +89,7 @@
   #define WATCH_TEMP_PERIOD 20                // Seconds
   #define WATCH_TEMP_INCREASE 2               // Degrees Celsius
 #endif
-
+//&begin[THERMAL_PROTECTION_BED]
 /**
  * Thermal Protection parameters for the bed are just as above for hotends.
  */
@@ -109,7 +109,7 @@
   #define WATCH_BED_TEMP_PERIOD 60                // Seconds
   #define WATCH_BED_TEMP_INCREASE 2               // Degrees Celsius
 #endif
-
+//&end[THERMAL_PROTECTION_BED]
 #if ENABLED(PIDTEMP)
   // this adds an experimental additional term to the heating power, proportional to the extrusion speed.
   // if Kc is chosen well, the additional required power due to increased melting should be compensated.
@@ -797,7 +797,7 @@
  */
 
 //#define HAVE_TMC2130DRIVER
-
+//&begin[Silent_StepStick]
 #if ENABLED(HAVE_TMC2130DRIVER)
 
   //#define TMC2130_ADVANCED_CONFIGURATION
@@ -988,7 +988,7 @@
   #endif // TMC2130_ADVANCED_CONFIGURATION
 
 #endif // HAVE_TMC2130DRIVER
-
+//&end[Silent_StepStick]
 // @section L6470
 
 /**

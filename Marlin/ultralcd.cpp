@@ -743,7 +743,7 @@ void kill_screen(const char* lcd_msg) {
       void watch_temp_callback_E3() {}
     #endif // HOTENDS > 3
   #endif
-
+//&begin[THERMAL_PROTECTION_BED]
   #if ENABLED(THERMAL_PROTECTION_BED) && WATCH_BED_TEMP_PERIOD > 0
     #if TEMP_SENSOR_BED != 0
       void watch_temp_callback_bed() { thermalManager.start_watching_bed(); }
@@ -753,6 +753,7 @@ void kill_screen(const char* lcd_msg) {
       void watch_temp_callback_bed() {}
     #endif
   #endif
+  //&end[THERMAL_PROTECTION_BED]
 //&begin[FILAMENT_CHANGE_FEATURE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     void lcd_enqueue_filament_change() {

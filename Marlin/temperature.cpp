@@ -102,12 +102,12 @@ uint8_t Temperature::soft_pwm_bed;
   int Temperature::watch_target_temp[HOTENDS] = { 0 };
   millis_t Temperature::watch_heater_next_ms[HOTENDS] = { 0 };
 #endif
-
+//&begin[THERMAL_PROTECTION_BED]
 #if ENABLED(THERMAL_PROTECTION_BED) && WATCH_BED_TEMP_PERIOD > 0
   int Temperature::watch_target_bed_temp = 0;
   millis_t Temperature::watch_bed_next_ms = 0;
 #endif
-
+//&end[THERMAL_PROTECTION_BED]
 #if ENABLED(PREVENT_COLD_EXTRUSION)
   bool Temperature::allow_cold_extrude = false;
   float Temperature::extrude_min_temp = EXTRUDE_MINTEMP;
@@ -708,6 +708,7 @@ void Temperature::manage_heater() {
     #endif // THERMAL_PROTECTION_HOTENDS
 
     // Check if the temperature is failing to increase
+	//&begin[THERMAL_PROTECTION_BED]
     #if ENABLED(THERMAL_PROTECTION_BED) && WATCH_BED_TEMP_PERIOD > 0
 
       // Is it time to check the bed?
@@ -724,7 +725,7 @@ void Temperature::manage_heater() {
       }
 
     #endif // THERMAL_PROTECTION_HOTENDS
-
+//&end[THERMAL_PROTECTION_BED]
     #if ENABLED(TEMP_SENSOR_1_AS_REDUNDANT)
       if (fabs(current_temperature[0] - redundant_temperature) > MAX_REDUNDANT_TEMP_SENSOR_DIFF) {
         _temp_error(0, PSTR(MSG_REDUNDANCY), PSTR(MSG_ERR_REDUNDANT_TEMP));
@@ -1177,7 +1178,7 @@ void Temperature::init() {
       watch_heater_next_ms[HOTEND_INDEX] = 0;
   }
 #endif
-
+//&begin[THERMAL_PROTECTION_BED]
 #if ENABLED(THERMAL_PROTECTION_BED) && WATCH_BED_TEMP_PERIOD > 0
   /**
    * Start Heating Sanity Check for hotends that are below
@@ -1193,7 +1194,7 @@ void Temperature::init() {
       watch_bed_next_ms = 0;
   }
 #endif
-
+//&end[THERMAL_PROTECTION_BED]
 #if ENABLED(THERMAL_PROTECTION_HOTENDS) || HAS_THERMALLY_PROTECTED_BED
 
   #if ENABLED(THERMAL_PROTECTION_HOTENDS)

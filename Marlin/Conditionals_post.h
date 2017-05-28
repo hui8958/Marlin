@@ -38,7 +38,7 @@
   #define X_CENTER float((X_MIN_POS + X_MAX_POS) * 0.5)
   #define Y_CENTER float((Y_MIN_POS + Y_MAX_POS) * 0.5)
   #define Z_CENTER float((Z_MIN_POS + Z_MAX_POS) * 0.5)
-
+//&begin[Support_COREXY_COREXZ_COREYZ]
   /**
    * CoreXY, CoreXZ, and CoreYZ - and their reverse
    */
@@ -66,7 +66,8 @@
       #define CORESIGN(n) (n)
     #endif
   #endif
-
+//&end[Support_COREXY_COREXZ_COREYZ]
+  
   #define IS_SCARA (ENABLED(MORGAN_SCARA) || ENABLED(MAKERARM_SCARA))
   #define IS_KINEMATIC (ENABLED(DELTA) || IS_SCARA)
   #define IS_CARTESIAN !IS_KINEMATIC

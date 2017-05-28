@@ -267,7 +267,7 @@ void Endstops::update() {
     #define UPDATE_ENDSTOP(AXIS,MINMAX) _UPDATE_ENDSTOP(AXIS,MINMAX,NOOP)
 
   #endif
-
+//&begin[Support_COREXY_COREXZ_COREYZ]
   #if CORE_IS_XY || CORE_IS_XZ
     // Head direction in -X axis for CoreXY and CoreXZ bots.
     // If DeltaA == -DeltaB, the movement is only in Y or Z axis
@@ -393,7 +393,7 @@ void Endstops::update() {
   #if CORE_IS_XZ || CORE_IS_YZ
     }
   #endif
-
+//&end[Support_COREXY_COREXZ_COREYZ]
   old_endstop_bits = current_endstop_bits;
 
 } // Endstops::update()

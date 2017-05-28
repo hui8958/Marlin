@@ -71,3 +71,4 @@ Marlin
     PWM_Fans
     THERMAL_PROTECTION_BED
     Silent_StepStick
+    Support_COREXY_COREXZ_COREYZ

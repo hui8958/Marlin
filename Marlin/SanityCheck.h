@@ -631,6 +631,7 @@
 #else
   #define COUNT_KIN_4 COUNT_KIN_3
 #endif
+//&begin[Support_COREXY_COREXZ_COREYZ]
 #if ENABLED(COREXY)
   #define COUNT_KIN_5 INCREMENT(COUNT_KIN_4)
 #else
@@ -661,6 +662,7 @@
 #else
   #define COUNT_KIN_10 COUNT_KIN_9
 #endif
+//&end[Support_COREXY_COREXZ_COREYZ]
 #if COUNT_KIN_10 > 1
   #error "Please enable only one of DELTA, MORGAN_SCARA, MAKERARM_SCARA, COREXY, COREYX, COREXZ, COREZX, COREYZ, or COREZY."
 #endif

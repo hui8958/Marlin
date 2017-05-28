@@ -1421,9 +1421,9 @@ inline void gcode_M200() {
  *       With multiple extruders use T to specify which one.
  */
 inline void gcode_M201() {
-
-  GET_TARGET_EXTRUDER(201); //&line[DISTINCT_E_FACTORS]
-
+//&begin[DISTINCT_E_FACTORS]
+  GET_TARGET_EXTRUDER(201); 
+//&end[DISTINCT_E_FACTORS]
   LOOP_XYZE(i) {
     if (code_seen(axis_codes[i])) {
 		 //&begin[DISTINCT_E_FACTORS]
@@ -1452,9 +1452,9 @@ inline void gcode_M201() {
  *       With multiple extruders use T to specify which one.
  */
 inline void gcode_M203() {
-
-  GET_TARGET_EXTRUDER(203); //&line[DISTINCT_E_FACTORS]
-
+//&begin[DISTINCT_E_FACTORS]
+  GET_TARGET_EXTRUDER(203); 
+//&end[DISTINCT_E_FACTORS]
   LOOP_XYZE(i)
     if (code_seen(axis_codes[i])) {
 		 //&begin[DISTINCT_E_FACTORS]

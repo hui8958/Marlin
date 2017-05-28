@@ -249,11 +249,11 @@
 #if HAS_BUZZER && DISABLED(LCD_USE_I2C_BUZZER)
   #include "buzzer.h"
 #endif
-
+//&begin[WatchDog]
 #if ENABLED(USE_WATCHDOG)
   #include "watchdog.h"
 #endif
-
+//&end[WatchDog]
 #if ENABLED(BLINKM)
   #include "blinkm.h"
   #include "Wire.h"
@@ -629,9 +629,9 @@ static uint8_t target_extruder;
         delta[ABC];
 #endif
 
-//&line[Move_To_Destination]
+//&begin[Move_To_Destination]
 float cartes[XYZ] = { 0 };
-
+//&end[Move_To_Destination]
 #if ENABLED(FILAMENT_WIDTH_SENSOR)
   bool filament_sensor = false;  //M405 turns on filament_sensor control, M406 turns it off
   float filament_width_nominal = DEFAULT_NOMINAL_FILAMENT_DIA,  // Nominal filament width. Change with M404
@@ -660,9 +660,9 @@ float cartes[XYZ] = { 0 };
 #endif
 //&end[Extruder_Mixing]
 
-//&line[IO_handling]
+//&begin[IO_handling]
 static bool send_ok[BUFSIZE];
-
+//&end[IO_handling]
 //&begin[Moter_Type_Servo]
 #if HAS_SERVOS
   Servo servo[NUM_SERVOS];
@@ -1443,9 +1443,9 @@ bool get_target_extruder_from_command(int code) {
  * the software endstop positions must be refreshed to remain
  * at the same positions relative to the machine.
  */
- //&line[Endstop]
+ //&begin[Endstop]
 void update_software_endstops(AxisEnum axis) {
-//&line[Endstop]
+
   float offs = LOGICAL_POSITION(0, axis);
  
   #if ENABLED(DUAL_X_CARRIAGE)
@@ -1473,12 +1473,10 @@ void update_software_endstops(AxisEnum axis) {
       }
     }
   #else
-  //&line[Endstop]
     soft_endstop_min[axis] = base_min_pos(axis) + offs;
-  //&line[Endstop]  
     soft_endstop_max[axis] = base_max_pos(axis) + offs;
   #endif
-
+//&end[Endstop]
   #if ENABLED(DEBUG_LEVELING_FEATURE)
     if (DEBUGGING(LEVELING)) {
       SERIAL_ECHOPAIR("For ", axis_codes[axis]);
@@ -2113,7 +2111,7 @@ static void clean_up_after_endstop_or_probe_move() {
 //&end[EndStopZ_BLTouchSensor]
 
   // returns false for ok and true for failure
-  //&line[EndStopZ_BLTouchSensor]
+  //&begin[EndStopZ_BLTouchSensor]
   static bool set_probe_deployed(bool deploy) {
 
     #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -2129,10 +2127,10 @@ static void clean_up_after_endstop_or_probe_move() {
     do_probe_raise(_Z_CLEARANCE_DEPLOY_PROBE);
 
     // When deploying make sure BLTOUCH is not already triggered
-    //&line[EndStopZ_BLTouchSensor]
+//&begin[EndStopZ_BLTouchSensor]
     #if ENABLED(BLTOUCH)
-    //&line[EndStopZ_BLTouchSensor]
-      if (deploy && TEST_BLTOUCH()) { stop(); return true; }
+	  if (deploy && TEST_BLTOUCH()) { stop(); return true; }
+//&end[EndStopZ_BLTouchSensor]
     #elif ENABLED(Z_PROBE_SLED)
       if (axis_unhomed_error(true, false, false)) { stop(); return true; }
     #elif ENABLED(Z_PROBE_ALLEN_KEY)
@@ -2189,8 +2187,7 @@ static void clean_up_after_endstop_or_probe_move() {
     endstops.enable_z_probe(deploy);
     return false;
   }
-
- //&line[EndStopZ_BLTouchSensor]
+  //&begin[EndStopZ_BLTouchSensor]
   static void do_probe_move(float z, float fr_mm_m) {
     #if ENABLED(DEBUG_LEVELING_FEATURE)
       if (DEBUGGING(LEVELING)) DEBUG_POS(">>> do_probe_move", current_position);
@@ -2226,7 +2223,7 @@ static void clean_up_after_endstop_or_probe_move() {
       if (DEBUGGING(LEVELING)) DEBUG_POS("<<< do_probe_move", current_position);
     #endif
   }
-
+  //&end[EndStopZ_BLTouchSensor]
   // Do a single Z probe and return with current_position[Z_AXIS]
   // at the height where the probe triggered.
   static float run_z_probe() {

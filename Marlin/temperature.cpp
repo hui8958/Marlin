@@ -32,11 +32,11 @@
 #if ENABLED(BABYSTEPPING)
   #include "stepper.h"
 #endif
-
+//&begin[WatchDog]
 #if ENABLED(USE_WATCHDOG)
   #include "watchdog.h"
 #endif
-
+//&end[WatchDog]
 #ifdef K1 // Defined in Configuration.h in the PID settings
   #define K2 (1.0-K1)
 #endif

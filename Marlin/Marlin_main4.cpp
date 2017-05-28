@@ -3106,11 +3106,13 @@ void kill(const char* lcd_msg) {
   #endif
 
   suicide();
+  //&begin[WatchDog]
   while (1) {
     #if ENABLED(USE_WATCHDOG)
       watchdog_reset();
     #endif
   } // Wait for reset
+  //&end[WatchDog]
 }
 
 /**
@@ -3158,12 +3160,12 @@ void setup() {
     setup_filrunoutpin();
   #endif
 
-
-  setup_killpin(); //&line[Board]
-
-
-  setup_powerhold();//&line[Power_Supply]
-
+//&being[Board]
+  setup_killpin();
+//&end[Board]
+//&begin[Power_Supply]
+  setup_powerhold();
+//&end[Power_Supply]
   #if HAS_STEPPER_RESET
     disableStepperDrivers();
   #endif
@@ -3203,33 +3205,34 @@ void setup() {
 //&end[IO_Handling]
 
   // Send "ok" after commands by default
-//&line[Command_Handling]
+//&begin[Command_Handling]
   for (int8_t i = 0; i < BUFSIZE; i++) send_ok[i] = true;
-
+//&end[Command_Handling]
   // Load data from EEPROM if available (or use defaults)
   // This also updates variables in the planner, elsewhere
   Config_RetrieveSettings();
 
-
+//&begin[Move_To_Destination]
   // Initialize current position based on home_offset
-  memcpy(current_position, home_offset, sizeof(home_offset)); //&line[Move_To_Destination]
-
-
+  memcpy(current_position, home_offset, sizeof(home_offset)); 
+//&end[Move_To_Destination]
+//&begin[Moter_Type_Stepper]
   // Vital to init stepper/planner equivalent for current_position
-  SYNC_PLAN_POSITION_KINEMATIC(); //&line[Moter_Type_Stepper]
-
-
-  thermalManager.init();  //&line[Temperature]   // Initialize temperature loop
-
+  SYNC_PLAN_POSITION_KINEMATIC(); 
+//&end[Moter_Type_Stepper]
+//&begin[Temperature] 
+  thermalManager.init();    // Initialize temperature loop
+//&end[Temperature] 
+//&begin[WatchDog] 
   #if ENABLED(USE_WATCHDOG)
     watchdog_init();
   #endif
+//&end[WatchDog]
+//&begin[Moter_Type_Stepper] 
+  stepper.init();   // Initialize stepper, this enables interrupts!
 
-
-  stepper.init();  //&line[Moter_Type_Stepper]  // Initialize stepper, this enables interrupts!
-
-  servo_init(); //&line[Moter_Type_Servo]
-
+  servo_init(); 
+//&end[Moter_Type_Stepper] 
   #if HAS_PHOTOGRAPH
     OUT_WRITE(PHOTOGRAPH_PIN, LOW);
   #endif
@@ -3262,9 +3265,9 @@ void setup() {
     OUT_WRITE(SLED_PIN, LOW); // turn it off
   #endif // Z_PROBE_SLED
 
-
-  setup_homepin(); //&line[Board]
-
+//&begin[Board]
+  setup_homepin(); 
+//&end[Board]
   #if PIN_EXISTS(STAT_LED_RED)
     OUT_WRITE(STAT_LED_RED_PIN, LOW); // turn it off
   #endif
@@ -3367,7 +3370,8 @@ if (commands_in_queue < BUFSIZE) get_available_commands();
     }
   }
 //&end[Command_Handling]
-
-  endstops.report_state(); //&line[Endstop]
+//&begin[Endstop]
+  endstops.report_state(); 
+//&end[Endstop]
   idle();
 }

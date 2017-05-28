@@ -171,8 +171,10 @@
   #if ENABLED(CONFIG_STEPPERS_TOSHIBA)
     #define MAX_STEP_FREQUENCY 10000 // Max step frequency for Toshiba Stepper Controllers
   #else
-  //&line[Stepper]
-    #define MAX_STEP_FREQUENCY 40000 // Max step frequency for Ultimaker (5000 pps / half step)
+ // Max step frequency for Ultimaker (5000 pps / half step)
+//&begin[Stepper]
+    #define MAX_STEP_FREQUENCY 40000
+//&end[Stepper]
   #endif
 
   //&begin[Stepper]
@@ -746,9 +748,9 @@
   #endif
 
   // Stepper pulse duration, in cycles
-  //&line[Stepper]
-  #define STEP_PULSE_CYCLES ((MINIMUM_STEPPER_PULSE) * CYCLES_PER_MICROSECOND)
-
+  //&begin[Stepper]
+  #define STEP_PULSE_CYCLES ((MINIMUM_STEPPER_PULSE) * CYCLES_PER_MICROSECOND)  
+//&end[Stepper]
   #ifndef DELTA_ENDSTOP_ADJ
     #define DELTA_ENDSTOP_ADJ { 0 }
   #endif

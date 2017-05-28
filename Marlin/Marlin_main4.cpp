@@ -1149,10 +1149,11 @@ void process_next_command() {
 //&begin[Emergency_Command_Parser]
       #if DISABLED(EMERGENCY_PARSER)
 
+	  //&begin[Emergency_Cancel_Heatup]
         case 108: // M108: Cancel Waiting
           gcode_M108();
           break;
-
+	//&end[Emergency_Cancel_Heatup]
         case 112: // M112: Emergency Stop
           gcode_M112();
           break;

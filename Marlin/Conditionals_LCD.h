@@ -317,6 +317,7 @@
     #define TOOL_E_INDEX current_block->active_extruder
   #endif
   //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+  //&begin[DISTINCT_E_FACTORS]
   /**
    * Distinct E Factors – Disable by commenting out DISTINCT_E_FACTORS
    */
@@ -328,7 +329,7 @@
     #define XYZE_N XYZE
     #define E_AXIS_N E_AXIS
   #endif
-
+ //&end[DISTINCT_E_FACTORS]
   //&begin[EndStopZ_BLTouchSensor]
   /**
    * The BLTouch Probe emulates a servo probe

@@ -1863,6 +1863,7 @@ void kill_screen(const char* lcd_msg) {
   void lcd_control_temperature_preheat_material2_settings_menu() { _lcd_control_temperature_preheat_settings_menu(1); }
 
   void _reset_acceleration_rates() { planner.reset_acceleration_rates(); }
+   //&begin[DISTINCT_E_FACTORS]
   #if ENABLED(DISTINCT_E_FACTORS)
     void _reset_e_acceleration_rate(const uint8_t e) { if (e == active_extruder) _reset_acceleration_rates(); }
     void _reset_e0_acceleration_rate() { _reset_e_acceleration_rate(0); }
@@ -1874,8 +1875,9 @@ void kill_screen(const char* lcd_msg) {
       #endif
     #endif
   #endif
-
+ //&end[DISTINCT_E_FACTORS]
   void _planner_refresh_positioning() { planner.refresh_positioning(); }
+   //&begin[DISTINCT_E_FACTORS]
   #if ENABLED(DISTINCT_E_FACTORS)
     void _planner_refresh_e_positioning(const uint8_t e) {
       if (e == active_extruder)
@@ -1892,7 +1894,7 @@ void kill_screen(const char* lcd_msg) {
       #endif
     #endif
   #endif
-
+ //&end[DISTINCT_E_FACTORS]
   /**
    *
    * "Control" > "Motion" submenu
@@ -1924,7 +1926,7 @@ void kill_screen(const char* lcd_msg) {
     MENU_ITEM_EDIT(float3, MSG_VMAX MSG_X, &planner.max_feedrate_mm_s[X_AXIS], 1, 999);
     MENU_ITEM_EDIT(float3, MSG_VMAX MSG_Y, &planner.max_feedrate_mm_s[Y_AXIS], 1, 999);
     MENU_ITEM_EDIT(float3, MSG_VMAX MSG_Z, &planner.max_feedrate_mm_s[Z_AXIS], 1, 999);
-
+ //&begin[DISTINCT_E_FACTORS]
     #if ENABLED(DISTINCT_E_FACTORS)
       MENU_ITEM_EDIT(float3, MSG_VMAX MSG_E, &planner.max_feedrate_mm_s[E_AXIS + active_extruder], 1, 999);
       MENU_ITEM_EDIT(float3, MSG_VMAX MSG_E1, &planner.max_feedrate_mm_s[E_AXIS], 1, 999);
@@ -1938,7 +1940,7 @@ void kill_screen(const char* lcd_msg) {
     #else
       MENU_ITEM_EDIT(float3, MSG_VMAX MSG_E, &planner.max_feedrate_mm_s[E_AXIS], 1, 999);
     #endif
-
+ //&end[DISTINCT_E_FACTORS]
     MENU_ITEM_EDIT(float3, MSG_VMIN, &planner.min_feedrate_mm_s, 0, 999);
     MENU_ITEM_EDIT(float3, MSG_VTRAV_MIN, &planner.min_travel_feedrate_mm_s, 0, 999);
 
@@ -1948,7 +1950,7 @@ void kill_screen(const char* lcd_msg) {
     MENU_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_X, &planner.max_acceleration_mm_per_s2[X_AXIS], 100, 99000, _reset_acceleration_rates);
     MENU_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_Y, &planner.max_acceleration_mm_per_s2[Y_AXIS], 100, 99000, _reset_acceleration_rates);
     MENU_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_Z, &planner.max_acceleration_mm_per_s2[Z_AXIS], 10, 99000, _reset_acceleration_rates);
-
+ //&begin[DISTINCT_E_FACTORS]
     #if ENABLED(DISTINCT_E_FACTORS)
       MENU_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_E, &planner.max_acceleration_mm_per_s2[E_AXIS + active_extruder], 100, 99000, _reset_acceleration_rates);
       MENU_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_E1, &planner.max_acceleration_mm_per_s2[E_AXIS], 100, 99000, _reset_e0_acceleration_rate);
@@ -1962,7 +1964,7 @@ void kill_screen(const char* lcd_msg) {
     #else
       MENU_ITEM_EDIT_CALLBACK(long5, MSG_AMAX MSG_E, &planner.max_acceleration_mm_per_s2[E_AXIS], 100, 99000, _reset_acceleration_rates);
     #endif
-
+ //&end[DISTINCT_E_FACTORS]
     MENU_ITEM_EDIT(float5, MSG_A_RETRACT, &planner.retract_acceleration, 100, 99000);
     MENU_ITEM_EDIT(float5, MSG_A_TRAVEL, &planner.travel_acceleration, 100, 99000);
 
@@ -1972,7 +1974,7 @@ void kill_screen(const char* lcd_msg) {
     MENU_ITEM_EDIT_CALLBACK(float62, MSG_XSTEPS, &planner.axis_steps_per_mm[X_AXIS], 5, 9999, _planner_refresh_positioning);
     MENU_ITEM_EDIT_CALLBACK(float62, MSG_YSTEPS, &planner.axis_steps_per_mm[Y_AXIS], 5, 9999, _planner_refresh_positioning);
     MENU_ITEM_EDIT_CALLBACK(float62, MSG_ZSTEPS, &planner.axis_steps_per_mm[Z_AXIS], 5, 9999, _planner_refresh_positioning);
-
+ //&begin[DISTINCT_E_FACTORS]
     #if ENABLED(DISTINCT_E_FACTORS)
       MENU_ITEM_EDIT_CALLBACK(float62, MSG_ESTEPS, &planner.axis_steps_per_mm[E_AXIS + active_extruder], 5, 9999, _planner_refresh_positioning);
       MENU_ITEM_EDIT_CALLBACK(float62, MSG_ESTEPS MSG_E1, &planner.axis_steps_per_mm[E_AXIS], 5, 9999, _planner_refresh_e0_positioning);
@@ -1986,7 +1988,7 @@ void kill_screen(const char* lcd_msg) {
     #else
       MENU_ITEM_EDIT_CALLBACK(float62, MSG_ESTEPS, &planner.axis_steps_per_mm[E_AXIS], 5, 9999, _planner_refresh_positioning);
     #endif
-
+ //&end[DISTINCT_E_FACTORS]
     #if ENABLED(ABORT_ON_ENDSTOP_HIT_FEATURE_ENABLED)
       MENU_ITEM_EDIT(bool, MSG_ENDSTOP_ABORT, &stepper.abort_on_endstop_hit);
     #endif

@@ -301,7 +301,7 @@ void Endstops::update() {
   #if CORE_IS_XY || CORE_IS_XZ
     }
   #endif
-
+	
   #if CORE_IS_XY || CORE_IS_YZ
     // Head direction in -Y axis for CoreXY / CoreYZ bots.
     // If DeltaA == DeltaB, the movement is only in X or Y axis

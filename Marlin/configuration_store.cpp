@@ -571,12 +571,13 @@ void Config_Postprocess() {
 void Config_ResetDefault() {
   const float tmp1[] = DEFAULT_AXIS_STEPS_PER_UNIT, tmp2[] = DEFAULT_MAX_FEEDRATE;
   const long tmp3[] = DEFAULT_MAX_ACCELERATION;
+   //&begin[DISTINCT_E_FACTORS]
   LOOP_XYZE_N(i) {
     planner.axis_steps_per_mm[i]          = tmp1[i < COUNT(tmp1) ? i : COUNT(tmp1) - 1];
     planner.max_feedrate_mm_s[i]          = tmp2[i < COUNT(tmp2) ? i : COUNT(tmp2) - 1];
     planner.max_acceleration_mm_per_s2[i] = tmp3[i < COUNT(tmp3) ? i : COUNT(tmp3) - 1];
   }
-
+ //end[DISTINCT_E_FACTORS]
   planner.acceleration = DEFAULT_ACCELERATION;
   planner.retract_acceleration = DEFAULT_RETRACT_ACCELERATION;
   planner.travel_acceleration = DEFAULT_TRAVEL_ACCELERATION;
@@ -719,17 +720,19 @@ void Config_ResetDefault() {
     SERIAL_ECHOPAIR("  M92 X", planner.axis_steps_per_mm[X_AXIS]);
     SERIAL_ECHOPAIR(" Y", planner.axis_steps_per_mm[Y_AXIS]);
     SERIAL_ECHOPAIR(" Z", planner.axis_steps_per_mm[Z_AXIS]);
+	//&begin[DISTINCT_E_FACTORS]
     #if E_STEPPERS == 1
       SERIAL_ECHOPAIR(" E", planner.axis_steps_per_mm[E_AXIS]);
     #endif
     SERIAL_EOL;
+	 
     #if ENABLED(DISTINCT_E_FACTORS)
       for (uint8_t i = 0; i < E_STEPPERS; i++) {
         SERIAL_ECHOPAIR("  M92 T", (int)i);
         SERIAL_ECHOLNPAIR(" E", planner.axis_steps_per_mm[E_AXIS + i]);
       }
     #endif
-
+ //end[DISTINCT_E_FACTORS]
     CONFIG_ECHO_START;
 
     if (!forReplay) {
@@ -739,17 +742,19 @@ void Config_ResetDefault() {
     SERIAL_ECHOPAIR("  M203 X", planner.max_feedrate_mm_s[X_AXIS]);
     SERIAL_ECHOPAIR(" Y", planner.max_feedrate_mm_s[Y_AXIS]);
     SERIAL_ECHOPAIR(" Z", planner.max_feedrate_mm_s[Z_AXIS]);
+//&begin[DISTINCT_E_FACTORS]
     #if E_STEPPERS == 1
       SERIAL_ECHOPAIR(" E", planner.max_feedrate_mm_s[E_AXIS]);
     #endif
     SERIAL_EOL;
+
     #if ENABLED(DISTINCT_E_FACTORS)
       for (uint8_t i = 0; i < E_STEPPERS; i++) {
         SERIAL_ECHOPAIR("  M203 T", (int)i);
         SERIAL_ECHOLNPAIR(" E", planner.max_feedrate_mm_s[E_AXIS + i]);
       }
     #endif
-
+ //end[DISTINCT_E_FACTORS]
     CONFIG_ECHO_START;
     if (!forReplay) {
       SERIAL_ECHOLNPGM("Maximum Acceleration (mm/s2):");
@@ -762,13 +767,14 @@ void Config_ResetDefault() {
       SERIAL_ECHOPAIR(" E", planner.max_acceleration_mm_per_s2[E_AXIS]);
     #endif
     SERIAL_EOL;
+	 //&begin[DISTINCT_E_FACTORS]
     #if ENABLED(DISTINCT_E_FACTORS)
       for (uint8_t i = 0; i < E_STEPPERS; i++) {
         SERIAL_ECHOPAIR("  M201 T", (int)i);
         SERIAL_ECHOLNPAIR(" E", planner.max_acceleration_mm_per_s2[E_AXIS + i]);
       }
     #endif
-
+ //end[DISTINCT_E_FACTORS]
     CONFIG_ECHO_START;
     if (!forReplay) {
       SERIAL_ECHOLNPGM("Accelerations: P=printing, R=retract and T=travel");

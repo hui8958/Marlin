@@ -580,8 +580,9 @@ inline void gcode_M105() {
   /**
    * M108: Stop the waiting for heaters in M109, M190, M303. Does not affect the target temperature.
    */
+   //&begin[Emergency_Cancel_Heatup]
   inline void gcode_M108() { wait_for_heatup = false; }
-
+//&end[Emergency_Cancel_Heatup]
 
   /**
    * M112: Emergency Stop
@@ -1124,6 +1125,7 @@ inline void gcode_M85() {
 }
 
 //&begin[Moter_Type_Stepper]
+ //&begin[DISTINCT_E_FACTORS]
 /**
  * Multi-stepper support for M92, M201, M203
  */
@@ -1134,7 +1136,7 @@ inline void gcode_M85() {
   #define GET_TARGET_EXTRUDER(CMD) NOOP
   #define TARGET_EXTRUDER 0
 #endif
-
+ //&end[DISTINCT_E_FACTORS]
 /**
  * M92: Set axis steps-per-unit for one or more axes, X, Y, Z, and E.
  *      (Follows the same syntax as G92)
@@ -1147,8 +1149,9 @@ inline void gcode_M92() {
 
   LOOP_XYZE(i) {
     if (code_seen(axis_codes[i])) {
+		 //&begin[DISTINCT_E_FACTORS]
       if (i == E_AXIS) {
-        float value = code_value_per_axis_unit(E_AXIS + TARGET_EXTRUDER);
+        float value = code_value_per_axis_unit(E_AXIS + TARGET_EXTRUDER); 
         if (value < 20.0) {
           float factor = planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] / value; // increase e constants if M92 E14 is given for netfab.
           planner.max_jerk[E_AXIS] *= factor;
@@ -1157,7 +1160,8 @@ inline void gcode_M92() {
         }
         planner.axis_steps_per_mm[E_AXIS + TARGET_EXTRUDER] = value;
       }
-      else {
+       //&end[DISTINCT_E_FACTORS]
+	  else {
         planner.axis_steps_per_mm[i] = code_value_per_axis_unit(i);
       }
     }
@@ -1418,12 +1422,14 @@ inline void gcode_M200() {
  */
 inline void gcode_M201() {
 
-  GET_TARGET_EXTRUDER(201);
+  GET_TARGET_EXTRUDER(201); //&line[DISTINCT_E_FACTORS]
 
   LOOP_XYZE(i) {
     if (code_seen(axis_codes[i])) {
+		 //&begin[DISTINCT_E_FACTORS]
       const uint8_t a = i + (i == E_AXIS ? TARGET_EXTRUDER : 0);
       planner.max_acceleration_mm_per_s2[a] = code_value_axis_units(a);
+	   //&end[DISTINCT_E_FACTORS]
     }
   }
   // steps per sq second need to be updated to agree with the units per sq second (as they are what is used in the planner)
@@ -1447,12 +1453,14 @@ inline void gcode_M201() {
  */
 inline void gcode_M203() {
 
-  GET_TARGET_EXTRUDER(203);
+  GET_TARGET_EXTRUDER(203); //&line[DISTINCT_E_FACTORS]
 
   LOOP_XYZE(i)
     if (code_seen(axis_codes[i])) {
+		 //&begin[DISTINCT_E_FACTORS]
       const uint8_t a = i + (i == E_AXIS ? TARGET_EXTRUDER : 0);
       planner.max_feedrate_mm_s[a] = code_value_axis_units(a);
+	   //&end[DISTINCT_E_FACTORS]
     }
 }
 //end[Extruder]

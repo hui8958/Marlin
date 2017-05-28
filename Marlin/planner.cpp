@@ -84,11 +84,11 @@ volatile uint8_t Planner::block_buffer_head = 0,           // Index of the next 
 float Planner::max_feedrate_mm_s[XYZE_N], // Max speeds in mm per second
       Planner::axis_steps_per_mm[XYZE_N],
       Planner::steps_to_mm[XYZE_N];
-
+ //&begin[DISTINCT_E_FACTORS]
 #if ENABLED(DISTINCT_E_FACTORS)
   uint8_t Planner::last_extruder = 0;     // Respond to extruder change
 #endif
-
+ //&end[DISTINCT_E_FACTORS]
 uint32_t Planner::max_acceleration_steps_per_s2[XYZE_N],
          Planner::max_acceleration_mm_per_s2[XYZE_N]; // Use M201 to override by software
 
@@ -662,7 +662,7 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
     lround(c * axis_steps_per_mm[Z_AXIS]),
     lround(e * axis_steps_per_mm[E_AXIS_N])
   };
-
+ //&begin[DISTINCT_E_FACTORS]
   // When changing extruders recalculate steps corresponding to the E position
   #if ENABLED(DISTINCT_E_FACTORS)
     if (last_extruder != extruder && axis_steps_per_mm[E_AXIS_N] != axis_steps_per_mm[E_AXIS + last_extruder]) {
@@ -670,7 +670,7 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
       last_extruder = extruder;
     }
   #endif
-  
+   //&end[DISTINCT_E_FACTORS]
 //&begin[LIN_ADVANCE]
   #if ENABLED(LIN_ADVANCE)
     float target_float[XYZE] = {a, b, c, e};
@@ -1371,12 +1371,14 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
  */
 
 void Planner::_set_position_mm(const float &a, const float &b, const float &c, const float &e) {
+	 //&begin[DISTINCT_E_FACTORS]
   #if ENABLED(DISTINCT_E_FACTORS)
     #define _EINDEX (E_AXIS + active_extruder)
     last_extruder = active_extruder;
   #else
     #define _EINDEX E_AXIS
   #endif
+   //&end[DISTINCT_E_FACTORS]
   long na = position[X_AXIS] = lround(a * axis_steps_per_mm[X_AXIS]),
        nb = position[Y_AXIS] = lround(b * axis_steps_per_mm[Y_AXIS]),
        nc = position[Z_AXIS] = lround(c * axis_steps_per_mm[Z_AXIS]),
@@ -1412,12 +1414,14 @@ void Planner::sync_from_steppers() {
  * Setters for planner position (also setting stepper position).
  */
 void Planner::set_position_mm(const AxisEnum axis, const float& v) {
+	 //&begin[DISTINCT_E_FACTORS]
   #if ENABLED(DISTINCT_E_FACTORS)
     const uint8_t axis_index = axis + (axis == E_AXIS ? active_extruder : 0);
     last_extruder = active_extruder;
   #else
     const uint8_t axis_index = axis;
   #endif
+   //&end[DISTINCT_E_FACTORS]
   position[axis] = lround(v * axis_steps_per_mm[axis_index]);
   stepper.set_position(axis, v);
   previous_speed[axis] = 0.0;
@@ -1425,11 +1429,13 @@ void Planner::set_position_mm(const AxisEnum axis, const float& v) {
 
 // Recalculate the steps/s^2 acceleration rates, based on the mm/s^2
 void Planner::reset_acceleration_rates() {
+	 //&begin[DISTINCT_E_FACTORS]
   #if ENABLED(DISTINCT_E_FACTORS)
     #define HIGHEST_CONDITION (i < E_AXIS || i == E_AXIS + active_extruder)
   #else
     #define HIGHEST_CONDITION true
   #endif
+   //&end[DISTINCT_E_FACTORS]
   uint32_t highest_rate = 1;
   LOOP_XYZE_N(i) {
     max_acceleration_steps_per_s2[i] = max_acceleration_mm_per_s2[i] * axis_steps_per_mm[i];

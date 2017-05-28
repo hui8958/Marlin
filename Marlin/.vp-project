@@ -42,6 +42,7 @@ Marlin
             Manual_Bed_Leveling
             Auto_Bed_Leveling
     WatchDog
+    DISTINCT_E_FACTORS
     Temperature
     PRINTCOUNTER
     Command_Input_Process
@@ -59,6 +60,7 @@ Marlin
     FILAMENT_CHANGE_FEATURE
     CASE_LIGHT
     Emergency_Command_Parser
+		Emergency_Cancel_Heatup
     G2_G3_R_Parameter
     Clean_Nozzle
     PINS_DEBUGGING

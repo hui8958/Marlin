@@ -147,9 +147,9 @@
 
 // This defines the number of extruders
 // :[1, 2, 3, 4]
-//&line[Extruder]
+//&begin[Extruder]
 #define EXTRUDERS 1
-
+//&end[Extruder]
 // Enable if your E steppers or extruder gear ratios are not identical
 //#define DISTINCT_E_FACTORS
 

@@ -381,14 +381,14 @@ float code_value_temp_diff();
   extern float retract_length, retract_length_swap, retract_feedrate_mm_s, retract_zlift;
   extern float retract_recover_length, retract_recover_length_swap, retract_recover_feedrate_mm_s;
 #endif
-
+//&begin[Print_Job_Timer]
 // Print job timer
 #if ENABLED(PRINTCOUNTER)
   extern PrintCounter print_job_timer;
 #else
   extern Stopwatch print_job_timer;
 #endif
-
+//&end[Print_Job_Timer]
 // Handling multiple extruders pins
 extern uint8_t active_extruder;
 

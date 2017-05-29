@@ -1065,7 +1065,7 @@
 // - M77  - Stop the print job timer
 #define PRINTJOB_TIMER_AUTOSTART
 
-//&begin[PrintCounter]
+//&begin[PRINTCOUNTER]
 //
 // Print Counter
 //
@@ -1077,7 +1077,7 @@
 //
 // This information can be viewed by the M78 command.
 //#define PRINTCOUNTER
-//&end[PrintCounter]
+//&end[PRINTCOUNTER]
 
 //=============================================================================
 //============================= LCD and SD support ============================

@@ -389,7 +389,7 @@ inline void gcode_M75() { print_job_timer.start(); }
  * M76: Pause print timer
  */
 inline void gcode_M76() { print_job_timer.pause(); }
-
+//&begin[PRINTCOUNTER]
 /**
  * M77: Stop print timer
  */
@@ -407,7 +407,7 @@ inline void gcode_M77() { print_job_timer.stop(); }
       print_job_timer.showStats();
   }
 #endif
-
+//&end[PRINTCOUNTER]
 //&begin[Hotend]
 /**
  * M104: Set hot end temperature

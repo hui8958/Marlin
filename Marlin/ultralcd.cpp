@@ -37,12 +37,12 @@
 #if ENABLED(BLTOUCH)
   #include "endstops.h"
 #endif
-
+//&begin[PRINTCOUNTER]
 #if ENABLED(PRINTCOUNTER)
   #include "printcounter.h"
   #include "duration_t.h"
 #endif
-
+//&end[PRINTCOUNTER]
 int lcd_preheat_hotend_temp[2], lcd_preheat_bed_temp[2], lcd_preheat_fan_speed[2];
 
 #if ENABLED(FILAMENT_LCD_DISPLAY)
@@ -2138,7 +2138,7 @@ void kill_screen(const char* lcd_msg) {
   #endif //SDSUPPORT
 
   #if ENABLED(LCD_INFO_MENU)
-
+//&begin[PRINTCOUNTER]
     #if ENABLED(PRINTCOUNTER)
       /**
        *
@@ -2173,7 +2173,7 @@ void kill_screen(const char* lcd_msg) {
         END_SCREEN();
       }
     #endif // PRINTCOUNTER
-
+//&end[PRINTCOUNTER]
     /**
      *
      * About Printer > Thermistors
@@ -2275,10 +2275,12 @@ void kill_screen(const char* lcd_msg) {
       MENU_ITEM(submenu, MSG_INFO_PRINTER_MENU, lcd_info_printer_menu);        // Printer Info >
       MENU_ITEM(submenu, MSG_INFO_BOARD_MENU, lcd_info_board_menu);            // Board Info >
       MENU_ITEM(submenu, MSG_INFO_THERMISTOR_MENU, lcd_info_thermistors_menu); // Thermistors >
+	  //&begin[PRINTCOUNTER]
       #if ENABLED(PRINTCOUNTER)
         MENU_ITEM(submenu, MSG_INFO_STATS_MENU, lcd_info_stats_menu);          // Printer Statistics >
       #endif
-      END_MENU();
+      //&end[PRINTCOUNTER]
+	  END_MENU();
     }
   #endif // LCD_INFO_MENU
 //&begin[FILAMENT_CHANGE_FEATURE]

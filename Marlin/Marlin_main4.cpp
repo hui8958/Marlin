@@ -1123,12 +1123,12 @@ void process_next_command() {
         gcode_M76(); break;
       case 77: // M77: Stop print timer
         gcode_M77(); break;
-
+//&begin[PRINTCOUNTER]
       #if ENABLED(PRINTCOUNTER)
         case 78: // M78: Show print statistics
           gcode_M78(); break;
       #endif
-
+//&end[PRINTCOUNTER]
       #if ENABLED(M100_FREE_MEMORY_WATCHER)
         case 100: // M100: Free Memory Report
           gcode_M100();

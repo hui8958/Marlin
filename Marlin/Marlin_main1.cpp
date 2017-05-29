@@ -2965,12 +2965,14 @@ void gcode_get_destination() {
 
   if (code_seen('F') && code_value_linear_units() > 0.0)
     feedrate_mm_s = MMM_TO_MMS(code_value_linear_units());
-//&begin[PRINTCOUNTER, Print_Job_Timer]
+//&begin[PRINTCOUNTER]
+//&begin[Print_Job_Timer]
   #if ENABLED(PRINTCOUNTER)
     if (!DEBUGGING(DRYRUN))
       print_job_timer.incFilamentUsed(destination[E_AXIS] - current_position[E_AXIS]);
   #endif
-//&end[PRINTCOUNTER, Print_Job_Timer]
+//&end[PRINTCOUNTER]
+//&end[Print_Job_Timer]
   // Get ABCDHI mixing factors
   #if ENABLED(MIXING_EXTRUDER) && ENABLED(DIRECT_MIXING_IN_G1)
     gcode_get_mix();

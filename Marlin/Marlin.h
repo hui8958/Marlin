@@ -395,11 +395,11 @@ extern uint8_t active_extruder;
 #if HAS_TEMP_HOTEND || HAS_TEMP_BED
   void print_heaterstates();
 #endif
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
   extern float mixing_factor[MIXING_STEPPERS];
 #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 void calculate_volumetric_multipliers();
 
 /**

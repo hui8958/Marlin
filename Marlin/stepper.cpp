@@ -113,11 +113,11 @@ long Stepper::acceleration_time, Stepper::deceleration_time;
 
 volatile long Stepper::count_position[NUM_AXIS] = { 0 };
 volatile signed char Stepper::count_direction[NUM_AXIS] = { 1, 1, 1, 1 };
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
   long Stepper::counter_m[MIXING_STEPPERS];
 #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 unsigned short Stepper::acc_step_rate; // needed for deceleration start point
 uint8_t Stepper::step_loops, Stepper::step_loops_nominal;
 unsigned short Stepper::OCR1A_nominal;
@@ -366,12 +366,12 @@ void Stepper::isr() {
 
       // Initialize Bresenham counters to 1/2 the ceiling
       counter_X = counter_Y = counter_Z = counter_E = -(current_block->step_event_count >> 1);
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
       #if ENABLED(MIXING_EXTRUDER)
         MIXING_STEPPERS_LOOP(i)
           counter_m[i] = -(current_block->mix_event_count[i] >> 1);
       #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
       step_events_completed = 0;
 
       #if ENABLED(ENDSTOP_INTERRUPTS_FEATURE)
@@ -433,11 +433,13 @@ void Stepper::isr() {
       counter_E += current_block->steps[E_AXIS];
       if (counter_E > 0) {
         counter_E -= current_block->step_event_count;
+		//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
         #if DISABLED(MIXING_EXTRUDER)
           // Don't step E here for mixing extruder
           count_position[E_AXIS] += count_direction[E_AXIS];
           motor_direction(E_AXIS) ? --e_steps[TOOL_E_INDEX] : ++e_steps[TOOL_E_INDEX];
         #endif
+		
       }
 
       #if ENABLED(MIXING_EXTRUDER)
@@ -451,7 +453,7 @@ void Stepper::isr() {
           }
         }
       #endif
-
+	//&end[SINGLENOZZLE_MIXING_EXTRUDER]
     #elif ENABLED(ADVANCE)
 
       // Always count the unified E axis
@@ -518,6 +520,7 @@ void Stepper::isr() {
 
     // For non-advance use linear interpolation for E also
     #if DISABLED(ADVANCE) && DISABLED(LIN_ADVANCE)
+	//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
       #if ENABLED(MIXING_EXTRUDER)
         // Keep updating the single E axis
         counter_E += current_block->steps[E_AXIS];
@@ -531,7 +534,8 @@ void Stepper::isr() {
       #else // !MIXING_EXTRUDER
         PULSE_START(E);
       #endif
-    #endif // !ADVANCE && !LIN_ADVANCE
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]   
+   #endif // !ADVANCE && !LIN_ADVANCE
 
     // For a minimum pulse time wait before stopping pulses
     #if STEP_PULSE_CYCLES > CYCLES_EATEN_BY_CODE
@@ -612,12 +616,14 @@ void Stepper::isr() {
     #if ENABLED(LIN_ADVANCE)
 
       if (current_block->use_advance_lead) {
+		  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
         #if ENABLED(MIXING_EXTRUDER)
           MIXING_STEPPERS_LOOP(j)
             current_estep_rate[j] = ((uint32_t)acc_step_rate * current_block->abs_adv_steps_multiplier8 * current_block->step_event_count / current_block->mix_event_count[j]) >> 17;
         #else
           current_estep_rate[TOOL_E_INDEX] = ((uint32_t)acc_step_rate * current_block->abs_adv_steps_multiplier8) >> 17;
         #endif
+		//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
       }
 
     #elif ENABLED(ADVANCE)
@@ -627,7 +633,7 @@ void Stepper::isr() {
 
       long advance_whole = advance >> 8,
            advance_factor = advance_whole - old_advance;
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
       // Do E steps + advance steps
       #if ENABLED(MIXING_EXTRUDER)
         // ...for mixing steppers proportionally
@@ -637,7 +643,7 @@ void Stepper::isr() {
         // ...for the active extruder
         e_steps[TOOL_E_INDEX] += advance_factor;
       #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
       old_advance = advance_whole;
 
     #endif // ADVANCE or LIN_ADVANCE
@@ -667,13 +673,15 @@ void Stepper::isr() {
     #if ENABLED(LIN_ADVANCE)
 
       if (current_block->use_advance_lead) {
+		  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
         #if ENABLED(MIXING_EXTRUDER)
           MIXING_STEPPERS_LOOP(j)
             current_estep_rate[j] = ((uint32_t)step_rate * current_block->abs_adv_steps_multiplier8 * current_block->step_event_count / current_block->mix_event_count[j]) >> 17;
         #else
           current_estep_rate[TOOL_E_INDEX] = ((uint32_t)step_rate * current_block->abs_adv_steps_multiplier8) >> 17;
         #endif
-      }
+      //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+	  }
 
     #elif ENABLED(ADVANCE)
 
@@ -683,14 +691,14 @@ void Stepper::isr() {
       // Do E steps + advance steps
       long advance_whole = advance >> 8,
            advance_factor = advance_whole - old_advance;
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
       #if ENABLED(MIXING_EXTRUDER)
         MIXING_STEPPERS_LOOP(j)
           e_steps[j] += advance_factor * current_block->step_event_count / current_block->mix_event_count[j];
       #else
         e_steps[TOOL_E_INDEX] += advance_factor;
       #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
       old_advance = advance_whole;
 
     #endif // ADVANCE or LIN_ADVANCE

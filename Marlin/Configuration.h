@@ -153,6 +153,8 @@
 // Enable if your E steppers or extruder gear ratios are not identical
 //#define DISTINCT_E_FACTORS
 
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+
 // For Cyclops or any "multi-extruder" that shares a single nozzle.
 //#define SINGLENOZZLE
 
@@ -189,7 +191,7 @@
 // For the other hotends it is their distance from the extruder 0 hotend.
 //#define HOTEND_OFFSET_X {0.0, 20.00} // (in mm) for each extruder, offset of the hotend on the X axis
 //#define HOTEND_OFFSET_Y {0.0, 5.00}  // (in mm) for each extruder, offset of the hotend on the Y axis
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Power]
 /**
  * Select your power supply here. Use 0 if you haven't connected the PS_ON_PIN

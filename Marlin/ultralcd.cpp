@@ -1519,14 +1519,14 @@ void kill_screen(const char* lcd_msg) {
 
     if (move_menu_scale < 10.0) {
       if (_MOVE_XYZ_ALLOWED) MENU_ITEM(submenu, MSG_MOVE_Z, lcd_move_z);
-
+ //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
       #if ENABLED(SWITCHING_EXTRUDER)
         if (active_extruder)
           MENU_ITEM(gcode, MSG_SELECT MSG_E1, PSTR("T0"));
         else
           MENU_ITEM(gcode, MSG_SELECT MSG_E2, PSTR("T1"));
       #endif
-
+ //&end[SINGLENOZZLE_MIXING_EXTRUDER]
       MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_e);
       #if E_MANUAL > 1
         MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E1, lcd_move_e0);

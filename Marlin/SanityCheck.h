@@ -290,7 +290,7 @@
   || (ENABLED(SINGLENOZZLE) && ENABLED(MIXING_EXTRUDER))
     #error "Please define only one type of extruder: SINGLENOZZLE, SWITCHING_EXTRUDER, or MIXING_EXTRUDER."
 #endif
-  //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+ 
 /**
  * Single Stepper Dual Extruder with switching servo
  */
@@ -318,7 +318,7 @@
     #error "MIXING_EXTRUDER is incompatible with FILAMENT_SENSOR. Comment out this line to use it anyway."
   #endif
 #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 /**
  * Limited number of servos
  */

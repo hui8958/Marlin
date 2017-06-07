@@ -147,7 +147,7 @@ class Stepper {
     // Current direction of stepper motors (+1 or -1)
     //
     static volatile signed char count_direction[NUM_AXIS];
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
     //
     // Mixing extruder mix counters
     //
@@ -157,7 +157,7 @@ class Stepper {
         for (uint8_t VAR = 0; VAR < MIXING_STEPPERS; VAR++) \
           if (current_block->mix_event_count[VAR])
     #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
   public:
 
     //
@@ -335,7 +335,7 @@ class Stepper {
 
         advance = current_block->initial_advance;
         final_advance = current_block->final_advance;
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
         // Do E steps + advance steps
         #if ENABLED(MIXING_EXTRUDER)
           long advance_factor = (advance >> 8) - old_advance;
@@ -346,7 +346,7 @@ class Stepper {
           // ...for the active extruder
           e_steps[TOOL_E_INDEX] += ((advance >> 8) - old_advance);
         #endif
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
         old_advance = advance >> 8;
 
       #endif

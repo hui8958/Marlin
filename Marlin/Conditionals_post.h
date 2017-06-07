@@ -319,9 +319,11 @@
     #ifndef HOTEND_OFFSET_Y
       #define HOTEND_OFFSET_Y { 0 } // Y offsets for each extruder
     #endif
+	//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
     #if !defined(HOTEND_OFFSET_Z) && (ENABLED(DUAL_X_CARRIAGE) || ENABLED(SWITCHING_EXTRUDER))
       #define HOTEND_OFFSET_Z { 0 }
     #endif
+	//&end[SINGLENOZZLE_MIXING_EXTRUDER]
   #endif
 //&end[Hotend]
 

@@ -402,7 +402,7 @@
 #define E3_STEP_INIT SET_OUTPUT(E3_STEP_PIN)
 #define E3_STEP_WRITE(STATE) WRITE(E3_STEP_PIN,STATE)
 #define E3_STEP_READ READ(E3_STEP_PIN)
-
+ //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 /**
  * Extruder indirection for the single E axis
  */
@@ -448,5 +448,5 @@
   #define NORM_E_DIR() E0_DIR_WRITE(!INVERT_E0_DIR)
   #define REV_E_DIR() E0_DIR_WRITE(INVERT_E0_DIR)
 #endif
-
+ //&end[SINGLENOZZLE_MIXING_EXTRUDER]
 #endif // STEPPER_INDIRECTION_H

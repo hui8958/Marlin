@@ -650,7 +650,7 @@ float cartes[XYZ] = { 0 };
   FilamentChangeMenuResponse filament_change_menu_response;
 #endif
 //&end[FILAMENT_CHANGE_FEATURE]
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
   float mixing_factor[MIXING_STEPPERS]; // Reciprocal of mix proportion. 0.0 = off, otherwise >= 1.0.
@@ -659,7 +659,7 @@ float cartes[XYZ] = { 0 };
   #endif
 #endif
 //&end[Extruder_Mixing]
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[IO_handling]
 static bool send_ok[BUFSIZE];
 //&end[IO_handling]
@@ -2899,7 +2899,7 @@ static void homeaxis(AxisEnum axis) {
   } // retract()
 
 #endif // FWRETRACT
-
+//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
 
@@ -2940,7 +2940,7 @@ static void homeaxis(AxisEnum axis) {
 
 #endif
 //&end[Extruder_Mixing]
-
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 /**
  * ***************************************************************************
  * ***************************** G-CODE HANDLING *****************************
@@ -2974,10 +2974,12 @@ void gcode_get_destination() {
 //&end[PRINTCOUNTER]
 //&end[Print_Job_Timer]
   // Get ABCDHI mixing factors
+ //&begin[SINGLENOZZLE_MIXING_EXTRUDER] 
   #if ENABLED(MIXING_EXTRUDER) && ENABLED(DIRECT_MIXING_IN_G1)
     gcode_get_mix();
   #endif
-}
+//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+  }
 //&end[Move_To_Destination]
 
 //&begin[Command_Handling]

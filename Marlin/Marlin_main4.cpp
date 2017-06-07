@@ -1274,13 +1274,13 @@ void process_next_command() {
       case 121: // M121: Disable endstops
         gcode_M121();
         break;
-//&begin[Silent_StepStick]
+//&begin[HAVE_TMC2130DRIVER]
       #if ENABLED(HAVE_TMC2130DRIVER)
         case 122: // M122: Diagnose, used to debug TMC2130
           gcode_M122();
           break;
       #endif
-//&end[Silent_StepStick]
+//&end[HAVE_TMC2130DRIVER]
       #if ENABLED(ULTIPANEL)
 
         case 145: // M145: Set material heatup parameters

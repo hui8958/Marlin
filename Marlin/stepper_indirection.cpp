@@ -123,7 +123,7 @@
   }
 
 #endif // HAVE_TMCDRIVER
-//&begin[Silent_StepStick]
+//&begin[HAVE_TMC2130DRIVER]
 //
 // TMC2130 Driver objects and inits
 //
@@ -548,7 +548,7 @@
   }
 
 #endif // HAVE_TMC2130DRIVER
-//&end[Silent_StepStick]
+//&end[HAVE_TMC2130DRIVER]
 //
 // L6470 Driver objects and inits
 //

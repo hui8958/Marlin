@@ -119,3 +119,4 @@ applet/
 .pioenvs
 .piolib
 Marlin/training_data_loc_all_metrics.arff
+Marlin/run.txt

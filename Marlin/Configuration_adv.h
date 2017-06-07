@@ -797,7 +797,7 @@
  */
 
 //#define HAVE_TMC2130DRIVER
-//&begin[Silent_StepStick]
+//&begin[HAVE_TMC2130DRIVER]
 #if ENABLED(HAVE_TMC2130DRIVER)
 
   //#define TMC2130_ADVANCED_CONFIGURATION
@@ -988,7 +988,7 @@
   #endif // TMC2130_ADVANCED_CONFIGURATION
 
 #endif // HAVE_TMC2130DRIVER
-//&end[Silent_StepStick]
+//&end[HAVE_TMC2130DRIVER]
 // @section L6470
 
 /**

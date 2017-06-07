@@ -822,12 +822,12 @@ void Stepper::init() {
   #if ENABLED(HAVE_TMCDRIVER)
     tmc_init();
   #endif
-//&begin[Silent_StepStick]
+//&begin[HAVE_TMC2130DRIVER]
   // Init TMC2130 Steppers
   #if ENABLED(HAVE_TMC2130DRIVER)
     tmc2130_init();
   #endif
-//&end[Silent_StepStick]
+//&end[HAVE_TMC2130DRIVER]
   // Init L6470 Steppers
   #if ENABLED(HAVE_L6470DRIVER)
     L6470_init();

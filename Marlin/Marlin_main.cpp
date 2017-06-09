@@ -432,7 +432,7 @@ float soft_endstop_min[XYZ] = { X_MIN_POS, Y_MIN_POS, Z_MIN_POS },
   int fanSpeeds[FAN_COUNT] = { 0 };
 #endif
 //&end[PWM_Fans]
-//&begin[Fan]
+//&end[Fan]
 
 //&begin[Extruder]
 // The active extruder (tool). Set with T<extruder> command.
@@ -807,7 +807,7 @@ inline void sync_plan_position() {
 }
 inline void sync_plan_position_e() { planner.set_e_position_mm(current_position[E_AXIS]); }
 //&end[Move_To_Destination]
-//&begin[Homing]
+//&end[Homing]
 
 #if IS_KINEMATIC
 
@@ -1187,7 +1187,6 @@ inline void get_serial_commands() {
   } // queue has space, serial has data
 }
 //&end[Command_Handling]
-//&end[IO_Handling]
 
 #if ENABLED(SDSUPPORT)
 
@@ -1637,7 +1636,7 @@ inline float get_homing_bump_feedrate(AxisEnum axis) {
   }
   return homing_feedrate_mm_s[axis] / hbd;
 }
-//&begin[Extruder]
+//&end[Extruder]
 
 //&begin[Move_To_Destination]
 //
@@ -2111,7 +2110,6 @@ static void clean_up_after_endstop_or_probe_move() {
 //&end[EndStopZ_BLTouchSensor]
 
   // returns false for ok and true for failure
-  //&begin[EndStopZ_BLTouchSensor]
   static bool set_probe_deployed(bool deploy) {
 
     #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -2187,7 +2185,6 @@ static void clean_up_after_endstop_or_probe_move() {
     endstops.enable_z_probe(deploy);
     return false;
   }
-  //&begin[EndStopZ_BLTouchSensor]
   static void do_probe_move(float z, float fr_mm_m) {
     #if ENABLED(DEBUG_LEVELING_FEATURE)
       if (DEBUGGING(LEVELING)) DEBUG_POS(">>> do_probe_move", current_position);
@@ -2208,7 +2205,6 @@ static void clean_up_after_endstop_or_probe_move() {
     #if ENABLED(BLTOUCH)
       set_bltouch_deployed(false);
     #endif
-    //&end[EndStopZ_BLTouchSensor]
     
     // Clear endstop flags
     endstops.hit_on_purpose();
@@ -10471,7 +10467,7 @@ void setup() {
     setup_filrunoutpin();
   #endif
 
-//&being[Board]
+//&begin[Board]
   setup_killpin();
 //&end[Board]
 //&begin[Power_Supply]

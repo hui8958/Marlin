@@ -577,7 +577,7 @@ void Config_ResetDefault() {
     planner.max_feedrate_mm_s[i]          = tmp2[i < COUNT(tmp2) ? i : COUNT(tmp2) - 1];
     planner.max_acceleration_mm_per_s2[i] = tmp3[i < COUNT(tmp3) ? i : COUNT(tmp3) - 1];
   }
- //end[DISTINCT_E_FACTORS]
+ //&end[DISTINCT_E_FACTORS]
   planner.acceleration = DEFAULT_ACCELERATION;
   planner.retract_acceleration = DEFAULT_RETRACT_ACCELERATION;
   planner.travel_acceleration = DEFAULT_TRAVEL_ACCELERATION;
@@ -732,7 +732,7 @@ void Config_ResetDefault() {
         SERIAL_ECHOLNPAIR(" E", planner.axis_steps_per_mm[E_AXIS + i]);
       }
     #endif
- //end[DISTINCT_E_FACTORS]
+ //&end[DISTINCT_E_FACTORS]
     CONFIG_ECHO_START;
 
     if (!forReplay) {
@@ -754,7 +754,7 @@ void Config_ResetDefault() {
         SERIAL_ECHOLNPAIR(" E", planner.max_feedrate_mm_s[E_AXIS + i]);
       }
     #endif
- //end[DISTINCT_E_FACTORS]
+ //&end[DISTINCT_E_FACTORS]
     CONFIG_ECHO_START;
     if (!forReplay) {
       SERIAL_ECHOLNPGM("Maximum Acceleration (mm/s2):");
@@ -774,7 +774,7 @@ void Config_ResetDefault() {
         SERIAL_ECHOLNPAIR(" E", planner.max_acceleration_mm_per_s2[E_AXIS + i]);
       }
     #endif
- //end[DISTINCT_E_FACTORS]
+ //&end[DISTINCT_E_FACTORS]
     CONFIG_ECHO_START;
     if (!forReplay) {
       SERIAL_ECHOLNPGM("Accelerations: P=printing, R=retract and T=travel");

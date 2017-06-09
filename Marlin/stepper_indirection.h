@@ -83,7 +83,8 @@
     #define X_ENABLE_INIT NOOP
     #define X_ENABLE_WRITE(STATE) stepperX.setEnabled(STATE)
     #define X_ENABLE_READ stepperX.isEnabled()
-  #else//&begin[HAVE_TMC2130DRIVER]
+  #else
+	  //&begin[HAVE_TMC2130DRIVER]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(X_IS_TMC2130)
       extern Trinamic_TMC2130 stepperX;
     #endif

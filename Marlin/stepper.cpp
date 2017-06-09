@@ -623,7 +623,7 @@ void Stepper::isr() {
         #else
           current_estep_rate[TOOL_E_INDEX] = ((uint32_t)acc_step_rate * current_block->abs_adv_steps_multiplier8) >> 17;
         #endif
-		//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+		//&end[SINGLENOZZLE_MIXING_EXTRUDER]
       }
 
     #elif ENABLED(ADVANCE)

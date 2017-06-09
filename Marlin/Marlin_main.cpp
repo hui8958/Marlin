@@ -1,4 +1,4 @@
-/**
+[SINGLENOZZLE_MIXING_EXTRUDER]/**
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
@@ -526,12 +526,12 @@ static uint8_t target_extruder;
   float z_endstop_adj = 0;
 #endif
 
-//&begin[Hotend]
+//&begin[HotEnd]
 // Extruder offsets
 #if HOTENDS > 1
   float hotend_offset[XYZ][HOTENDS];
 #endif
-//&end[Hotend]
+//&end[HotEnd]
 
 #if HAS_Z_SERVO_ENDSTOP
   const int z_servo_angle[2] = Z_SERVO_ANGLES;
@@ -5369,7 +5369,7 @@ inline void gcode_M77() { print_job_timer.stop(); }
   }
 #endif
 //&end[PRINTCOUNTER]
-//&begin[Hotend]
+//&begin[HotEnd]
 /**
  * M104: Set hot end temperature
  */
@@ -5479,7 +5479,7 @@ inline void gcode_M105() {
 
   SERIAL_EOL;
 }
-//&end[Hotend]
+//&end[HotEnd]
 //&end[Bed_Heated]
 //&begin[AUTO_REPORT_TEMPERATURES]
 #if ENABLED(AUTO_REPORT_TEMPERATURES) && (HAS_TEMP_HOTEND || HAS_TEMP_BED)
@@ -5561,7 +5561,7 @@ inline void gcode_M105() {
 
 #endif
 //&end[Emergency_Command_Parser]
-//&begin[Hotend]
+//&begin[HotEnd]
   #ifndef MIN_COOLING_SLOPE_DEG
     #define MIN_COOLING_SLOPE_DEG 1.50
   #endif
@@ -5696,7 +5696,7 @@ inline void gcode_M109() {
 
   KEEPALIVE_STATE(IN_HANDLER);
 }
-//&end[Hotend]
+//&end[HotEnd]
 
 //&begin[Bed_Heated]
 #if HAS_TEMP_BED
@@ -6634,7 +6634,7 @@ inline void gcode_M211() {
 //&end[Control_Software_EndStop]
 //&end[Endstop]
 
-//&begin[Hotend]
+//&begin[HotEnd]
 #if HOTENDS > 1
 
   /**
@@ -6671,7 +6671,7 @@ inline void gcode_M211() {
   }
 
 #endif // HOTENDS > 1
-//&end[Hotend]
+//&end[HotEnd]
 
 //&begin[Extruder]
 /**
@@ -6829,7 +6829,7 @@ inline void gcode_M226() {
 #endif // HAS_BUZZER
 //&end[Buzzer]
 
-//&begin[Hotend]
+//&begin[HotEnd]
 #if ENABLED(PIDTEMP)
 
   /**
@@ -6881,7 +6881,7 @@ inline void gcode_M226() {
   }
 
 #endif // PIDTEMP
-//&end[Hotend]
+//&end[HotEnd]
 
 //&begin[Bed_Heated]
 #if ENABLED(PIDTEMPBED)
@@ -7971,7 +7971,6 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
           // No extra case for HAS_ABL in DUAL_X_CARRIAGE. Does that mean they don't work together?
         #else // !DUAL_X_CARRIAGE
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
           #if ENABLED(SWITCHING_EXTRUDER)
             // <0 if the new nozzle is higher, >0 if lower. A bigger raise when lower.
             float z_diff = hotend_offset[Z_AXIS][active_extruder] - hotend_offset[Z_AXIS][tmp_extruder],
@@ -7992,7 +7991,6 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
               stepper.synchronize();
             }
           #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
           /**
            * Set current_position to the position of the new nozzle.
            * Offsets are based on linear distance, so we need to get

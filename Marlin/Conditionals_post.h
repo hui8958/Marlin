@@ -308,7 +308,7 @@
   #define HAS_PID_HEATING (ENABLED(PIDTEMP) || ENABLED(PIDTEMPBED))
   #define HAS_PID_FOR_BOTH (ENABLED(PIDTEMP) && ENABLED(PIDTEMPBED))
 
-//&begin[Hotend]
+//&begin[HotEnd]
   /**
    * Default hotend offsets, if not defined
    */
@@ -325,7 +325,7 @@
     #endif
 	//&end[SINGLENOZZLE_MIXING_EXTRUDER]
   #endif
-//&end[Hotend]
+//&end[HotEnd]
 
 //&begin[Extruder]
   /**
@@ -335,13 +335,13 @@
   #define ARRAY_BY_EXTRUDERS1(v1) ARRAY_BY_EXTRUDERS(v1, v1, v1, v1, v1, v1)
 //&end[Extruder]
 
-//&begin[Hotend]
+//&begin[HotEnd]
   /**
    * ARRAY_BY_HOTENDS based on HOTENDS
    */
   #define ARRAY_BY_HOTENDS(...) ARRAY_N(HOTENDS, __VA_ARGS__)
   #define ARRAY_BY_HOTENDS1(v1) ARRAY_BY_HOTENDS(v1, v1, v1, v1, v1, v1)
-//&end[Hotend]
+//&end[HotEnd]
 
   /**
    * Z_DUAL_ENDSTOPS endstop reassignment

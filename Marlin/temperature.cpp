@@ -238,9 +238,9 @@ uint8_t Temperature::soft_pwm[HOTENDS];
       if (hotend < 0)
         soft_pwm_bed = bias = d = (MAX_BED_POWER) >> 1;
       else
-        soft_pwm[hotend] = bias = d = (PID_MAX) >> 1;
+        soft_pwm[HotEnd] = bias = d = (PID_MAX) >> 1;
     #elif ENABLED(PIDTEMP)
-      soft_pwm[hotend] = bias = d = (PID_MAX) >> 1;
+      soft_pwm[HotEnd] = bias = d = (PID_MAX) >> 1;
     #else
       soft_pwm_bed = bias = d = (MAX_BED_POWER) >> 1;
     #endif
@@ -257,9 +257,9 @@ uint8_t Temperature::soft_pwm[HOTENDS];
 
         input =
           #if HAS_PID_FOR_BOTH
-            hotend < 0 ? current_temperature_bed : current_temperature[hotend]
+            hotend < 0 ? current_temperature_bed : current_temperature[HotEnd]
           #elif ENABLED(PIDTEMP)
-            current_temperature[hotend]
+            current_temperature[HotEnd]
           #else
             current_temperature_bed
           #endif
@@ -282,9 +282,9 @@ uint8_t Temperature::soft_pwm[HOTENDS];
               if (hotend < 0)
                 soft_pwm_bed = (bias - d) >> 1;
               else
-                soft_pwm[hotend] = (bias - d) >> 1;
+                soft_pwm[HotEnd] = (bias - d) >> 1;
             #elif ENABLED(PIDTEMP)
-              soft_pwm[hotend] = (bias - d) >> 1;
+              soft_pwm[HotEnd] = (bias - d) >> 1;
             #elif ENABLED(PIDTEMPBED)
               soft_pwm_bed = (bias - d) >> 1;
             #endif
@@ -351,9 +351,9 @@ uint8_t Temperature::soft_pwm[HOTENDS];
               if (hotend < 0)
                 soft_pwm_bed = (bias + d) >> 1;
               else
-                soft_pwm[hotend] = (bias + d) >> 1;
+                soft_pwm[HotEnd] = (bias + d) >> 1;
             #elif ENABLED(PIDTEMP)
-              soft_pwm[hotend] = (bias + d) >> 1;
+              soft_pwm[HotEnd] = (bias + d) >> 1;
             #else
               soft_pwm_bed = (bias + d) >> 1;
             #endif

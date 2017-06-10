@@ -4,16 +4,18 @@ Marlin
         ATX
         X_Box360
     Board
-        EndStop
-            EndStop_Axis 3..6
-            EndStop_Type
-	            EndStopXY
-	                EndStopXY_Mechanichal
-	            xor EndStopZ
-			        EndStopZ_BLTouchSensor
-			        EndStopZ_Mechanichal
-		        	EndStopZ_InductiveSensor
-        Motor
+        Endstop
+	    Control_Software_EndStop
+            Endstop_Axis 3..6
+            Endstop_Type
+	            EndstopXY
+	                EndstopXY_Mechanichal
+	            xor EndstopZ
+			        EndstopZ_BLTouchSensor
+			        EndstopZ_Mechanichal
+		        	EndstopZ_InductiveSensor
+        Motor	    
+	    SINGLENOZZLE_MIXING_EXTRUDER
             Motor_Axis 3
             xor Extruder 1..*
                 Extruder_Mixing
@@ -21,8 +23,14 @@ Marlin
                 Extruder_Single
             xor Moter_Type
                 Moter_Type_Stepper
+		    DISTINCT_E_FACTORS
+		    Inch_Mode_Support
+		    HAVE_TMC2130DRIVER
+		    MINIMUM_STEPPER_PULSE
+		    LIN_ADVANCE
                 Moter_Type_Servo
         Fan 1..*
+	    PWM_Fans
         xor HotEnd 1..*
             HotEnd_Single
             HotEnd_Multiple
@@ -33,44 +41,37 @@ Marlin
                 Temp_Sensor_HotEnd_Multiple
         Display 0..1
             Buzzer
+	    CASE_LIGHT
             SDcard_Reader
         xor Bed
             Bed_Regular
             Bed_Heated
+	         THERMAL_PROTECTION_BED
     Homing
         Bed_Leveing
             Manual_Bed_Leveling
             Auto_Bed_Leveling
-    WatchDog
-    DISTINCT_E_FACTORS
-    Temperature
-    PRINTCOUNTER
-    Command_Input_Process
-    Move_To_Destination
-    Movement_Planner
-    Print_Job_Timer
-    Debugger
-    Inch_Mode_Support
-    Temperature_Units_Support
-    IO_Handling
-    Arc_Movement
-    Auto_Bed_Leveling_Bilinear
-    Park_Nozzle
-    LIN_ADVANCE
-    FILAMENT_CHANGE_FEATURE
-    CASE_LIGHT
-    Emergency_Command_Parser
+	        Auto_Bed_Leveling_Bilinear
+    Software_functionalities
+    	IO_Handling
+	Command_Input_Process
+	Move_To_Destination
+	    Arc_Movement
+	    G2_G3_R_Parameter
+	    Support_COREXY_COREXZ_COREYZ
+	    Clean_Nozzle
+	Print_Job_Timer
+	    PRINTCOUNTER
+	Movement_Planner
+	Temperature
+	    Temperature_Units_Support
+	    AUTO_REPORT_TEMPERATURES
+	FILAMENT_CHANGE_FEATURE
+	Debugger
+	PINS_DEBUGGING
+	WatchDog
+	RGB_LED
+    	Park_Nozzle
+        Emergency_Command_Parser
 		Emergency_Cancel_Heatup
-    G2_G3_R_Parameter
-    Clean_Nozzle
-    PINS_DEBUGGING
-    AUTO_REPORT_TEMPERATURES
-    Extended_Capabilities_Report
-    Control_Software_EndStop
-    MINIMUM_STEPPER_PULSE
-    RGB_LED
-    SINGLENOZZLE_MIXING_EXTRUDER
-    PWM_Fans
-    THERMAL_PROTECTION_BED
-    HAVE_TMC2130DRIVER
-    Support_COREXY_COREXZ_COREYZ
+	Extended_Capabilities_Report

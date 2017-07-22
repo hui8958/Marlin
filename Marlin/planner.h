@@ -81,11 +81,11 @@ typedef struct {
   // Fields used by the Bresenham algorithm for tracing the line
   int32_t steps[NUM_AXIS];                  // Step count along each axis
   uint32_t step_event_count;                // The number of step events required to complete this block
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+//&begin[Extruder_Mixing]
   #if ENABLED(MIXING_EXTRUDER)
     uint32_t mix_event_count[MIXING_STEPPERS]; // Scaled step_event_count for the mixing steppers
   #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Mixing]
   int32_t accelerate_until,                 // The index of the step event on which to stop acceleration
           decelerate_after,                 // The index of the step event on which to start decelerating
           acceleration_rate;                // The acceleration rate used for acceleration calculation

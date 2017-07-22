@@ -153,12 +153,10 @@
 // Enable if your E steppers or extruder gear ratios are not identical
 //#define DISTINCT_E_FACTORS
 
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 
 // For Cyclops or any "multi-extruder" that shares a single nozzle.
 //#define SINGLENOZZLE
 
-//&begin[Switching_Extruder]
 // A dual extruder that uses a single stepper motor
 // Don't forget to set SSDE_SERVO_ANGLES and HOTEND_OFFSET_X/Y/Z
 //#define SWITCHING_EXTRUDER
@@ -167,9 +165,7 @@
   #define SWITCHING_EXTRUDER_SERVO_ANGLES { 0, 90 } // Angles for E0, E1
   //#define HOTEND_OFFSET_Z {0.0, 0.0}
 #endif
-//&end[Switching_Extruder]
 
-//&begin[Mixing_Extruder]
 /**
  * "Mixing Extruder"
  *   - Adds a new code, M165, to set the current mix factors.
@@ -184,14 +180,13 @@
   #define MIXING_VIRTUAL_TOOLS 16  // Use the Virtual Tool method with M163 and M164
   //#define DIRECT_MIXING_IN_G1    // Allow ABCDHI mix factors in G1 movement commands
 #endif
-//&end[Mixing_Extruder]
+
 
 // Offset of the extruders (uncomment if using more than one and relying on firmware to position when changing).
 // The offset has to be X=0, Y=0 for the extruder 0 hotend (default extruder).
 // For the other hotends it is their distance from the extruder 0 hotend.
 //#define HOTEND_OFFSET_X {0.0, 20.00} // (in mm) for each extruder, offset of the hotend on the X axis
 //#define HOTEND_OFFSET_Y {0.0, 5.00}  // (in mm) for each extruder, offset of the hotend on the Y axis
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Power]
 /**
  * Select your power supply here. Use 0 if you haven't connected the PS_ON_PIN

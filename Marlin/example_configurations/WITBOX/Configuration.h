@@ -153,7 +153,7 @@
 
 // For Cyclops or any "multi-extruder" that shares a single nozzle.
 //#define SINGLENOZZLE
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+//&begin[Extruder_Switching]
 // A dual extruder that uses a single stepper motor
 // Don't forget to set SSDE_SERVO_ANGLES and HOTEND_OFFSET_X/Y/Z
 //#define SWITCHING_EXTRUDER
@@ -162,7 +162,7 @@
   #define SWITCHING_EXTRUDER_SERVO_ANGLES { 0, 90 } // Angles for E0, E1
   //#define HOTEND_OFFSET_Z {0.0, 0.0}
 #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Switching]
 /**
  * "Mixing Extruder"
  *   - Adds a new code, M165, to set the current mix factors.

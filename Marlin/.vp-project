@@ -15,7 +15,7 @@ Marlin
 			        EndstopZ_Mechanichal
 		        	EndstopZ_InductiveSensor
         Motor	    
-	    SINGLENOZZLE_MIXING_EXTRUDER
+	    SINGLENOZZLE_MULTIPLE_EXTRUDER
             Motor_Axis 3
             xor Extruder 1..*
                 Extruder_Mixing

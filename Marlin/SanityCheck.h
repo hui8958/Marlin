@@ -277,12 +277,12 @@
   #if ENABLED(HEATERS_PARALLEL)
     #error "EXTRUDERS must be 1 with HEATERS_PARALLEL."
   #endif
-  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
 #elif ENABLED(SINGLENOZZLE)
   #error "SINGLENOZZLE requires 2 or more EXTRUDERS."
-    //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+    //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
 #endif
-  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+
 /**
  * Only one type of extruder allowed
  */
@@ -294,6 +294,7 @@
 /**
  * Single Stepper Dual Extruder with switching servo
  */
+ //&begin[Extruder_Switching]
 #if ENABLED(SWITCHING_EXTRUDER)
   #if ENABLED(DUAL_X_CARRIAGE)
     #error "SWITCHING_EXTRUDER and DUAL_X_CARRIAGE are incompatible."
@@ -303,10 +304,11 @@
     #error "SWITCHING_EXTRUDER requires NUM_SERVOS >= 1."
   #endif
 #endif
-
+ //&end[Extruder_Switching]
 /**
  * Mixing Extruder requirements
  */
+ //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
   #if EXTRUDERS > 1
     #error "MIXING_EXTRUDER currently only supports one extruder."
@@ -318,7 +320,7 @@
     #error "MIXING_EXTRUDER is incompatible with FILAMENT_SENSOR. Comment out this line to use it anyway."
   #endif
 #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Mixing]
 /**
  * Limited number of servos
  */
@@ -803,15 +805,19 @@
     #error "DUAL_NOZZLE_DUPLICATION_MODE requires exactly 2 hotends."
   #elif ENABLED(DUAL_X_CARRIAGE)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with DUAL_X_CARRIAGE."
-	  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+	  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
   #elif ENABLED(SINGLENOZZLE)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with SINGLENOZZLE."
-	  //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+	  //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+	   //&begin[Extruder_Mixing]
   #elif ENABLED(MIXING_EXTRUDER)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with MIXING_EXTRUDER."
+     //&end[Extruder_Mixing]
+     //&begin[Extruder_Switching]
   #elif ENABLED(SWITCHING_EXTRUDER)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with SWITCHING_EXTRUDER."
   #endif
+   //&end[Extruder_Switching]
 #endif
 
 /**

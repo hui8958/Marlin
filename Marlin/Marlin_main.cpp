@@ -1,4 +1,4 @@
-[SINGLENOZZLE_MIXING_EXTRUDER]/**
+/**
  * Marlin 3D Printer Firmware
  * Copyright (C) 2016 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
  *
@@ -650,7 +650,6 @@ float cartes[XYZ] = { 0 };
   FilamentChangeMenuResponse filament_change_menu_response;
 #endif
 //&end[FILAMENT_CHANGE_FEATURE]
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
   float mixing_factor[MIXING_STEPPERS]; // Reciprocal of mix proportion. 0.0 = off, otherwise >= 1.0.
@@ -659,7 +658,6 @@ float cartes[XYZ] = { 0 };
   #endif
 #endif
 //&end[Extruder_Mixing]
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[IO_handling]
 static bool send_ok[BUFSIZE];
 //&end[IO_handling]
@@ -2895,7 +2893,6 @@ static void homeaxis(AxisEnum axis) {
   } // retract()
 
 #endif // FWRETRACT
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
 
@@ -2936,7 +2933,6 @@ static void homeaxis(AxisEnum axis) {
 
 #endif
 //&end[Extruder_Mixing]
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 /**
  * ***************************************************************************
  * ***************************** G-CODE HANDLING *****************************
@@ -2970,11 +2966,11 @@ void gcode_get_destination() {
 //&end[PRINTCOUNTER]
 //&end[Print_Job_Timer]
   // Get ABCDHI mixing factors
- //&begin[SINGLENOZZLE_MIXING_EXTRUDER] 
+//&begin[Extruder_Mixing]
   #if ENABLED(MIXING_EXTRUDER) && ENABLED(DIRECT_MIXING_IN_G1)
     gcode_get_mix();
   #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Mixing]
   }
 //&end[Move_To_Destination]
 
@@ -5372,11 +5368,11 @@ inline void gcode_M77() { print_job_timer.stop(); }
 inline void gcode_M104() {
   if (get_target_extruder_from_command(104)) return;
   if (DEBUGGING(DRYRUN)) return;
-  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
   #if ENABLED(SINGLENOZZLE)
     if (target_extruder != active_extruder) return;
   #endif
-  //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+  //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
   if (code_seen('S')) {
     thermalManager.setTargetHotend(code_value_temp_abs(), target_extruder);
     #if ENABLED(DUAL_X_CARRIAGE)
@@ -5573,11 +5569,11 @@ inline void gcode_M109() {
 
   if (get_target_extruder_from_command(109)) return;
   if (DEBUGGING(DRYRUN)) return;
-  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
   #if ENABLED(SINGLENOZZLE)
     if (target_extruder != active_extruder) return;
   #endif
-  //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+  //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
   bool no_wait_for_cooling = code_seen('S');
   if (no_wait_for_cooling || code_seen('R')) {
     thermalManager.setTargetHotend(code_value_temp_abs(), target_extruder);
@@ -6646,11 +6642,11 @@ inline void gcode_M211() {
 
     if (code_seen('X')) hotend_offset[X_AXIS][target_extruder] = code_value_axis_units(X_AXIS);
     if (code_seen('Y')) hotend_offset[Y_AXIS][target_extruder] = code_value_axis_units(Y_AXIS);
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+//&begin[Extruder_Switching]
     #if ENABLED(DUAL_X_CARRIAGE) || ENABLED(SWITCHING_EXTRUDER)
       if (code_seen('Z')) hotend_offset[Z_AXIS][target_extruder] = code_value_axis_units(Z_AXIS);
     #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Switching]
     SERIAL_ECHO_START;
     SERIAL_ECHOPGM(MSG_HOTEND_OFFSET);
     HOTEND_LOOP() {
@@ -7734,7 +7730,6 @@ inline void gcode_M907() {
 
 #endif // HAS_CASE_LIGHT
 //&end[CASE_LIGHT]
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
 
@@ -7793,7 +7788,6 @@ inline void gcode_M907() {
 
 #endif // MIXING_EXTRUDER
 //&end[Extruder_Mixing]
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 /**
  * M999: Restart after being stopped
  *
@@ -7813,7 +7807,6 @@ inline void gcode_M999() {
   // gcode_LastN = Stopped_gcode_LastN;
   FlushSerialRequestResend();
 }
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder_Switching]
 #if ENABLED(SWITCHING_EXTRUDER)
   inline void move_extruder_servo(uint8_t e) {
@@ -7822,7 +7815,6 @@ inline void gcode_M999() {
   }
 #endif
 //&end[Extruder_Switching]
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder]
 inline void invalid_extruder_error(const uint8_t &e) {
   SERIAL_ECHO_START;
@@ -7831,14 +7823,12 @@ inline void invalid_extruder_error(const uint8_t &e) {
   SERIAL_ECHOLN(MSG_INVALID_EXTRUDER);
 }
 //&end[Extruder]
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
-//&begin[Extruder_Mixing]
-//&begin[Extruder_Switching]
 /**
  * Perform a tool-change, which may result in moving the
  * previous tool out of the way and the new tool into place.
  */
 void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool no_move/*=false*/) {
+//&begin[Extruder_Mixing]
   #if ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1
 
     if (tmp_extruder >= MIXING_VIRTUAL_TOOLS)
@@ -7847,7 +7837,6 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
     // T0-Tnnn: Switch virtual tool by changing the mix
     for (uint8_t j = 0; j < MIXING_STEPPERS; j++)
       mixing_factor[j] = mixing_virtual_tool_mix[tmp_extruder][j];
-
   #else //!MIXING_EXTRUDER || MIXING_VIRTUAL_TOOLS <= 1
 
     #if HOTENDS > 1
@@ -7967,6 +7956,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
           // No extra case for HAS_ABL in DUAL_X_CARRIAGE. Does that mean they don't work together?
         #else // !DUAL_X_CARRIAGE
+        //&begin[Extruder_Switching]
           #if ENABLED(SWITCHING_EXTRUDER)
             // <0 if the new nozzle is higher, >0 if lower. A bigger raise when lower.
             float z_diff = hotend_offset[Z_AXIS][active_extruder] - hotend_offset[Z_AXIS][tmp_extruder],
@@ -7987,6 +7977,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
               stepper.synchronize();
             }
           #endif
+          //&end[Extruder_Switching]
           /**
            * Set current_position to the position of the new nozzle.
            * Offsets are based on linear distance, so we need to get
@@ -8130,9 +8121,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
   #endif //!MIXING_EXTRUDER || MIXING_VIRTUAL_TOOLS <= 1
 }
 //&end[Extruder_Mixing]
-//&end[Extruder_Switching]
 
-//&begin[Extruder_Switching]
 /**
  * T0-T3: Switch tool, usually switching extruders
  *
@@ -8149,7 +8138,7 @@ inline void gcode_T(uint8_t tmp_extruder) {
       DEBUG_POS("BEFORE", current_position);
     }
   #endif
-
+//&begin[Extruder_Mixing]
   #if HOTENDS == 1 || (ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1)
 
     tool_change(tmp_extruder);
@@ -8163,7 +8152,7 @@ inline void gcode_T(uint8_t tmp_extruder) {
     );
 
   #endif
-
+//&end[Extruder_Mixing]
   #if ENABLED(DEBUG_LEVELING_FEATURE)
     if (DEBUGGING(LEVELING)) {
       DEBUG_POS("AFTER", current_position);
@@ -8171,8 +8160,6 @@ inline void gcode_T(uint8_t tmp_extruder) {
     }
   #endif
 }
-//&end[Extruder_Switching]
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Command_Input_Process]
 /**
  * Process a single command and dispatch it to its handler
@@ -8607,6 +8594,7 @@ void process_next_command() {
 
       #endif // BLINKM
 //&end[RGB_LED]
+//&begin[Extruder_Mixing]
       #if ENABLED(MIXING_EXTRUDER)
         case 163: // M163: Set a component weight for mixing extruder
           gcode_M163();
@@ -8622,7 +8610,7 @@ void process_next_command() {
             break;
         #endif
       #endif
-
+//&end[Extruder_Mixing]
       case 200: // M200: Set filament diameter, E to cubic units
         gcode_M200();
         break;
@@ -10255,7 +10243,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
     if (ELAPSED(ms, previous_cmd_ms + (EXTRUDER_RUNOUT_SECONDS) * 1000UL)
       && thermalManager.degHotend(active_extruder) > EXTRUDER_RUNOUT_MINTEMP) {
       bool oldstatus;
-	  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+	  //&begin[Extruder_Switching]
       #if ENABLED(SWITCHING_EXTRUDER)
         oldstatus = E0_ENABLE_READ;
         enable_e0();
@@ -10285,7 +10273,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
           #endif
         }
       #endif // !SWITCHING_EXTRUDER
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Switching]
       previous_cmd_ms = ms; // refresh_cmd_timeout()
 
       #if IS_KINEMATIC
@@ -10305,7 +10293,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
       #endif
       stepper.synchronize();
       planner.set_e_position_mm(current_position[E_AXIS]);
-	  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+	  //&begin[Extruder_Switching]
       #if ENABLED(SWITCHING_EXTRUDER)
         E0_ENABLE_WRITE(oldstatus);
       #else
@@ -10330,7 +10318,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
           #endif
         }
       #endif // !SWITCHING_EXTRUDER
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]   
+//&end[Extruder_Switching]   
    }
   #endif // EXTRUDER_RUNOUT_PREVENT
 
@@ -10600,7 +10588,6 @@ void setup() {
       #endif
     #endif
   #endif
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
 //&begin[Extruder_Mixing]
   #if ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1
     // Initialize mixing to 100% color 1
@@ -10612,7 +10599,6 @@ void setup() {
   #endif
 //&end[Extruder_Mixing]
 //&begin[Extended_Capabilities_Report]
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
   #if ENABLED(EXPERIMENTAL_I2CBUS) && I2C_SLAVE_ADDRESS > 0
     i2c.onReceive(i2c_on_receive);
     i2c.onRequest(i2c_on_request);

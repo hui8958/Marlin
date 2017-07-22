@@ -152,7 +152,7 @@ void manage_inactivity(bool ignore_stepper_queue = false);
   #define  enable_z() NOOP
   #define disable_z() NOOP
 #endif
-
+//&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
 
   /**
@@ -174,7 +174,7 @@ void manage_inactivity(bool ignore_stepper_queue = false);
   #define disable_e2() NOOP
   #define  enable_e3() NOOP
   #define disable_e3() NOOP
-
+//&end[Extruder_Mixing]
 #else // !MIXING_EXTRUDER
 
   #if HAS_E0_ENABLE
@@ -395,11 +395,11 @@ extern uint8_t active_extruder;
 #if HAS_TEMP_HOTEND || HAS_TEMP_BED
   void print_heaterstates();
 #endif
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+//&begin[Extruder_Mixing]
 #if ENABLED(MIXING_EXTRUDER)
   extern float mixing_factor[MIXING_STEPPERS];
 #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Mixing]
 void calculate_volumetric_multipliers();
 
 /**

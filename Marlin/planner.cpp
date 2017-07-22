@@ -802,13 +802,13 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
 
   // Bail if this is a zero-length block
   if (block->step_event_count < MIN_STEPS_PER_SEGMENT) return;
-//&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+//&begin[Extruder_Mixing]
   // For a mixing extruder, get a magnified step_event_count for each
   #if ENABLED(MIXING_EXTRUDER)
     for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
       block->mix_event_count[i] = mixing_factor[i] * block->step_event_count;
   #endif
-//&end[SINGLENOZZLE_MIXING_EXTRUDER]
+//&end[Extruder_Mixing]
   //&begin[PWM_Fans]
   #if FAN_COUNT > 0
     for (uint8_t i = 0; i < FAN_COUNT; i++) block->fan_speed[i] = fanSpeeds[i];

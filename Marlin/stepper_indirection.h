@@ -403,7 +403,7 @@
 #define E3_STEP_INIT SET_OUTPUT(E3_STEP_PIN)
 #define E3_STEP_WRITE(STATE) WRITE(E3_STEP_PIN,STATE)
 #define E3_STEP_READ READ(E3_STEP_PIN)
- //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+ //&begin[Extruder_Switching]
 /**
  * Extruder indirection for the single E axis
  */
@@ -429,6 +429,8 @@
     #define NORM_E_DIR() { if (current_block->active_extruder == 0) { E0_DIR_WRITE(!INVERT_E0_DIR); } else { E1_DIR_WRITE(!INVERT_E1_DIR); } }
     #define REV_E_DIR() { if (current_block->active_extruder == 0) { E0_DIR_WRITE(INVERT_E0_DIR); } else { E1_DIR_WRITE(INVERT_E1_DIR); } }
   #endif
+   //&end[Extruder_Switching]
+    //&begin[Extruder_Mixing]
 #elif ENABLED(MIXING_EXTRUDER)
   #define E_STEP_WRITE(v) NOOP /* not used for mixing extruders! */
   #if MIXING_STEPPERS > 3
@@ -444,10 +446,11 @@
     #define NORM_E_DIR() { E0_DIR_WRITE(!INVERT_E0_DIR); E1_DIR_WRITE(!INVERT_E1_DIR); }
     #define REV_E_DIR()  { E0_DIR_WRITE( INVERT_E0_DIR); E1_DIR_WRITE( INVERT_E1_DIR); }
   #endif
+ //&end[Extruder_Mixing]
 #else
   #define E_STEP_WRITE(v) E0_STEP_WRITE(v)
   #define NORM_E_DIR() E0_DIR_WRITE(!INVERT_E0_DIR)
   #define REV_E_DIR() E0_DIR_WRITE(INVERT_E0_DIR)
 #endif
- //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+
 #endif // STEPPER_INDIRECTION_H

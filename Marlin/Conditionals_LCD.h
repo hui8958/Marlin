@@ -278,7 +278,8 @@
     #define BOOTSCREEN_TIMEOUT 2500
   #endif
 
-  //&begin[SINGLENOZZLE_MIXING_EXTRUDER]
+
+
   /**
    * Extruders have some combination of stepper motors and hotends
    * so we separate these concepts into the defines:
@@ -289,6 +290,7 @@
    *  TOOL_E_INDEX - Index to use when getting/setting the tool state
    *
    */
+     //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
   #if ENABLED(SINGLENOZZLE)             // One hotend, multi-extruder
     #define HOTENDS      1
     #define E_STEPPERS   EXTRUDERS
@@ -297,6 +299,8 @@
     #undef TEMP_SENSOR_1_AS_REDUNDANT
     #undef HOTEND_OFFSET_X
     #undef HOTEND_OFFSET_Y
+      //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+      //&begin[Extruder_Switching]
   #elif ENABLED(SWITCHING_EXTRUDER)     // One E stepper, unified E axis, two hotends
     #define HOTENDS      EXTRUDERS
     #define E_STEPPERS   1
@@ -305,6 +309,8 @@
     #ifndef HOTEND_OFFSET_Z
       #define HOTEND_OFFSET_Z { 0 }
     #endif
+    //&end[Extruder_Switching]
+    //&begin[Extruder_Mixing]
   #elif ENABLED(MIXING_EXTRUDER)        // Multi-stepper, unified E axis, one hotend
     #define HOTENDS      1
     #define E_STEPPERS   MIXING_STEPPERS
@@ -316,7 +322,7 @@
     #define E_MANUAL     EXTRUDERS
     #define TOOL_E_INDEX current_block->active_extruder
   #endif
-  //&end[SINGLENOZZLE_MIXING_EXTRUDER]
+  //&end[Extruder_Mixing]
   //&begin[DISTINCT_E_FACTORS]
   /**
    * Distinct E Factors – Disable by commenting out DISTINCT_E_FACTORS

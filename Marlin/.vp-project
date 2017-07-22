@@ -41,7 +41,7 @@ Marlin
                 Temp_Sensor_HotEnd_Multiple
         Display 0..1
             Buzzer
-	    CASE_LIGHT
+	        CASE_LIGHT
             SDcard_Reader
         xor Bed
             Bed_Regular
@@ -53,25 +53,25 @@ Marlin
             Auto_Bed_Leveling
 	        Auto_Bed_Leveling_Bilinear
     Software_functionalities
-    	IO_Handling
-	Command_Input_Process
-	Move_To_Destination
-	    Arc_Movement
-	    G2_G3_R_Parameter
-	    Support_COREXY_COREXZ_COREYZ
-	    Clean_Nozzle
-	Print_Job_Timer
-	    PRINTCOUNTER
-	Movement_Planner
-	Temperature
-	    Temperature_Units_Support
-	    AUTO_REPORT_TEMPERATURES
-	FILAMENT_CHANGE_FEATURE
-	Debugger
-	PINS_DEBUGGING
-	WatchDog
-	RGB_LED
-    	Park_Nozzle
+        IO_Handling
+    	Command_Input_Process
+    	Move_To_Destination
+        Arc_Movement
+        G2_G3_R_Parameter
+        Support_COREXY_COREXZ_COREYZ
+        Clean_Nozzle
+    	Print_Job_Timer
+        PRINTCOUNTER
+    	Movement_Planner
+    	Temperature
+        Temperature_Units_Support
+        AUTO_REPORT_TEMPERATURES
+    	FILAMENT_CHANGE_FEATURE
+    	Debugger
+    	PINS_DEBUGGING
+    	WatchDog
+    	RGB_LED
+        Park_Nozzle
         Emergency_Command_Parser
-		Emergency_Cancel_Heatup
-	Extended_Capabilities_Report
+        Emergency_Cancel_Heatup
+    	Extended_Capabilities_Report

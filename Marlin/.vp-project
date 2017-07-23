@@ -5,7 +5,7 @@ Marlin
         X_Box360
     Board
         Endstop
-	    Control_Software_EndStop
+            Control_Software_EndStop
             Endstop_Axis 3..6
             Endstop_Type
 	            EndstopXY
@@ -15,7 +15,7 @@ Marlin
 			        EndstopZ_Mechanichal
 		        	EndstopZ_InductiveSensor
         Motor	    
-	    SINGLENOZZLE_MULTIPLE_EXTRUDER
+	        SINGLENOZZLE_MULTIPLE_EXTRUDER
             Motor_Axis 3
             xor Extruder 1..*
                 Extruder_Mixing
@@ -23,12 +23,12 @@ Marlin
                 Extruder_Single
             xor Moter_Type
                 Moter_Type_Stepper
+                Moter_Type_Servo
 		    DISTINCT_E_FACTORS
 		    Inch_Mode_Support
 		    HAVE_TMC2130DRIVER
 		    MINIMUM_STEPPER_PULSE
 		    LIN_ADVANCE
-                Moter_Type_Servo
         Fan 1..*
 	    PWM_Fans
         xor HotEnd 1..*
@@ -46,7 +46,7 @@ Marlin
         xor Bed
             Bed_Regular
             Bed_Heated
-	         THERMAL_PROTECTION_BED
+	        THERMAL_PROTECTION_BED
     Homing
         Bed_Leveing
             Manual_Bed_Leveling
@@ -55,23 +55,23 @@ Marlin
     Software_functionalities
         IO_Handling
     	Command_Input_Process
-    	Move_To_Destination
-        Arc_Movement
-        G2_G3_R_Parameter
-        Support_COREXY_COREXZ_COREYZ
-        Clean_Nozzle
-    	Print_Job_Timer
-        PRINTCOUNTER
     	Movement_Planner
+    	Move_To_Destination
+            Arc_Movement
+            G2_G3_R_Parameter
+            Support_COREXY_COREXZ_COREYZ
+            Clean_Nozzle
+            Park_Nozzle
+    	Print_Job_Timer
+            PRINTCOUNTER
     	Temperature
-        Temperature_Units_Support
-        AUTO_REPORT_TEMPERATURES
+            Temperature_Units_Support
+            AUTO_REPORT_TEMPERATURES
+        Emergency_Command_Parser
+        Emergency_Cancel_Heatup
     	FILAMENT_CHANGE_FEATURE
     	Debugger
     	PINS_DEBUGGING
     	WatchDog
     	RGB_LED
-        Park_Nozzle
-        Emergency_Command_Parser
-        Emergency_Cancel_Heatup
     	Extended_Capabilities_Report

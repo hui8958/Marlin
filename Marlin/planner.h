@@ -81,11 +81,11 @@ typedef struct {
   // Fields used by the Bresenham algorithm for tracing the line
   int32_t steps[NUM_AXIS];                  // Step count along each axis
   uint32_t step_event_count;                // The number of step events required to complete this block
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
   #if ENABLED(MIXING_EXTRUDER)
     uint32_t mix_event_count[MIXING_STEPPERS]; // Scaled step_event_count for the mixing steppers
   #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
   int32_t accelerate_until,                 // The index of the step event on which to stop acceleration
           decelerate_after,                 // The index of the step event on which to start decelerating
           acceleration_rate;                // The acceleration rate used for acceleration calculation
@@ -117,11 +117,11 @@ typedef struct {
            initial_rate,                    // The jerk-adjusted step rate at start of block
            final_rate,                      // The minimal rate at exit
            acceleration_steps_per_s2;       // acceleration steps/sec^2
-//&begin[PWM_Fans]
+//&begin[PWM]
   #if FAN_COUNT > 0
     uint16_t fan_speed[FAN_COUNT];
   #endif
-//&end[PWM_Fans]
+//&end[PWM]
   #if ENABLED(BARICUDA)
     uint32_t valve_pressure, e_to_p_pressure;
   #endif

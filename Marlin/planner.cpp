@@ -404,11 +404,11 @@ void Planner::recalculate() {
 void Planner::check_axes_activity() {
   unsigned char axis_active[NUM_AXIS] = { 0 },
                 tail_fan_speed[FAN_COUNT];
-//&begin[PWM_Fans]
+//&begin[PWM]
   #if FAN_COUNT > 0
     for (uint8_t i = 0; i < FAN_COUNT; i++) tail_fan_speed[i] = fanSpeeds[i];
   #endif
-//&end[PWM_Fans]
+//&end[PWM]
   #if ENABLED(BARICUDA)
     #if HAS_HEATER_1
       unsigned char tail_valve_pressure = baricuda_valve_pressure;
@@ -419,11 +419,11 @@ void Planner::check_axes_activity() {
   #endif
 
   if (blocks_queued()) {
-//&begin[PWM_Fans]
+//&begin[PWM]
     #if FAN_COUNT > 0
       for (uint8_t i = 0; i < FAN_COUNT; i++) tail_fan_speed[i] = block_buffer[block_buffer_tail].fan_speed[i];
     #endif
-//&end[PWM_Fans]
+//&end[PWM]
     block_t* block;
 
     #if ENABLED(BARICUDA)
@@ -458,7 +458,7 @@ void Planner::check_axes_activity() {
       disable_e3();
     }
   #endif
-//&begin[PWM_Fans]
+//&begin[PWM]
   #if FAN_COUNT > 0
 
     #if defined(FAN_MIN_PWM)
@@ -520,7 +520,7 @@ void Planner::check_axes_activity() {
     #endif
 
   #endif // FAN_COUNT > 0
-//&end[PWM_Fans]
+//&end[PWM]
   #if ENABLED(AUTOTEMP)
     getHighESpeed();
   #endif
@@ -802,18 +802,18 @@ void Planner::_buffer_line(const float &a, const float &b, const float &c, const
 
   // Bail if this is a zero-length block
   if (block->step_event_count < MIN_STEPS_PER_SEGMENT) return;
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
   // For a mixing extruder, get a magnified step_event_count for each
   #if ENABLED(MIXING_EXTRUDER)
     for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
       block->mix_event_count[i] = mixing_factor[i] * block->step_event_count;
   #endif
-//&end[Extruder_Mixing]
-  //&begin[PWM_Fans]
+//&end[MIXING_EXTRUDER]
+  //&begin[PWM]
   #if FAN_COUNT > 0
     for (uint8_t i = 0; i < FAN_COUNT; i++) block->fan_speed[i] = fanSpeeds[i];
   #endif
-//&end[PWM_Fans]
+//&end[PWM]
   #if ENABLED(BARICUDA)
     block->valve_pressure = baricuda_valve_pressure;
     block->e_to_p_pressure = baricuda_e_to_p_pressure;

@@ -123,7 +123,7 @@
   }
 
 #endif // HAVE_TMCDRIVER
-//&begin[HAVE_TMC2130DRIVER]
+//&begin[TMC2130]
 //
 // TMC2130 Driver objects and inits
 //
@@ -548,7 +548,7 @@
   }
 
 #endif // HAVE_TMC2130DRIVER
-//&end[HAVE_TMC2130DRIVER]
+//&end[TMC2130]
 //
 // L6470 Driver objects and inits
 //

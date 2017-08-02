@@ -54,13 +54,13 @@
 #endif
 
 // TMC130 drivers have STEP/DIR/ENABLE on normal pins
-//&begin[HAVE_TMC2130DRIVER]
+//&begin[TMC2130]
 #if ENABLED(HAVE_TMC2130DRIVER)
   #include <SPI.h>
   #include <Trinamic_TMC2130.h>
   void tmc2130_init();
 #endif
-//&end[HAVE_TMC2130DRIVER]
+//&end[TMC2130]
 // L6470 has STEP on normal pins, but DIR/ENABLE via SPI
 #if ENABLED(HAVE_L6470DRIVER)
   #include <SPI.h>
@@ -84,11 +84,11 @@
     #define X_ENABLE_WRITE(STATE) stepperX.setEnabled(STATE)
     #define X_ENABLE_READ stepperX.isEnabled()
   #else
-	  //&begin[HAVE_TMC2130DRIVER]
+	  //&begin[TMC2130]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(X_IS_TMC2130)
       extern Trinamic_TMC2130 stepperX;
     #endif
-	//&end[HAVE_TMC2130DRIVER]
+	//&end[TMC2130]
     #define X_ENABLE_INIT SET_OUTPUT(X_ENABLE_PIN)
     #define X_ENABLE_WRITE(STATE) WRITE(X_ENABLE_PIN,STATE)
     #define X_ENABLE_READ READ(X_ENABLE_PIN)
@@ -117,11 +117,11 @@
     #define Y_ENABLE_WRITE(STATE) stepperY.setEnabled(STATE)
     #define Y_ENABLE_READ stepperY.isEnabled()
   #else
-	  //&begin[HAVE_TMC2130DRIVER]
+	  //&begin[TMC2130]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(Y_IS_TMC2130)
       extern Trinamic_TMC2130 stepperY;
     #endif
-	//&end[HAVE_TMC2130DRIVER]
+	//&end[TMC2130]
     #define Y_ENABLE_INIT SET_OUTPUT(Y_ENABLE_PIN)
     #define Y_ENABLE_WRITE(STATE) WRITE(Y_ENABLE_PIN,STATE)
     #define Y_ENABLE_READ READ(Y_ENABLE_PIN)
@@ -150,11 +150,11 @@
     #define Z_ENABLE_WRITE(STATE) stepperZ.setEnabled(STATE)
     #define Z_ENABLE_READ stepperZ.isEnabled()
   #else
-	  //&begin[HAVE_TMC2130DRIVER]
+	  //&begin[TMC2130]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(Z_IS_TMC2130)
       extern Trinamic_TMC2130 stepperZ;
     #endif
-	//&end[HAVE_TMC2130DRIVER]
+	//&end[TMC2130]
     #define Z_ENABLE_INIT SET_OUTPUT(Z_ENABLE_PIN)
     #define Z_ENABLE_WRITE(STATE) WRITE(Z_ENABLE_PIN,STATE)
     #define Z_ENABLE_READ READ(Z_ENABLE_PIN)
@@ -184,11 +184,11 @@
       #define X2_ENABLE_WRITE(STATE) stepperX2.setEnabled(STATE)
       #define X2_ENABLE_READ stepperX2.isEnabled()
     #else
-		//&begin[HAVE_TMC2130DRIVER]
+		//&begin[TMC2130]
       #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(X2_IS_TMC2130)
         extern Trinamic_TMC2130 stepperX2;
       #endif
-	  //&end[HAVE_TMC2130DRIVER]
+	  //&end[TMC2130]
       #define X2_ENABLE_INIT SET_OUTPUT(X2_ENABLE_PIN)
       #define X2_ENABLE_WRITE(STATE) WRITE(X2_ENABLE_PIN,STATE)
       #define X2_ENABLE_READ READ(X2_ENABLE_PIN)
@@ -219,11 +219,11 @@
       #define Y2_ENABLE_WRITE(STATE) stepperY2.setEnabled(STATE)
       #define Y2_ENABLE_READ stepperY2.isEnabled()
     #else
-		//&begin[HAVE_TMC2130DRIVER]
+		//&begin[TMC2130]
       #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(Y2_IS_TMC2130)
         extern Trinamic_TMC2130 stepperY2;
       #endif
-	  //&end[HAVE_TMC2130DRIVER]
+	  //&end[TMC2130]
       #define Y2_ENABLE_INIT SET_OUTPUT(Y2_ENABLE_PIN)
       #define Y2_ENABLE_WRITE(STATE) WRITE(Y2_ENABLE_PIN,STATE)
       #define Y2_ENABLE_READ READ(Y2_ENABLE_PIN)
@@ -254,11 +254,11 @@
       #define Z2_ENABLE_WRITE(STATE) stepperZ2.setEnabled(STATE)
       #define Z2_ENABLE_READ stepperZ2.isEnabled()
     #else
-		//&begin[HAVE_TMC2130DRIVER]
+		//&begin[TMC2130]
       #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(Z2_IS_TMC2130)
         extern Trinamic_TMC2130 stepperZ2;
       #endif
-	  //&end[HAVE_TMC2130DRIVER]
+	  //&end[TMC2130]
       #define Z2_ENABLE_INIT SET_OUTPUT(Z2_ENABLE_PIN)
       #define Z2_ENABLE_WRITE(STATE) WRITE(Z2_ENABLE_PIN,STATE)
       #define Z2_ENABLE_READ READ(Z2_ENABLE_PIN)
@@ -288,11 +288,11 @@
     #define E0_ENABLE_WRITE(STATE) stepperE0.setEnabled(STATE)
     #define E0_ENABLE_READ stepperE0.isEnabled()
   #else
-	  //&begin[HAVE_TMC2130DRIVER]
+	  //&begin[TMC2130]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(E0_IS_TMC2130)
       extern Trinamic_TMC2130 stepperE0;
     #endif
-	//&end[HAVE_TMC2130DRIVER]
+	//&end[TMC2130]
     #define E0_ENABLE_INIT SET_OUTPUT(E0_ENABLE_PIN)
     #define E0_ENABLE_WRITE(STATE) WRITE(E0_ENABLE_PIN,STATE)
     #define E0_ENABLE_READ READ(E0_ENABLE_PIN)
@@ -321,11 +321,11 @@
     #define E1_ENABLE_WRITE(STATE) stepperE1.setEnabled(STATE)
     #define E1_ENABLE_READ stepperE1.isEnabled()
   #else
-	  //&begin[HAVE_TMC2130DRIVER]
+	  //&begin[TMC2130]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(E1_IS_TMC2130)
       extern Trinamic_TMC2130 stepperE1;
     #endif
-	//&end[HAVE_TMC2130DRIVER]
+	//&end[TMC2130]
     #define E1_ENABLE_INIT SET_OUTPUT(E1_ENABLE_PIN)
     #define E1_ENABLE_WRITE(STATE) WRITE(E1_ENABLE_PIN,STATE)
     #define E1_ENABLE_READ READ(E1_ENABLE_PIN)
@@ -354,11 +354,11 @@
     #define E2_ENABLE_WRITE(STATE) stepperE2.setEnabled(STATE)
     #define E2_ENABLE_READ stepperE2.isEnabled()
   #else
-	  //&begin[HAVE_TMC2130DRIVER]
+	  //&begin[TMC2130]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(E2_IS_TMC2130)
       extern Trinamic_TMC2130 stepperE2;
     #endif
-	//&end[HAVE_TMC2130DRIVER]
+	//&end[TMC2130]
     #define E2_ENABLE_INIT SET_OUTPUT(E2_ENABLE_PIN)
     #define E2_ENABLE_WRITE(STATE) WRITE(E2_ENABLE_PIN,STATE)
     #define E2_ENABLE_READ READ(E2_ENABLE_PIN)
@@ -387,11 +387,11 @@
     #define E3_ENABLE_WRITE(STATE) stepperE3.setEnabled(STATE)
     #define E3_ENABLE_READ stepperE3.isEnabled()
   #else
-	  //&begin[HAVE_TMC2130DRIVER]
+	  //&begin[TMC2130]
     #if ENABLED(HAVE_TMC2130DRIVER) && ENABLED(E3_IS_TMC2130)
       extern Trinamic_TMC2130 stepperE3;
     #endif
-	//&end[HAVE_TMC2130DRIVER]
+	//&end[TMC2130]
     #define E3_ENABLE_INIT SET_OUTPUT(E3_ENABLE_PIN)
     #define E3_ENABLE_WRITE(STATE) WRITE(E3_ENABLE_PIN,STATE)
     #define E3_ENABLE_READ READ(E3_ENABLE_PIN)
@@ -403,7 +403,7 @@
 #define E3_STEP_INIT SET_OUTPUT(E3_STEP_PIN)
 #define E3_STEP_WRITE(STATE) WRITE(E3_STEP_PIN,STATE)
 #define E3_STEP_READ READ(E3_STEP_PIN)
- //&begin[Extruder_Switching]
+ //&begin[SWITCHING_EXTRUDER]
 /**
  * Extruder indirection for the single E axis
  */
@@ -429,8 +429,8 @@
     #define NORM_E_DIR() { if (current_block->active_extruder == 0) { E0_DIR_WRITE(!INVERT_E0_DIR); } else { E1_DIR_WRITE(!INVERT_E1_DIR); } }
     #define REV_E_DIR() { if (current_block->active_extruder == 0) { E0_DIR_WRITE(INVERT_E0_DIR); } else { E1_DIR_WRITE(INVERT_E1_DIR); } }
   #endif
-   //&end[Extruder_Switching]
-    //&begin[Extruder_Mixing]
+   //&end[SWITCHING_EXTRUDER]
+    //&begin[MIXING_EXTRUDER]
 #elif ENABLED(MIXING_EXTRUDER)
   #define E_STEP_WRITE(v) NOOP /* not used for mixing extruders! */
   #if MIXING_STEPPERS > 3
@@ -446,7 +446,7 @@
     #define NORM_E_DIR() { E0_DIR_WRITE(!INVERT_E0_DIR); E1_DIR_WRITE(!INVERT_E1_DIR); }
     #define REV_E_DIR()  { E0_DIR_WRITE( INVERT_E0_DIR); E1_DIR_WRITE( INVERT_E1_DIR); }
   #endif
- //&end[Extruder_Mixing]
+ //&end[MIXING_EXTRUDER]
 #else
   #define E_STEP_WRITE(v) E0_STEP_WRITE(v)
   #define NORM_E_DIR() E0_DIR_WRITE(!INVERT_E0_DIR)

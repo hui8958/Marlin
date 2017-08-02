@@ -141,7 +141,7 @@ uint8_t lcdDrawUpdate = LCDVIEW_CLEAR_CALL_REDRAW; // Set when the LCD needs to 
     void lcd_info_board_menu();
     void lcd_info_menu();
   #endif // LCD_INFO_MENU
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     void lcd_filament_change_option_menu();
     void lcd_filament_change_init_message();
@@ -151,7 +151,7 @@ uint8_t lcdDrawUpdate = LCDVIEW_CLEAR_CALL_REDRAW; // Set when the LCD needs to 
     void lcd_filament_change_extrude_message();
     void lcd_filament_change_resume_message();
   #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
   #if HAS_LCD_CONTRAST
     void lcd_set_contrast();
   #endif
@@ -754,14 +754,14 @@ void kill_screen(const char* lcd_msg) {
     #endif
   #endif
   //&end[THERMAL_PROTECTION_BED]
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     void lcd_enqueue_filament_change() {
       lcd_filament_change_show_message(FILAMENT_CHANGE_MESSAGE_INIT);
       enqueue_and_echo_commands_P(PSTR("M600"));
     }
   #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
   /**
    *
    * "Tune" submenu
@@ -822,7 +822,7 @@ void kill_screen(const char* lcd_msg) {
     //
     // Fan Speed:
     //
-	//&begin[PWM_Fans]
+	//&begin[PWM]
     #if FAN_COUNT > 0
       #if HAS_FAN0
         #if FAN_COUNT > 1
@@ -839,7 +839,7 @@ void kill_screen(const char* lcd_msg) {
         MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_FAN_SPEED " 3", &fanSpeeds[2], 0, 255);
       #endif
     #endif // FAN_COUNT > 0
-//&end[PWM_Fans]
+//&end[PWM]
     //
     // Flow:
     // Flow 1:
@@ -873,14 +873,14 @@ void kill_screen(const char* lcd_msg) {
       #endif //BABYSTEP_XY
       MENU_ITEM(submenu, MSG_BABYSTEP_Z, lcd_babystep_z);
     #endif
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
     //
     // Change filament
     //
     #if ENABLED(FILAMENT_CHANGE_FEATURE)
        MENU_ITEM(function, MSG_FILAMENTCHANGE, lcd_enqueue_filament_change);
     #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
     END_MENU();
   }
 
@@ -923,7 +923,7 @@ void kill_screen(const char* lcd_msg) {
     #else
       UNUSED(tempb);
     #endif
-	//&begin[PWM_Fans]
+	//&begin[PWM]
     #if FAN_COUNT > 0
       #if FAN_COUNT > 1
         fanSpeeds[active_extruder < FAN_COUNT ? active_extruder : 0] = fan;
@@ -933,7 +933,7 @@ void kill_screen(const char* lcd_msg) {
     #else
       UNUSED(fan);
     #endif
-    //&end[PWM_Fans]
+    //&end[PWM]
 	lcd_return_to_status();
   }
 
@@ -1035,11 +1035,11 @@ void kill_screen(const char* lcd_msg) {
   #endif // TEMP_SENSOR_0 && (TEMP_SENSOR_1 || TEMP_SENSOR_2 || TEMP_SENSOR_3 || TEMP_SENSOR_BED)
 
   void lcd_cooldown() {
-	  //&begin[PWM_Fans]
+	  //&begin[PWM]
     #if FAN_COUNT > 0
       for (uint8_t i = 0; i < FAN_COUNT; i++) fanSpeeds[i] = 0;
     #endif
-	//&end[PWM_Fans]
+	//&end[PWM]
     thermalManager.disable_all_heaters();
     lcd_return_to_status();
   }
@@ -1415,7 +1415,7 @@ void kill_screen(const char* lcd_msg) {
     ENCODER_DIRECTION_NORMAL();
     if (encoderPosition) {
       refresh_cmd_timeout();
-		//&begin[Control_Software_EndStop]
+		//&begin[software_endstops]
       // Limit to software endstops, if enabled
       float min = (soft_endstops_enabled && min_software_endstops) ? soft_endstop_min[axis] : current_position[axis] - 1000,
             max = (soft_endstops_enabled && max_software_endstops) ? soft_endstop_max[axis] : current_position[axis] + 1000;
@@ -1446,7 +1446,7 @@ void kill_screen(const char* lcd_msg) {
   void lcd_move_x() { _lcd_move_xyz(PSTR(MSG_MOVE_X), X_AXIS); }
   void lcd_move_y() { _lcd_move_xyz(PSTR(MSG_MOVE_Y), Y_AXIS); }
   void lcd_move_z() { _lcd_move_xyz(PSTR(MSG_MOVE_Z), Z_AXIS); }
-  //&end[Control_Software_EndStop]
+  //&end[software_endstops]
   void _lcd_move_e(
     #if E_MANUAL > 1
       int8_t eindex=-1
@@ -1519,14 +1519,14 @@ void kill_screen(const char* lcd_msg) {
 
     if (move_menu_scale < 10.0) {
       if (_MOVE_XYZ_ALLOWED) MENU_ITEM(submenu, MSG_MOVE_Z, lcd_move_z);
- //&begin[Extruder_Switching]
+ //&begin[SWITCHING_EXTRUDER]
       #if ENABLED(SWITCHING_EXTRUDER)
         if (active_extruder)
           MENU_ITEM(gcode, MSG_SELECT MSG_E1, PSTR("T0"));
         else
           MENU_ITEM(gcode, MSG_SELECT MSG_E2, PSTR("T1"));
       #endif
- //&end[Extruder_Switching]
+ //&end[SWITCHING_EXTRUDER]
       MENU_ITEM(submenu, MSG_MOVE_E, lcd_move_e);
       #if E_MANUAL > 1
         MENU_ITEM(submenu, MSG_MOVE_E MSG_MOVE_E1, lcd_move_e0);
@@ -1729,7 +1729,7 @@ void kill_screen(const char* lcd_msg) {
     #if TEMP_SENSOR_BED != 0
       MENU_MULTIPLIER_ITEM_EDIT_CALLBACK(int3, MSG_BED, &thermalManager.target_temperature_bed, 0, BED_MAXTEMP - 15, watch_temp_callback_bed);
     #endif
-//&begin[PWM_Fans]
+//&begin[PWM]
     //
     // Fan Speed:
     //
@@ -1749,7 +1749,7 @@ void kill_screen(const char* lcd_msg) {
         MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_FAN_SPEED " 3", &fanSpeeds[2], 0, 255);
       #endif
     #endif // FAN_COUNT > 0
-//&end[PWM_Fans]
+//&end[PWM]
     //
     // Autotemp, Min, Max, Fact
     //
@@ -2283,7 +2283,7 @@ void kill_screen(const char* lcd_msg) {
 	  END_MENU();
     }
   #endif // LCD_INFO_MENU
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
 
     void lcd_filament_change_resume_print() {
@@ -2415,7 +2415,7 @@ void kill_screen(const char* lcd_msg) {
     }
 
   #endif // FILAMENT_CHANGE_FEATURE
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
   /**
    *
    * Functions for editing single values

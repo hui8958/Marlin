@@ -107,11 +107,11 @@ FORCE_INLINE void serialprintPGM(const char* str) {
 }
 
 void idle(
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     bool no_stepper_sleep = false  // pass true to keep steppers from disabling on timeout
   #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
   );
 
 void manage_inactivity(bool ignore_stepper_queue = false);
@@ -152,7 +152,7 @@ void manage_inactivity(bool ignore_stepper_queue = false);
   #define  enable_z() NOOP
   #define disable_z() NOOP
 #endif
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
 
   /**
@@ -174,7 +174,7 @@ void manage_inactivity(bool ignore_stepper_queue = false);
   #define disable_e2() NOOP
   #define  enable_e3() NOOP
   #define disable_e3() NOOP
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 #else // !MIXING_EXTRUDER
 
   #if HAS_E0_ENABLE
@@ -271,11 +271,11 @@ extern float volumetric_multiplier[EXTRUDERS]; // reciprocal of cross-sectional 
 extern bool axis_known_position[XYZ]; // axis[n].is_known
 extern bool axis_homed[XYZ]; // axis[n].is_homed
 extern volatile bool wait_for_heatup;
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
 #if ENABLED(EMERGENCY_PARSER) || ENABLED(ULTIPANEL)
   extern volatile bool wait_for_user;
 #endif
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
 extern float current_position[NUM_AXIS];
 extern float position_shift[XYZ];
 extern float home_offset[XYZ];
@@ -286,7 +286,7 @@ extern float home_offset[XYZ];
 
 // Software Endstops
 void update_software_endstops(AxisEnum axis);
-//&begin[Control_Software_EndStop]
+//&begin[software_endstops]
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
   extern bool soft_endstops_enabled;
   void clamp_to_software_endstops(float target[XYZ]);
@@ -294,7 +294,7 @@ void update_software_endstops(AxisEnum axis);
   #define soft_endstops_enabled false
   #define clamp_to_software_endstops(x) NOOP
 #endif
-//&end[Control_Software_EndStop]
+//&end[software_endstops]
 extern float soft_endstop_min[XYZ];
 extern float soft_endstop_max[XYZ];
 
@@ -348,11 +348,11 @@ float code_value_temp_diff();
 #if ENABLED(HOST_KEEPALIVE_FEATURE)
   extern uint8_t host_keepalive_interval;
 #endif
-//&begin[PWM_Fans]
+//&begin[PWM]
 #if FAN_COUNT > 0
   extern int fanSpeeds[FAN_COUNT];
 #endif
-//&end[PWM_Fans]
+//&end[PWM]
 #if ENABLED(BARICUDA)
   extern int baricuda_valve_pressure;
   extern int baricuda_e_to_p_pressure;
@@ -366,11 +366,11 @@ float code_value_temp_diff();
   extern int filwidth_delay_index[2];  // Ring buffer indexes. Used by planner, temperature, and main code
   extern int meas_delay_cm;            // Delay distance
 #endif
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
   extern FilamentChangeMenuResponse filament_change_menu_response;
 #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
 #if ENABLED(PID_EXTRUSION_SCALING)
   extern int lpq_len;
 #endif
@@ -395,11 +395,11 @@ extern uint8_t active_extruder;
 #if HAS_TEMP_HOTEND || HAS_TEMP_BED
   void print_heaterstates();
 #endif
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
   extern float mixing_factor[MIXING_STEPPERS];
 #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 void calculate_volumetric_multipliers();
 
 /**

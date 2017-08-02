@@ -290,7 +290,7 @@
    *  TOOL_E_INDEX - Index to use when getting/setting the tool state
    *
    */
-     //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+     //&begin[SINGLENOZZLE]
   #if ENABLED(SINGLENOZZLE)             // One hotend, multi-extruder
     #define HOTENDS      1
     #define E_STEPPERS   EXTRUDERS
@@ -299,8 +299,8 @@
     #undef TEMP_SENSOR_1_AS_REDUNDANT
     #undef HOTEND_OFFSET_X
     #undef HOTEND_OFFSET_Y
-      //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
-      //&begin[Extruder_Switching]
+      //&end[SINGLENOZZLE]
+      //&begin[SWITCHING_EXTRUDER]
   #elif ENABLED(SWITCHING_EXTRUDER)     // One E stepper, unified E axis, two hotends
     #define HOTENDS      EXTRUDERS
     #define E_STEPPERS   1
@@ -309,8 +309,8 @@
     #ifndef HOTEND_OFFSET_Z
       #define HOTEND_OFFSET_Z { 0 }
     #endif
-    //&end[Extruder_Switching]
-    //&begin[Extruder_Mixing]
+    //&end[SWITCHING_EXTRUDER]
+    //&begin[MIXING_EXTRUDER]
   #elif ENABLED(MIXING_EXTRUDER)        // Multi-stepper, unified E axis, one hotend
     #define HOTENDS      1
     #define E_STEPPERS   MIXING_STEPPERS
@@ -322,7 +322,7 @@
     #define E_MANUAL     EXTRUDERS
     #define TOOL_E_INDEX current_block->active_extruder
   #endif
-  //&end[Extruder_Mixing]
+  //&end[MIXING_EXTRUDER]
   //&begin[DISTINCT_E_FACTORS]
   /**
    * Distinct E Factors – Disable by commenting out DISTINCT_E_FACTORS
@@ -336,7 +336,7 @@
     #define E_AXIS_N E_AXIS
   #endif
  //&end[DISTINCT_E_FACTORS]
-  //&begin[EndStopZ_BLTouchSensor]
+  //&begin[BLTOUCH]
   /**
    * The BLTouch Probe emulates a servo probe
    * and uses "special" angles for its state.
@@ -368,7 +368,7 @@
       #define TEST_BLTOUCH() _TEST_BLTOUCH(Z_MIN_PROBE)
     #endif
   #endif
-//&end[EndStopZ_BLTouchSensor]
+//&end[BLTOUCH]
   /**
    * Set a flag for a servo probe
    */

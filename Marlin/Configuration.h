@@ -731,10 +731,10 @@
 #define X_HOME_DIR -1
 #define Y_HOME_DIR -1
 #define Z_HOME_DIR -1
-//&begin[Control_Software_EndStop]
+//&begin[software_endstops]
 #define min_software_endstops true // If true, axis won't move to coordinates less than HOME_POS.
 #define max_software_endstops true  // If true, axis won't move to coordinates greater than the defined lengths below.
-//&end[Control_Software_EndStop]
+//&end[software_endstops]
 //&end[Endstop]
 
 // @section machine
@@ -987,13 +987,13 @@
 //        the machine's limit of Z_MAX_POS.
 //
 
-//&begin[Park_Nozzle]
+//&begin[NOZZLE_PARK_FEATURE]
 //#define NOZZLE_PARK_FEATURE
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z }
   #define NOZZLE_PARK_POINT { (X_MIN_POS + 10), (Y_MAX_POS - 10), 20 }
 #endif
-//&end[Park_Nozzle]
+//&end[NOZZLE_PARK_FEATURE]
 
 //
 // Clean Nozzle Feature -- EXPERIMENTAL
@@ -1031,7 +1031,7 @@
 //
 //#define NOZZLE_CLEAN_FEATURE
 
-//&begin[Clean_Nozzle]
+//&begin[NOZZLE_CLEAN_FEATURE]
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
   // Number of pattern repetitions
   #define NOZZLE_CLEAN_STROKES  12
@@ -1043,7 +1043,7 @@
   // Moves the nozzle to the initial position
   #define NOZZLE_CLEAN_GOBACK
 #endif
-//&end[Clean_Nozzle]
+//&end[NOZZLE_CLEAN_FEATURE]
 
 //
 // Print job timer

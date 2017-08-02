@@ -346,7 +346,7 @@
       #endif
     #endif
   #endif
-  //&begin[Extruder_Mixing]
+  //&begin[MIXING_EXTRUDER]
 #elif ENABLED(MIXING_EXTRUDER)
   #undef _E1_PINS
   #define _E1_PINS E1_STEP_PIN, E1_DIR_PIN, E1_ENABLE_PIN,
@@ -363,7 +363,7 @@
     #endif
   #endif
 #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 
 #define BED_PINS HEATER_BED_PIN, marlinAnalogInputToDigitalPin(TEMP_BED_PIN),
 

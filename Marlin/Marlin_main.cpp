@@ -416,22 +416,22 @@ float home_offset[XYZ] = { 0 };
 //&end[Homing]
 
 //&begin[Endstop]
-//&begin[Control_Software_EndStop]
+//&begin[software_endstops]
 // Software Endstops are based on the configured limits.
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
   bool soft_endstops_enabled = true;
 #endif
 float soft_endstop_min[XYZ] = { X_MIN_POS, Y_MIN_POS, Z_MIN_POS },
       soft_endstop_max[XYZ] = { X_MAX_POS, Y_MAX_POS, Z_MAX_POS };
-//&end[Control_Software_EndStop]
+//&end[software_endstops]
 //&end[Endstop]
 
 //&begin[Fan]
-//&begin[PWM_Fans]
+//&begin[PWM]
 #if FAN_COUNT > 0
   int fanSpeeds[FAN_COUNT] = { 0 };
 #endif
-//&end[PWM_Fans]
+//&end[PWM]
 //&end[Fan]
 
 //&begin[Extruder]
@@ -444,12 +444,12 @@ static bool relative_mode = false;
 
 // For M109 and M190, this flag may be cleared (by M108) to exit the wait loop
 volatile bool wait_for_heatup = true;
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
 // For M0/M1, this flag may be cleared (by M108) to exit the wait-for-user loop
 #if ENABLED(EMERGENCY_PARSER) || ENABLED(ULTIPANEL)
   volatile bool wait_for_user = false;
 #endif
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
 const char errormagic[] PROGMEM = "Error:";
 const char echomagic[] PROGMEM = "echo:";
 const char axis_codes[NUM_AXIS] = {'X', 'Y', 'Z', 'E'};
@@ -645,19 +645,19 @@ float cartes[XYZ] = { 0 };
   static bool filament_ran_out = false;
 #endif
 
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
   FilamentChangeMenuResponse filament_change_menu_response;
 #endif
-//&end[FILAMENT_CHANGE_FEATURE]
-//&begin[Extruder_Mixing]
+//&end[FILAMENT_CHANGE]
+//&begin[MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
   float mixing_factor[MIXING_STEPPERS]; // Reciprocal of mix proportion. 0.0 = off, otherwise >= 1.0.
   #if MIXING_VIRTUAL_TOOLS > 1
     float mixing_virtual_tool_mix[MIXING_VIRTUAL_TOOLS][MIXING_STEPPERS];
   #endif
 #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 //&begin[IO_handling]
 static bool send_ok[BUFSIZE];
 //&end[IO_handling]
@@ -737,7 +737,7 @@ void get_cartesian_from_steppers();
 void set_current_from_steppers_for_axis(const AxisEnum axis);
 //&end[Moter_Type_Stepper]
 
-//&begin[Arc_Movement]
+//&begin[ARC_SUPPORT]
 #if ENABLED(ARC_SUPPORT)
   void plan_arc(float target[NUM_AXIS], float* offset, uint8_t clockwise);
 #endif
@@ -745,7 +745,7 @@ void set_current_from_steppers_for_axis(const AxisEnum axis);
 #if ENABLED(BEZIER_CURVE_SUPPORT)
   void plan_cubic_move(const float offset[4]);
 #endif
-//&end[Arc_Movement]
+//&end[ARC_SUPPORT]
 
 //&begin[IO_Handling]
 void serial_echopair_P(const char* s_P, const char *v)   { serialprintPGM(s_P); SERIAL_ECHO(v); }
@@ -757,9 +757,9 @@ void serial_echopair_P(const char* s_P, double v)        { serialprintPGM(s_P); 
 void serial_echopair_P(const char* s_P, unsigned long v) { serialprintPGM(s_P); SERIAL_ECHO(v); }
 //&end[IO_Handling]
 
-//&begin[Extruder_Switching]
+//&begin[SWITCHING_EXTRUDER]
 void tool_change(const uint8_t tmp_extruder, const float fr_mm_s=0.0, bool no_move=false);
-//&end[Extruder_Switching]
+//&end[SWITCHING_EXTRUDER]
 
 static void report_current_position();
 
@@ -2092,7 +2092,7 @@ static void clean_up_after_endstop_or_probe_move() {
   #define DEPLOY_PROBE() set_probe_deployed(true)
   #define STOW_PROBE() set_probe_deployed(false)
 
-//&begin[EndStopZ_BLTouchSensor]
+//&begin[BLTOUCH]
   #if ENABLED(BLTOUCH)
     FORCE_INLINE void set_bltouch_deployed(const bool &deploy) {
       servo[Z_ENDSTOP_SERVO_NR].move(deploy ? BLTOUCH_DEPLOY : BLTOUCH_STOW);
@@ -2105,7 +2105,7 @@ static void clean_up_after_endstop_or_probe_move() {
       #endif
     }
   #endif
-//&end[EndStopZ_BLTouchSensor]
+//&end[BLTOUCH]
 
   // returns false for ok and true for failure
   static bool set_probe_deployed(bool deploy) {
@@ -2123,10 +2123,10 @@ static void clean_up_after_endstop_or_probe_move() {
     do_probe_raise(_Z_CLEARANCE_DEPLOY_PROBE);
 
     // When deploying make sure BLTOUCH is not already triggered
-//&begin[EndStopZ_BLTouchSensor]
+//&begin[BLTOUCH]
     #if ENABLED(BLTOUCH)
 	  if (deploy && TEST_BLTOUCH()) { stop(); return true; }
-//&end[EndStopZ_BLTouchSensor]
+//&end[BLTOUCH]
     #elif ENABLED(Z_PROBE_SLED)
       if (axis_unhomed_error(true, false, false)) { stop(); return true; }
     #elif ENABLED(Z_PROBE_ALLEN_KEY)
@@ -2189,17 +2189,17 @@ static void clean_up_after_endstop_or_probe_move() {
     #endif
 
     // Deploy BLTouch at the start of any probe
-     //&begin[EndStopZ_BLTouchSensor]
+     //&begin[BLTOUCH]
     #if ENABLED(BLTOUCH)
       set_bltouch_deployed(true);
     #endif
-    //&end[EndStopZ_BLTouchSensor]
+    //&end[BLTOUCH]
     
     // Move down until probe triggered
     do_blocking_move_to_z(LOGICAL_Z_POSITION(z), MMM_TO_MMS(fr_mm_m));
 
     // Retract BLTouch immediately after a probe
-     //&begin[EndStopZ_BLTouchSensor]
+     //&begin[BLTOUCH]
     #if ENABLED(BLTOUCH)
       set_bltouch_deployed(false);
     #endif
@@ -2217,7 +2217,7 @@ static void clean_up_after_endstop_or_probe_move() {
       if (DEBUGGING(LEVELING)) DEBUG_POS("<<< do_probe_move", current_position);
     #endif
   }
-  //&end[EndStopZ_BLTouchSensor]
+  //&end[BLTOUCH]
   // Do a single Z probe and return with current_position[Z_AXIS]
   // at the height where the probe triggered.
   static float run_z_probe() {
@@ -2893,7 +2893,7 @@ static void homeaxis(AxisEnum axis) {
   } // retract()
 
 #endif // FWRETRACT
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
 
   void normalize_mix() {
@@ -2932,7 +2932,7 @@ static void homeaxis(AxisEnum axis) {
   #endif
 
 #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 /**
  * ***************************************************************************
  * ***************************** G-CODE HANDLING *****************************
@@ -2966,11 +2966,11 @@ void gcode_get_destination() {
 //&end[PRINTCOUNTER]
 //&end[Print_Job_Timer]
   // Get ABCDHI mixing factors
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
   #if ENABLED(MIXING_EXTRUDER) && ENABLED(DIRECT_MIXING_IN_G1)
     gcode_get_mix();
   #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
   }
 //&end[Move_To_Destination]
 
@@ -3090,7 +3090,7 @@ inline void gcode_G0_G1(
 }
 //&end[Move_To_Destination]
 
-//&begin[Arc_Movement]
+//&begin[ARC_SUPPORT]
 /**
  * G2: Clockwise Arc
  * G3: Counterclockwise Arc
@@ -3165,7 +3165,7 @@ inline void gcode_G0_G1(
     }
   }
 #endif
-//&end[Arc_Movement]
+//&end[ARC_SUPPORT]
 /**
  * G4: Dwell S<seconds> or P<milliseconds>
  */
@@ -3184,7 +3184,7 @@ inline void gcode_G4() {
   while (PENDING(millis(), dwell_ms)) idle();
 }
 
-//&begin[Arc_Movement]
+//&begin[ARC_SUPPORT]
 #if ENABLED(BEZIER_CURVE_SUPPORT)
 
   /**
@@ -3214,7 +3214,7 @@ inline void gcode_G4() {
   }
 
 #endif // BEZIER_CURVE_SUPPORT
-//&end[Arc_Movement]
+//&end[ARC_SUPPORT]
 
 #if ENABLED(FWRETRACT)
 
@@ -3236,7 +3236,7 @@ inline void gcode_G4() {
   }
 
 #endif //FWRETRACT
-//&begin[Clean_Nozzle]
+//&begin[NOZZLE_CLEAN_FEATURE]
 #if ENABLED(NOZZLE_CLEAN_FEATURE)
   /**
    * G12: Clean the nozzle
@@ -3252,7 +3252,7 @@ inline void gcode_G4() {
     Nozzle::clean(pattern, strokes, objects);
   }
 #endif
-//&end[Clean_Nozzle]
+//&end[NOZZLE_CLEAN_FEATURE]
 //&begin[Inch_Mode_Support]
 #if ENABLED(INCH_MODE_SUPPORT)
   /**
@@ -3267,7 +3267,7 @@ inline void gcode_G4() {
 #endif
 //&end[Inch_Mode_Support]
 
-//&begin[Park_Nozzle]
+//&begin[NOZZLE_PARK_FEATURE]
 #if ENABLED(NOZZLE_PARK_FEATURE)
   /**
    * G27: Park the nozzle
@@ -3279,7 +3279,7 @@ inline void gcode_G4() {
     Nozzle::park(z_action);
   }
 #endif // NOZZLE_PARK_FEATURE
-//&end[Park_Nozzle]
+//&end[NOZZLE_PARK_FEATURE]
 
 //&begin[Homing]
 #if ENABLED(QUICK_HOME)
@@ -4720,7 +4720,7 @@ inline void gcode_G92() {
   report_current_position();
 }
 //&end[Move_To_Destination]
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
 #if ENABLED(EMERGENCY_PARSER) || ENABLED(ULTIPANEL)
 
   /**
@@ -4787,7 +4787,7 @@ inline void gcode_G92() {
   }
 
 #endif // EMERGENCY_PARSER || ULTIPANEL
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
 //&begin[Moter_Type_Stepper]
 /**
  * M17: Enable power on all stepper motors
@@ -4971,7 +4971,7 @@ static bool pin_is_protected(uint8_t pin) {
  */
 inline void gcode_M42() {
   if (!code_seen('S')) return;
-//&begin[PWM_Fans]
+//&begin[PWM]
   int pin_status = code_value_int();
   if (pin_status < 0 || pin_status > 255) return;
 
@@ -5001,7 +5001,7 @@ inline void gcode_M42() {
       #endif
     }
   #endif
-  //&end[PWM_Fans]
+  //&end[PWM]
 }
 //&end[Board]
 //&begin[PINS_DEBUGGING]
@@ -5055,11 +5055,11 @@ inline void gcode_M42() {
         // else
           pin_state[pin - first_pin] = digitalRead(pin);
       }
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
       #if ENABLED(EMERGENCY_PARSER) || ENABLED(ULTIPANEL)
         wait_for_user = true;
       #endif
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
       for(;;) {
         for (int8_t pin = first_pin; pin <= last_pin; pin++) {
           if (pin_is_protected(pin)) continue;
@@ -5368,11 +5368,11 @@ inline void gcode_M77() { print_job_timer.stop(); }
 inline void gcode_M104() {
   if (get_target_extruder_from_command(104)) return;
   if (DEBUGGING(DRYRUN)) return;
-  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+  //&begin[SINGLENOZZLE]
   #if ENABLED(SINGLENOZZLE)
     if (target_extruder != active_extruder) return;
   #endif
-  //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+  //&end[SINGLENOZZLE]
   if (code_seen('S')) {
     thermalManager.setTargetHotend(code_value_temp_abs(), target_extruder);
     #if ENABLED(DUAL_X_CARRIAGE)
@@ -5502,7 +5502,7 @@ inline void gcode_M105() {
 //&end[AUTO_REPORT_TEMPERATURES]
 //&begin[Fan]
 #if FAN_COUNT > 0
-//&begin[PWM_Fans]
+//&begin[PWM]
   /**
    * M106: Set Fan Speed
    *
@@ -5515,8 +5515,8 @@ inline void gcode_M105() {
     NOMORE(s, 255);
     if (p < FAN_COUNT) fanSpeeds[p] = s;
   }
-//&end[PWM_Fans]
-//&begin[PWM_Fans]
+//&end[PWM]
+//&begin[PWM]
   /**
    * M107: Fan Off
    */
@@ -5524,10 +5524,10 @@ inline void gcode_M105() {
     uint16_t p = code_seen('P') ? code_value_ushort() : 0;
     if (p < FAN_COUNT) fanSpeeds[p] = 0;
   }
-//&end[PWM_Fans]
+//&end[PWM]
 #endif // FAN_COUNT > 0
 //&end[Fan]
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
 #if DISABLED(EMERGENCY_PARSER)
 
   /**
@@ -5552,7 +5552,7 @@ inline void gcode_M105() {
   inline void gcode_M410() { quickstop_stepper(); }
 
 #endif
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
 //&begin[HotEnd]
   #ifndef MIN_COOLING_SLOPE_DEG
     #define MIN_COOLING_SLOPE_DEG 1.50
@@ -5569,11 +5569,11 @@ inline void gcode_M109() {
 
   if (get_target_extruder_from_command(109)) return;
   if (DEBUGGING(DRYRUN)) return;
-  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+  //&begin[SINGLENOZZLE]
   #if ENABLED(SINGLENOZZLE)
     if (target_extruder != active_extruder) return;
   #endif
-  //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+  //&end[SINGLENOZZLE]
   bool no_wait_for_cooling = code_seen('S');
   if (no_wait_for_cooling || code_seen('R')) {
     thermalManager.setTargetHotend(code_value_temp_abs(), target_extruder);
@@ -6000,7 +6000,7 @@ inline void gcode_M140() {
 inline void gcode_M81() {
   thermalManager.disable_all_heaters();
   stepper.finish_and_disable();
-  //&begin[PWM_Fans]
+  //&begin[PWM]
   #if FAN_COUNT > 0
     #if FAN_COUNT > 1
       for (uint8_t i = 0; i < FAN_COUNT; i++) fanSpeeds[i] = 0;
@@ -6008,7 +6008,7 @@ inline void gcode_M81() {
       fanSpeeds[0] = 0;
     #endif
   #endif
-  //&end[PWM_Fans]
+  //&end[PWM]
   delay(1000); // Wait 1 second before switching off
   #if HAS_SUICIDE
     stepper.synchronize();
@@ -6236,7 +6236,7 @@ inline void gcode_M120() { endstops.enable_globally(true); }
  */
 inline void gcode_M121() { endstops.enable_globally(false); }
 //&end[Endstop]
-//&begin[HAVE_TMC2130DRIVER]
+//&begin[TMC2130]
 #if ENABLED(HAVE_TMC2130DRIVER)
 
   /**
@@ -6288,7 +6288,7 @@ inline void gcode_M121() { endstops.enable_globally(false); }
     #endif
   }
 #endif // HAVE_TMC2130DRIVER
-//&end[HAVE_TMC2130DRIVER]
+//&end[TMC2130]
 //&begin[RGB_LED]
 #if ENABLED(BLINKM) || ENABLED(RGB_LED)
 
@@ -6596,7 +6596,7 @@ inline void gcode_M206() {
 #endif // FWRETRACT
 
 //&begin[Endstop]
-//&begin[Control_Software_EndStop]
+//&begin[software_endstops]
 /**
  * M211: Enable, Disable, and/or Report software endstops
  *
@@ -6623,7 +6623,7 @@ inline void gcode_M211() {
   SERIAL_ECHOPAIR(" " MSG_Y, soft_endstop_max[Y_AXIS]);
   SERIAL_ECHOLNPAIR(" " MSG_Z, soft_endstop_max[Z_AXIS]);
 }
-//&end[Control_Software_EndStop]
+//&end[software_endstops]
 //&end[Endstop]
 
 //&begin[HotEnd]
@@ -6642,11 +6642,11 @@ inline void gcode_M211() {
 
     if (code_seen('X')) hotend_offset[X_AXIS][target_extruder] = code_value_axis_units(X_AXIS);
     if (code_seen('Y')) hotend_offset[Y_AXIS][target_extruder] = code_value_axis_units(Y_AXIS);
-//&begin[Extruder_Switching]
+//&begin[SWITCHING_EXTRUDER]
     #if ENABLED(DUAL_X_CARRIAGE) || ENABLED(SWITCHING_EXTRUDER)
       if (code_seen('Z')) hotend_offset[Z_AXIS][target_extruder] = code_value_axis_units(Z_AXIS);
     #endif
-//&end[Extruder_Switching]
+//&end[SWITCHING_EXTRUDER]
     SERIAL_ECHO_START;
     SERIAL_ECHOPGM(MSG_HOTEND_OFFSET);
     HOTEND_LOOP() {
@@ -7367,7 +7367,7 @@ inline void gcode_M503() {
   }
 
 #endif // HAS_BED_PROBE
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
 
   /**
@@ -7542,7 +7542,7 @@ inline void gcode_M503() {
   }
 
 #endif // FILAMENT_CHANGE_FEATURE
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
 #if ENABLED(DUAL_X_CARRIAGE)
 
   /**
@@ -7730,7 +7730,7 @@ inline void gcode_M907() {
 
 #endif // HAS_CASE_LIGHT
 //&end[CASE_LIGHT]
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
 
   /**
@@ -7787,7 +7787,7 @@ inline void gcode_M907() {
   #endif
 
 #endif // MIXING_EXTRUDER
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 /**
  * M999: Restart after being stopped
  *
@@ -7807,14 +7807,14 @@ inline void gcode_M999() {
   // gcode_LastN = Stopped_gcode_LastN;
   FlushSerialRequestResend();
 }
-//&begin[Extruder_Switching]
+//&begin[SWITCHING_EXTRUDER]
 #if ENABLED(SWITCHING_EXTRUDER)
   inline void move_extruder_servo(uint8_t e) {
     const int angles[2] = SWITCHING_EXTRUDER_SERVO_ANGLES;
     MOVE_SERVO(SWITCHING_EXTRUDER_SERVO_NR, angles[e]);
   }
 #endif
-//&end[Extruder_Switching]
+//&end[SWITCHING_EXTRUDER]
 //&begin[Extruder]
 inline void invalid_extruder_error(const uint8_t &e) {
   SERIAL_ECHO_START;
@@ -7828,7 +7828,7 @@ inline void invalid_extruder_error(const uint8_t &e) {
  * previous tool out of the way and the new tool into place.
  */
 void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool no_move/*=false*/) {
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
   #if ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1
 
     if (tmp_extruder >= MIXING_VIRTUAL_TOOLS)
@@ -7956,7 +7956,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
           // No extra case for HAS_ABL in DUAL_X_CARRIAGE. Does that mean they don't work together?
         #else // !DUAL_X_CARRIAGE
-        //&begin[Extruder_Switching]
+        //&begin[SWITCHING_EXTRUDER]
           #if ENABLED(SWITCHING_EXTRUDER)
             // <0 if the new nozzle is higher, >0 if lower. A bigger raise when lower.
             float z_diff = hotend_offset[Z_AXIS][active_extruder] - hotend_offset[Z_AXIS][tmp_extruder],
@@ -7977,7 +7977,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
               stepper.synchronize();
             }
           #endif
-          //&end[Extruder_Switching]
+          //&end[SWITCHING_EXTRUDER]
           /**
            * Set current_position to the position of the new nozzle.
            * Offsets are based on linear distance, so we need to get
@@ -8120,7 +8120,7 @@ void tool_change(const uint8_t tmp_extruder, const float fr_mm_s/*=0.0*/, bool n
 
   #endif //!MIXING_EXTRUDER || MIXING_VIRTUAL_TOOLS <= 1
 }
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 
 /**
  * T0-T3: Switch tool, usually switching extruders
@@ -8138,7 +8138,7 @@ inline void gcode_T(uint8_t tmp_extruder) {
       DEBUG_POS("BEFORE", current_position);
     }
   #endif
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
   #if HOTENDS == 1 || (ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1)
 
     tool_change(tmp_extruder);
@@ -8152,7 +8152,7 @@ inline void gcode_T(uint8_t tmp_extruder) {
     );
 
   #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
   #if ENABLED(DEBUG_LEVELING_FEATURE)
     if (DEBUGGING(LEVELING)) {
       DEBUG_POS("AFTER", current_position);
@@ -8268,13 +8268,13 @@ void process_next_command() {
           gcode_G10_G11(codenum == 10);
           break;
       #endif // FWRETRACT
-//&begin[Clean_Nozzle]
+//&begin[NOZZLE_CLEAN_FEATURE]
       #if ENABLED(NOZZLE_CLEAN_FEATURE)
         case 12:
           gcode_G12(); // G12: Nozzle Clean
           break;
       #endif // NOZZLE_CLEAN_FEATURE
-//&end[Clean_Nozzle]
+//&end[NOZZLE_CLEAN_FEATURE]
 //&begin[Inch_Mode_Support]
       #if ENABLED(INCH_MODE_SUPPORT)
         case 20: //G20: Inch Mode
@@ -8286,13 +8286,13 @@ void process_next_command() {
           break;
       #endif // INCH_MODE_SUPPORT
 //&end[Inch_Mode_Support]
-	//&begin[Park_Nozzle]
+	//&begin[NOZZLE_PARK_FEATURE]
       #if ENABLED(NOZZLE_PARK_FEATURE)
         case 27: // G27: Nozzle Park
           gcode_G27();
           break;
       #endif // NOZZLE_PARK_FEATURE
-	//&end[Park_Nozzle]
+	//&end[NOZZLE_PARK_FEATURE]
 	  
       case 28: // G28: Home all axes, one at a time
         gcode_G28();
@@ -8344,14 +8344,14 @@ void process_next_command() {
     break;
 
     case 'M': switch (codenum) {
-		//&begin[Emergency_Command_Parser]
+		//&begin[EMERGENCY_PARSER]
       #if ENABLED(ULTIPANEL) || ENABLED(EMERGENCY_PARSER)
         case 0: // M0: Unconditional stop - Wait for user button press on LCD
         case 1: // M1: Conditional stop - Wait for user button press on LCD
           gcode_M0_M1();
           break;
       #endif // ULTIPANEL
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
       case 17: // M17: Enable all stepper motors
         gcode_M17();
         break;
@@ -8437,7 +8437,7 @@ void process_next_command() {
       case 111: // M111: Set debug level
         gcode_M111();
         break;
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
       #if DISABLED(EMERGENCY_PARSER)
 
 	  //&begin[Emergency_Cancel_Heatup]
@@ -8454,7 +8454,7 @@ void process_next_command() {
           break;
 
       #endif
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
       #if ENABLED(HOST_KEEPALIVE_FEATURE)
         case 113: // M113: Set Host Keepalive interval
           gcode_M113();
@@ -8485,7 +8485,7 @@ void process_next_command() {
           gcode_M190();
           break;
       #endif // HAS_TEMP_BED
-//&begin[PWM_Fans]
+//&begin[PWM]
       #if FAN_COUNT > 0
         case 106: // M106: Fan On
           gcode_M106();
@@ -8494,7 +8494,7 @@ void process_next_command() {
           gcode_M107();
           break;
       #endif // FAN_COUNT > 0
-//&end[PWM_Fans]
+//&end[PWM]
       #if ENABLED(BARICUDA)
         // PWM for HEATER_1_PIN
         #if HAS_HEATER_1
@@ -8565,13 +8565,13 @@ void process_next_command() {
       case 121: // M121: Disable endstops
         gcode_M121();
         break;
-//&begin[HAVE_TMC2130DRIVER]
+//&begin[TMC2130]
       #if ENABLED(HAVE_TMC2130DRIVER)
         case 122: // M122: Diagnose, used to debug TMC2130
           gcode_M122();
           break;
       #endif
-//&end[HAVE_TMC2130DRIVER]
+//&end[TMC2130]
       #if ENABLED(ULTIPANEL)
 
         case 145: // M145: Set material heatup parameters
@@ -8594,7 +8594,7 @@ void process_next_command() {
 
       #endif // BLINKM
 //&end[RGB_LED]
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
       #if ENABLED(MIXING_EXTRUDER)
         case 163: // M163: Set a component weight for mixing extruder
           gcode_M163();
@@ -8610,7 +8610,7 @@ void process_next_command() {
             break;
         #endif
       #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
       case 200: // M200: Set filament diameter, E to cubic units
         gcode_M200();
         break;
@@ -8825,13 +8825,13 @@ void process_next_command() {
           gcode_M851();
           break;
       #endif // HAS_BED_PROBE
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
       #if ENABLED(FILAMENT_CHANGE_FEATURE)
         case 600: // M600: Pause for filament change
           gcode_M600();
           break;
       #endif // FILAMENT_CHANGE_FEATURE
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
       #if ENABLED(DUAL_X_CARRIAGE)
         case 605: // M605: Set Dual X Carriage movement mode
           gcode_M605();
@@ -8952,7 +8952,7 @@ void ok_to_send() {
 //&end[Command_Input_Process]
 
 //&begin[Endstop]
-//&begin[Control_Software_EndStop]
+//&begin[software_endstops]
 #if ENABLED(min_software_endstops) || ENABLED(max_software_endstops)
 
   /**
@@ -8972,7 +8972,7 @@ void ok_to_send() {
   }
 
 #endif
-//&end[Control_Software_EndStop]
+//&end[software_endstops]
 //&end[Endstop]
 
 #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
@@ -9742,7 +9742,7 @@ void prepare_move_to_destination() {
 }
 //&end[Move_To_Destination]
 
-//&begin[Arc_Movement]
+//&begin[ARC_SUPPORT]
 #if ENABLED(ARC_SUPPORT)
   /**
    * Plan an arc in 2 dimensions
@@ -9888,7 +9888,7 @@ void prepare_move_to_destination() {
   }
 
 #endif // BEZIER_CURVE_SUPPORT
-//&end[Arc_Movement]
+//&end[ARC_SUPPORT]
 
 
 #if HAS_CONTROLLERFAN
@@ -10243,7 +10243,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
     if (ELAPSED(ms, previous_cmd_ms + (EXTRUDER_RUNOUT_SECONDS) * 1000UL)
       && thermalManager.degHotend(active_extruder) > EXTRUDER_RUNOUT_MINTEMP) {
       bool oldstatus;
-	  //&begin[Extruder_Switching]
+	  //&begin[SWITCHING_EXTRUDER]
       #if ENABLED(SWITCHING_EXTRUDER)
         oldstatus = E0_ENABLE_READ;
         enable_e0();
@@ -10273,7 +10273,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
           #endif
         }
       #endif // !SWITCHING_EXTRUDER
-//&end[Extruder_Switching]
+//&end[SWITCHING_EXTRUDER]
       previous_cmd_ms = ms; // refresh_cmd_timeout()
 
       #if IS_KINEMATIC
@@ -10293,7 +10293,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
       #endif
       stepper.synchronize();
       planner.set_e_position_mm(current_position[E_AXIS]);
-	  //&begin[Extruder_Switching]
+	  //&begin[SWITCHING_EXTRUDER]
       #if ENABLED(SWITCHING_EXTRUDER)
         E0_ENABLE_WRITE(oldstatus);
       #else
@@ -10318,7 +10318,7 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
           #endif
         }
       #endif // !SWITCHING_EXTRUDER
-//&end[Extruder_Switching]   
+//&end[SWITCHING_EXTRUDER]   
    }
   #endif // EXTRUDER_RUNOUT_PREVENT
 
@@ -10343,11 +10343,11 @@ void manage_inactivity(bool ignore_stepper_queue/*=false*/) {
  * Standard idle routine keeps the machine alive
  */
 void idle(
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     bool no_stepper_sleep/*=false*/
   #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
   ) {
   lcd_update();
 
@@ -10358,11 +10358,11 @@ void idle(
   #endif
 //&end[AUTO_REPORT_TEMPERATURES]
   manage_inactivity(
-  //&begin[FILAMENT_CHANGE_FEATURE]
+  //&begin[FILAMENT_CHANGE]
     #if ENABLED(FILAMENT_CHANGE_FEATURE)
       no_stepper_sleep
     #endif
-	//&end[FILAMENT_CHANGE_FEATURE]
+	//&end[FILAMENT_CHANGE]
   );
 
   thermalManager.manage_heater();
@@ -10588,7 +10588,7 @@ void setup() {
       #endif
     #endif
   #endif
-//&begin[Extruder_Mixing]
+//&begin[MIXING_EXTRUDER]
   #if ENABLED(MIXING_EXTRUDER) && MIXING_VIRTUAL_TOOLS > 1
     // Initialize mixing to 100% color 1
     for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
@@ -10597,7 +10597,7 @@ void setup() {
       for (uint8_t i = 0; i < MIXING_STEPPERS; i++)
         mixing_virtual_tool_mix[t][i] = mixing_factor[i];
   #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 //&begin[Extended_Capabilities_Report]
   #if ENABLED(EXPERIMENTAL_I2CBUS) && I2C_SLAVE_ADDRESS > 0
     i2c.onReceive(i2c_on_receive);

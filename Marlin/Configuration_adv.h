@@ -594,7 +594,7 @@
 
 // @section extras
 
-//&begin[Arc_Movement]
+//&begin[ARC_SUPPORT]
 // Arc interpretation settings:
 #define ARC_SUPPORT  // Disabling this saves ~2738 bytes
 #define MM_PER_ARC_SEGMENT 1
@@ -602,7 +602,7 @@
 
 // Support for G5 with XYZE destination and IJPQ offsets. Requires ~2666 bytes.
 //#define BEZIER_CURVE_SUPPORT
-//&end[Arc_Movement]
+//&end[ARC_SUPPORT]
 
 // G38.2 and G38.3 Probe Target
 //#define G38_PROBE_TARGET
@@ -690,7 +690,7 @@
 
 // Add support for experimental filament exchange support M600; requires display
 #if ENABLED(ULTIPANEL)
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
   // #define FILAMENT_CHANGE_FEATURE             // Enable filament exchange menu and M600 g-code (used for runout sensor too)
   #if ENABLED(FILAMENT_CHANGE_FEATURE)
     #define FILAMENT_CHANGE_X_POS 3             // X position of hotend
@@ -716,7 +716,7 @@
                                                 // or until outcoming filament color is not clear for filament color change
     #define FILAMENT_CHANGE_EXTRUDE_FEEDRATE 3  // Extrude filament feedrate in mm/s - must be slower than load feedrate
   #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
   #endif
 
 /******************************************************************************\
@@ -797,7 +797,7 @@
  */
 
 //#define HAVE_TMC2130DRIVER
-//&begin[HAVE_TMC2130DRIVER]
+//&begin[TMC2130]
 #if ENABLED(HAVE_TMC2130DRIVER)
 
   //#define TMC2130_ADVANCED_CONFIGURATION
@@ -988,7 +988,7 @@
   #endif // TMC2130_ADVANCED_CONFIGURATION
 
 #endif // HAVE_TMC2130DRIVER
-//&end[HAVE_TMC2130DRIVER]
+//&end[TMC2130]
 // @section L6470
 
 /**

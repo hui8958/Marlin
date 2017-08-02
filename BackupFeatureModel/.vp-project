@@ -5,32 +5,32 @@ Marlin
         X_Box360
     Board
         Endstop
-            software_endstops
+            Control_Software_EndStop
             Endstop_Axis 3..6
             Endstop_Type
 	            EndstopXY
 	                EndstopXY_Mechanichal
 	            xor EndstopZ
-			        BLTOUCH
+			        EndstopZ_BLTouchSensor
 			        EndstopZ_Mechanichal
 		        	EndstopZ_InductiveSensor
         Motor	    
-	        SINGLENOZZLE
+	        SINGLENOZZLE_MULTIPLE_EXTRUDER
             Motor_Axis 3
             xor Extruder 1..*
-                MIXING_EXTRUDER
-                SWITCHING_EXTRUDER
+                Extruder_Mixing
+                Extruder_Switching
                 Extruder_Single
             xor Moter_Type
                 Moter_Type_Stepper
                 Moter_Type_Servo
 		    DISTINCT_E_FACTORS
 		    Inch_Mode_Support
-		    TMC2130
+		    HAVE_TMC2130DRIVER
 		    MINIMUM_STEPPER_PULSE
 		    LIN_ADVANCE
         Fan 1..*
-	    	PWM
+	    	PWM_Fans
         xor HotEnd 1..*
             HotEnd_Single
             HotEnd_Multiple
@@ -57,19 +57,19 @@ Marlin
     	Command_Input_Process
     	Movement_Planner
     	Move_To_Destination
-            ARC_SUPPORT
+            Arc_Movement
             G2_G3_R_Parameter
             Support_COREXY_COREXZ_COREYZ
-            NOZZLE_CLEAN_FEATURE
-            NOZZLE_PARK_FEATURE
+            Clean_Nozzle
+            Park_Nozzle
     	Print_Job_Timer
             PRINTCOUNTER
     	Temperature
             Temperature_Units_Support
             AUTO_REPORT_TEMPERATURES
-        EMERGENCY_PARSER
+        Emergency_Command_Parser
         Emergency_Cancel_Heatup
-    	FILAMENT_CHANGE
+    	FILAMENT_CHANGE_FEATURE
     	Debugger
     	PINS_DEBUGGING
     	WatchDog

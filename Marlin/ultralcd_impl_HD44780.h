@@ -955,7 +955,7 @@ static void lcd_implementation_status_screen() {
     if (thermalManager.degTargetBed() > 0) leds |= LED_A;
 
     if (thermalManager.degTargetHotend(0) > 0) leds |= LED_B;
-//&begin[PWM_Fans]
+//&begin[PWM]
     #if FAN_COUNT > 0
       if (0
         #if HAS_FAN0
@@ -969,7 +969,7 @@ static void lcd_implementation_status_screen() {
         #endif
       ) leds |= LED_C;
     #endif // FAN_COUNT > 0
-//&end[PWM_Fans]
+//&end[PWM]
     #if HOTENDS > 1
       if (thermalManager.degTargetHotend(1) > 0) leds |= LED_C;
     #endif

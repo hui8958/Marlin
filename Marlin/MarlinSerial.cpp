@@ -436,7 +436,7 @@ MarlinSerial customizedSerial;
 #if defined(USBCON) && ENABLED(BLUETOOTH)
   HardwareSerial bluetoothSerial;
 #endif
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
 #if ENABLED(EMERGENCY_PARSER)
 
   // Currently looking for: M108, M112, M410
@@ -525,4 +525,4 @@ MarlinSerial customizedSerial;
   }
 
 #endif
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]

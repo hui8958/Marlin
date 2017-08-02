@@ -110,7 +110,7 @@ enum TempState {
   Measure_FILWIDTH,
   StartupDelay // Startup, delay initial temp reading a tiny bit so the hardware can settle
 };
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
 #if ENABLED(EMERGENCY_PARSER)
   enum e_parser_state {
     state_RESET,
@@ -127,8 +127,8 @@ enum TempState {
     state_IGNORE // to '\n'
   };
 #endif
-//&end[Emergency_Command_Parser]
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&end[EMERGENCY_PARSER]
+//&begin[FILAMENT_CHANGE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
   enum FilamentChangeMenuResponse {
     FILAMENT_CHANGE_RESPONSE_WAIT_FOR,
@@ -149,7 +149,7 @@ enum TempState {
     };
   #endif
 #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
 /**
  * States for managing Marlin and host communication
  * Marlin sends messages if blocked or busy

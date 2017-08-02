@@ -86,11 +86,11 @@
     extern volatile uint8_t buttons;  //the last checked buttons in a bit array.
     void lcd_buttons_update();
     void lcd_quick_feedback(); // Audible feedback for a button click - could also be visual
-//&begin[FILAMENT_CHANGE_FEATURE]
+//&begin[FILAMENT_CHANGE]
     #if ENABLED(FILAMENT_CHANGE_FEATURE)
       void lcd_filament_change_show_message(const FilamentChangeMessage message);
     #endif // FILAMENT_CHANGE_FEATURE
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
   #else
 
     inline void lcd_buttons_update() {}

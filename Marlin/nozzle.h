@@ -167,7 +167,7 @@ class Nozzle {
     static void park(
       __attribute__((unused)) uint8_t const &z_action
     ) __attribute__((optimize ("Os"))) {
-		//&begin[Park_Nozzle]
+		//&begin[NOZZLE_PARK_FEATURE]
       #if ENABLED(NOZZLE_PARK_FEATURE)
         float const z = current_position[Z_AXIS];
         point_t const park = NOZZLE_PARK_POINT;
@@ -190,7 +190,7 @@ class Nozzle {
         do_blocking_move_to_xy(park.x, park.y);
 
       #endif // NOZZLE_PARK_FEATURE
-	  //&end[Park_Nozzle]
+	  //&end[NOZZLE_PARK_FEATURE]
     }
 };
 

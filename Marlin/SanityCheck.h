@@ -249,11 +249,11 @@
 /**
  * Filament Change with Extruder Runout Prevention
  */
- //&begin[FILAMENT_CHANGE_FEATURE]
+ //&begin[FILAMENT_CHANGE]
 #if ENABLED(FILAMENT_CHANGE_FEATURE) && ENABLED(EXTRUDER_RUNOUT_PREVENT)
   #error "EXTRUDER_RUNOUT_PREVENT is incompatible with FILAMENT_CHANGE_FEATURE."
 #endif
-//&end[FILAMENT_CHANGE_FEATURE]
+//&end[FILAMENT_CHANGE]
 /**
  * Individual axis homing is useless for DELTAS
  */
@@ -277,10 +277,10 @@
   #if ENABLED(HEATERS_PARALLEL)
     #error "EXTRUDERS must be 1 with HEATERS_PARALLEL."
   #endif
-  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+  //&begin[SINGLENOZZLE]
 #elif ENABLED(SINGLENOZZLE)
   #error "SINGLENOZZLE requires 2 or more EXTRUDERS."
-    //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+    //&end[SINGLENOZZLE]
 #endif
 
 /**
@@ -294,7 +294,7 @@
 /**
  * Single Stepper Dual Extruder with switching servo
  */
- //&begin[Extruder_Switching]
+ //&begin[SWITCHING_EXTRUDER]
 #if ENABLED(SWITCHING_EXTRUDER)
   #if ENABLED(DUAL_X_CARRIAGE)
     #error "SWITCHING_EXTRUDER and DUAL_X_CARRIAGE are incompatible."
@@ -304,11 +304,11 @@
     #error "SWITCHING_EXTRUDER requires NUM_SERVOS >= 1."
   #endif
 #endif
- //&end[Extruder_Switching]
+ //&end[SWITCHING_EXTRUDER]
 /**
  * Mixing Extruder requirements
  */
- //&begin[Extruder_Mixing]
+ //&begin[MIXING_EXTRUDER]
 #if ENABLED(MIXING_EXTRUDER)
   #if EXTRUDERS > 1
     #error "MIXING_EXTRUDER currently only supports one extruder."
@@ -320,7 +320,7 @@
     #error "MIXING_EXTRUDER is incompatible with FILAMENT_SENSOR. Comment out this line to use it anyway."
   #endif
 #endif
-//&end[Extruder_Mixing]
+//&end[MIXING_EXTRUDER]
 /**
  * Limited number of servos
  */
@@ -695,7 +695,7 @@
     #error "DUAL_X_CARRIAGE requires X_HOME_DIR -1 and X2_HOME_DIR 1."
   #endif
 #endif // DUAL_X_CARRIAGE
-//&begin[PWM_Fans]
+//&begin[PWM]
 /**
  * Make sure auto fan pins don't conflict with the fan pin
  */
@@ -728,7 +728,7 @@
     #error "You cannot set E3_AUTO_FAN_PIN equal to CONTROLLERFAN_PIN."
   #endif
 #endif
-//&end[PWM_Fans]
+//&end[PWM]
 /**
  * Test Heater, Temp Sensor, and Extruder Pins; Sensor Type must also be set.
  */
@@ -805,19 +805,19 @@
     #error "DUAL_NOZZLE_DUPLICATION_MODE requires exactly 2 hotends."
   #elif ENABLED(DUAL_X_CARRIAGE)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with DUAL_X_CARRIAGE."
-	  //&begin[SINGLENOZZLE_MULTIPLE_EXTRUDER]
+	  //&begin[SINGLENOZZLE]
   #elif ENABLED(SINGLENOZZLE)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with SINGLENOZZLE."
-	  //&end[SINGLENOZZLE_MULTIPLE_EXTRUDER]
-	   //&begin[Extruder_Mixing]
+	  //&end[SINGLENOZZLE]
+	   //&begin[MIXING_EXTRUDER]
   #elif ENABLED(MIXING_EXTRUDER)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with MIXING_EXTRUDER."
-     //&end[Extruder_Mixing]
-     //&begin[Extruder_Switching]
+     //&end[MIXING_EXTRUDER]
+     //&begin[SWITCHING_EXTRUDER]
   #elif ENABLED(SWITCHING_EXTRUDER)
     #error "DUAL_NOZZLE_DUPLICATION_MODE is incompatible with SWITCHING_EXTRUDER."
   #endif
-   //&end[Extruder_Switching]
+   //&end[SWITCHING_EXTRUDER]
 #endif
 
 /**
@@ -867,14 +867,14 @@
     #error "Enable USE_ZMAX_PLUG when homing Z to MAX."
   #endif
 #endif
-//&begin[Emergency_Command_Parser]
+//&begin[EMERGENCY_PARSER]
 /**
  * emergency-command parser
  */
 #if ENABLED(EMERGENCY_PARSER) && defined(USBCON)
   #error "EMERGENCY_PARSER does not work on boards with AT90USB processors (USBCON)."
 #endif
-//&end[Emergency_Command_Parser]
+//&end[EMERGENCY_PARSER]
 //&begin[Extended_Capabilities_Report]
 /**
  * I2C bus

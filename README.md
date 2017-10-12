@@ -56,6 +56,8 @@ The annotation can be found by searching the following Annotation Names:
 |WatchDog | WatchDog|
 
 # Screenshot from FLOrIDA
+The annotated codes can be visualized by using FLOrIDA tool.
+Below you can find the screenshot from the tool.
 ![The annotated codes can be visualized by using FLOrIDA.](https://github.com/hui8958/Marlin/blob/MarlinFeatureAnnotations/screenShot.PNG)
 
 # Usage

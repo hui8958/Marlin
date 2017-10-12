@@ -582,7 +582,7 @@
   #endif
 //&end[Temperature]
 
-//&begin[Fan]
+
 //&begin[PWM]
   /**
    * Up to 3 PWM fans
@@ -609,7 +609,7 @@
   #endif
   #define WRITE_FAN_N(n, v) WRITE_FAN##n(v)
   //&end[PWM]
-//&end[Fan]
+
 
   /**
    * Servos and probes

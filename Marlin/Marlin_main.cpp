@@ -426,13 +426,13 @@ float soft_endstop_min[XYZ] = { X_MIN_POS, Y_MIN_POS, Z_MIN_POS },
 //&end[software_endstops]
 //&end[Endstop]
 
-//&begin[Fan]
+
 //&begin[PWM]
 #if FAN_COUNT > 0
   int fanSpeeds[FAN_COUNT] = { 0 };
 #endif
 //&end[PWM]
-//&end[Fan]
+
 
 //&begin[Extruder]
 // The active extruder (tool). Set with T<extruder> command.
@@ -5500,7 +5500,7 @@ inline void gcode_M105() {
 
 #endif // AUTO_REPORT_TEMPERATURES
 //&end[AUTO_REPORT_TEMPERATURES]
-//&begin[Fan]
+
 #if FAN_COUNT > 0
 //&begin[PWM]
   /**
@@ -5526,7 +5526,7 @@ inline void gcode_M105() {
   }
 //&end[PWM]
 #endif // FAN_COUNT > 0
-//&end[Fan]
+
 //&begin[EMERGENCY_PARSER]
 #if DISABLED(EMERGENCY_PARSER)
 

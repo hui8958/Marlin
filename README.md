@@ -55,9 +55,17 @@ The annotation can be found by searching the following Annotation Names:
 |TMC2130 Silent StepStick support | TMC2130|
 |WatchDog | WatchDog|
 
+# Screenshot from FLOrIDA
+![The annotated codes can be visualized by using FLOrIDA.](https://github.com/hui8958/Marlin/blob/MarlinFeatureAnnotations/screenShot.PNG)
+
 # Usage
 The tool for analysis Feature Characteristics can be found in:
 [FeatureCharacteristicsMeasurementTool] 
+
+# Reference
+[1] Antkiewicz, M., Ji, W., Berger, T., Czarnecki, K., Schmorleiz, T., Lämmel, R., Stănciulescu, Ș., Wąsowski, A. and Schaefer, I., 2014, May. Flexible product line engineering with a virtual platform. In Companion Proceedings of the 36th International Conference on Software Engineering (pp. 532-535). ACM.
+
+[2] Andam, B., Burger, A., Berger, T. and Chaudron, M.R., 2017, February. FLOrIDA: Feature LOcatIon DAshboard for extracting and visualizing feature traces. In Proceedings of the Eleventh International Workshop on Variability Modelling of Software-intensive Systems (pp. 100-107). ACM.
 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
